@@ -1,5 +1,6 @@
 package sprint_2.santorinigame;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.*;
 
@@ -12,6 +13,12 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close operation
         frame.setTitle("Santorini Game"); // Set title
         frame.setLayout(new GridLayout(5, 5));
+
+        for (int i = 0; i < 25; i++) {
+            JPanel panel = new JPanel();
+            panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            frame.add(panel);
+        }
         frame.setVisible(true); // Make frame visible
     }
 }

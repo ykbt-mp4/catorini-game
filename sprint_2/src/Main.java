@@ -1,4 +1,4 @@
-package sprint_2.src;
+import main.GamePanel;
 
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
@@ -16,14 +16,10 @@ public class Main {
 
         // Adding in the gameboard 
         GamePanel gamePanel = new GamePanel();
-        
-        // adding in the side panel 
-        ControlPanel controlPanel = new ControlPanel();
 
         // Add panels
-        mainPanel.add(gamePanel, BorderLayout.WEST);
-        mainPanel.add(controlPanel, BorderLayout.EAST);
-        
+        mainPanel.add(gamePanel, BorderLayout.CENTER);
+
         frame.setContentPane(mainPanel);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);

@@ -1,4 +1,4 @@
-package sprint_2.src.tile;
+package tile;
 
 import java.awt.image.BufferedImage;
 

@@ -1,11 +1,10 @@
-package tile;
-
-import main.GamePanel;
+package src.tile;
 
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.Objects;
 import javax.imageio.ImageIO;
+import src.main.GamePanel;
 
     public final class TileManager {
         GamePanel gp;
@@ -22,34 +21,34 @@ import javax.imageio.ImageIO;
         try {
     
             tile[0] = new Tile(); 
-            tile[0].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/grass1.png")));
+            tile[0].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/resources/tiles/grass1.png")));
 
             tile[1] = new Tile(); 
-            tile[1].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/grass2.png")));
+            tile[1].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/resources/tiles/grass2.png")));
 
             tile[2] = new Tile(); 
-            tile[2].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/grass3.png")));
+            tile[2].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/resources/tiles/grass3.png")));
 
             tile[3] = new Tile(); 
-            tile[3].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/grass4.png")));
+            tile[3].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/resources/tiles/grass4.png")));
 
             tile[4] = new Tile(); 
-            tile[4].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/grass5.png")));
+            tile[4].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/resources/tiles/grass5.png")));
 
             tile[5] = new Tile(); 
-            tile[5].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/grass6.png")));
+            tile[5].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/resources/tiles/grass6.png")));
 
             tile[6] = new Tile(); 
-            tile[6].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/hills1.png")));
+            tile[6].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/resources/tiles/hills1.png")));
 
             tile[7] = new Tile(); 
-            tile[7].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/hills2.png")));
+            tile[7].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/resources/tiles/hills2.png")));
 
             tile[8] = new Tile(); 
-            tile[8].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/hills3.png")));
+            tile[8].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/resources/tiles/hills3.png")));
 
             tile[9] = new Tile(); 
-            tile[9].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/water.png")));
+            tile[9].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/resources/tiles/water.png")));
     
         } catch (IOException e) {
             e.printStackTrace();

@@ -7,11 +7,15 @@ import sprint_2.src.GamePanel;
 public final class TileManager {
     GamePanel gp;
     Tile[] tile;
-
+    private final int waterTileSize = 107;  // these numbers are fixed so the background stays the same at all times
+    private final int waterGridWidth = 7;  
+    private final int waterGridHeight = 7;
+     
     public TileManager(GamePanel gp){
         this.gp = gp;
         tile = new Tile[10];
         getTileImage();
+
     }
 
     // load tile images
@@ -53,18 +57,20 @@ public final class TileManager {
         } 
     }
     
+    // drawing the gameboard
     public void draw(Graphics2D g2){
         
         int startX = (gp.getWidth() - gp.tileSize * gp.totalTiles) / 2; 
         int startY = (gp.getHeight() - gp.tileSize * gp.totalTiles) / 2;
 
         // draw the water tiles
-        for (int row = 0; row < gp.totalTiles; row++) {
-            for (int col = 0; col < gp.totalTiles; col++) {
-            
-                int x = startX + col * gp.tileSize;
-                int y = startY + row * gp.tileSize;
-                g2.drawImage(tile[9].image, x, y, gp.tileSize, gp.tileSize, null);
+        for (int row = 0; row < waterGridWidth; row++) {
+            for (int col = 0; col < waterGridHeight; col++) {
+                int x = waterGridWidth + col * waterTileSize;
+                int y = waterGridHeight + row * waterTileSize;
+                
+                // Draw the water tile with the separate size
+                g2.drawImage(tile[9].image, x, y, waterTileSize, waterTileSize, null);
             }
         }
 
@@ -115,7 +121,6 @@ public final class TileManager {
                 int y = startY + row * gp.tileSize;
                 g2.drawImage(tile[4].image, x, y, gp.tileSize, gp.tileSize, null);
             }
-        }
-
+        }   
     }
 }

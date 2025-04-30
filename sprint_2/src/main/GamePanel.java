@@ -18,7 +18,7 @@ public class GamePanel extends JPanel {
 
     // Tile setup
     private final int paddingTiles = 1;
-    public final int playTiles = 10;
+    public final int playTiles = 5;
     public final int totalTiles = playTiles + paddingTiles * 2;
     public final int tileSize = Math.min(boardWidth, boardHeight) / totalTiles;
 
@@ -60,7 +60,7 @@ public class GamePanel extends JPanel {
         g2.setColor(Color.BLACK); // light black, slightly transparent
 
         // REFERENCE POINTS PURPOSES !!
-        g2.drawOval(getBoardX(), getBoardY(), tileSize, tileSize);
+        g2.drawOval(getBoardX() + tileSize, getBoardY() + tileSize, tileSize, tileSize); // placeholder worker
         // Draw vertical lines
         for (int col = 0; col <= totalTiles; col++) {
             int x = getBoardX() + col * tileSize;
@@ -86,6 +86,10 @@ public class GamePanel extends JPanel {
             int y2 = (getHeight() - imageHeight) / 2;
             player2.getGodCard().draw(g2, x2, y2, imageWidth, imageHeight, "Player 2");
         }
+
+        // debugging purposes!!! for coord system
+        System.out.println("x origin " + getBoardX());
+        System.out.println("y origin "+ getBoardY());
     }
 
 }

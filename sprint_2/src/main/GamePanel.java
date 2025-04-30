@@ -5,46 +5,91 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+
+import actors.Player;
 import tile.TileManager;
+import util.FontLoader;
 
 public class GamePanel extends JPanel {
 
+    // Board dimensions
     private final int boardWidth = 750;
     private final int boardHeight = 750;
-    private final int paddingTiles = 1;    
-    public final int playTiles = 5;  // playable area - can be changed according to user input
-    public final int totalTiles = playTiles + paddingTiles * 2; // 7x7 total for a 5x5 playable area
+
+    // Tile setup
+    private final int paddingTiles = 1;
+    public final int playTiles = 5;
+    public final int totalTiles = playTiles + paddingTiles * 2;
     public final int tileSize = Math.min(boardWidth, boardHeight) / totalTiles;
 
-    TileManager tileM;
+    // Players
+    private final Player player1;
+    private final Player player2;
 
-    public GamePanel() {
+    // Components
+    private final TileManager tileManager;
+    private final FontLoader fontLoader;
+
+    public GamePanel(Player player1, Player player2) {
+
         this.setPreferredSize(new Dimension(boardWidth, boardHeight)); // fixed gameboard size
         this.setBackground(new Color(156, 212, 200));
+        this.player1 = player1;
+        this.player2 = player2;
 
-        tileM = new TileManager(this);
+        this.tileManager = new TileManager(this);
+        this.fontLoader = new FontLoader();
+
     }
-    
+
+    // Public accessors for board coordinates
+    public int getBoardX() {
+        return (getWidth() - tileSize * totalTiles) / 2;
+    }
+
+    public int getBoardY() {
+        return (getHeight() - tileSize * totalTiles) / 2;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D)g;
-        tileM.draw(g2);
+        Graphics2D g2 = (Graphics2D) g;
+        tileManager.draw(g2);
+        g2.setFont(fontLoader.getPixelFont());
+        g2.setColor(Color.BLACK); // light black, slightly transparent
 
-        int startX = (getWidth() - tileSize * totalTiles) / 2;
-        int startY = (getHeight() - tileSize * totalTiles) / 2;
-        g2.setColor(new Color(0, 0, 0, 50)); // light black, slightly transparent
-
+        // REFERENCE POINTS PURPOSES !!
+        g2.drawOval(getBoardX() + tileSize, getBoardY() + tileSize, tileSize, tileSize); // placeholder worker
         // Draw vertical lines
         for (int col = 0; col <= totalTiles; col++) {
-            int x = startX + col * tileSize;
+            int x = getBoardX() + col * tileSize;
             g2.drawLine(x, 0, x, getHeight());
-        }
-
-        // Draw horizontal lines
+        } // Draw horizontal lines
         for (int row = 0; row <= totalTiles; row++) {
-            int y = startY + row * tileSize;
+            int y = getBoardY() + row * tileSize;
             g2.drawLine(0, y, getWidth(), y);
         }
+
+        // drawing the god cards for display
+        int imageWidth = 135;
+        int imageHeight = 180;
+
+        if (player1.getGodCard() != null) {
+            int x1 = getBoardX() - imageWidth;
+            int y1 = (getHeight() - imageHeight) / 2;
+            player1.getGodCard().draw(g2, x1, y1, imageWidth, imageHeight, "Player 1");
+        }
+
+        if (player2.getGodCard() != null) {
+            int x2 = getBoardX() + totalTiles * tileSize;
+            int y2 = (getHeight() - imageHeight) / 2;
+            player2.getGodCard().draw(g2, x2, y2, imageWidth, imageHeight, "Player 2");
+        }
+
+        // debugging purposes!!! for coord system
+        System.out.println("x origin " + getBoardX());
+        System.out.println("y origin "+ getBoardY());
     }
+
 }

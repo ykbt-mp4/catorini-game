@@ -26,7 +26,7 @@ public class Main {
 
         JPanel mainPanel = new JPanel(new BorderLayout());
 
-        // Adding in the gameboard 
+        // Adding in the gameboard
         GamePanel gamePanel = new GamePanel(player1, player2);
 
         // Add panels

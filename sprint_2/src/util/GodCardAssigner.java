@@ -1,7 +1,7 @@
 package util;
-import actors.Artemis;
-import actors.Demeter;
-import actors.God;
+import actors.gods.Artemis;
+import actors.gods.Demeter;
+import actors.gods.God;
 import actors.Player;
 
 import java.util.ArrayList;

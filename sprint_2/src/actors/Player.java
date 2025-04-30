@@ -1,5 +1,7 @@
 package actors;
 
+import actors.gods.God;
+
 public class Player {
     private God godCard;
 

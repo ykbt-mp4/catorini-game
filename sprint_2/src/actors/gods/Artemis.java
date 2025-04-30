@@ -1,4 +1,4 @@
-package actors;
+package actors.gods;
 
 public class Artemis extends God {
 

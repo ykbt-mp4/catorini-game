@@ -1,8 +1,9 @@
 package util;
+
+import actors.Player;
 import actors.gods.Artemis;
 import actors.gods.Demeter;
 import actors.gods.God;
-import actors.Player;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -21,6 +22,6 @@ public class GodCardAssigner {
         }
         Random random = new Random();
         God god = availableGods.remove(random.nextInt(availableGods.size()));
-        // player.setGodCard(god);
+        player.setGodCard(god);
     }
 }

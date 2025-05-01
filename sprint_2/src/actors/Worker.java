@@ -12,7 +12,6 @@ public class Worker {
         this.row = row;
         this.col = col;
 
-
     }
 
     public int getRow() {
@@ -47,3 +46,4 @@ public class Worker {
         this.playerId = playerId;
     }
 }
+

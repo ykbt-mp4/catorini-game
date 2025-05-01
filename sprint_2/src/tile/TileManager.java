@@ -1,4 +1,4 @@
-package tile;
+//package tile;
 
 import main.GamePanel;
 
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Objects;
 import javax.imageio.ImageIO;
 
-public final class TileManager {
+//public final class TileManager {
 //        GamePanel gp;
 //        Tile[] tile;
 //
@@ -111,4 +111,3 @@ public final class TileManager {
 //            }
 //        }
 //    }
-}

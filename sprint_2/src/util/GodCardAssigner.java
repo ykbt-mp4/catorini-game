@@ -21,6 +21,6 @@ public class GodCardAssigner {
         }
         Random random = new Random();
         God god = availableGods.remove(random.nextInt(availableGods.size()));
-        player.setGodCard(god);
+        // player.setGodCard(god);
     }
 }

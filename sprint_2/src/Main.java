@@ -1,40 +1,26 @@
+import javax.swing.*;
+import java.awt.*;
 import actors.Player;
 import main.GamePanel;
-import util.GodCardAssigner;
 
-import java.awt.BorderLayout;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class Main {
-
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Santorini Game");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.setSize(1300, 800);
+        JFrame window = new JFrame("Santorini Game");
+        window.setSize(1200, 700);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setResizable(false);
+        window.setLocationRelativeTo(null);
 
-        Player player1 = new Player();
-        Player player2 = new Player();
+        Player player1 = new Player(1);
+        Player player2 = new Player(2);
 
-        GodCardAssigner.assignRandomGod(player1);
-        GodCardAssigner.assignRandomGod(player2);
+        GamePanel santorini = new GamePanel(player1, player2);
 
-        // debugging purposes
-        System.out.println("Player 1 was assigned the god: " + player1.getGodCard().getName());
-        System.out.println("Player 2 was assigned the god: " + player2.getGodCard().getName());
+        santorini.setWorkerPos();
 
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        window.add(santorini, BorderLayout.WEST);
+        window.setVisible(true);
 
-        // Adding in the gameboard
-        GamePanel gamePanel = new GamePanel(player1, player2);
-
-        // Add panels
-        mainPanel.add(gamePanel, BorderLayout.CENTER);
-
-        frame.setContentPane(mainPanel);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
 }
-

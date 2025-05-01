@@ -1,15 +1,22 @@
 package actors;
 
-import actors.gods.God;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
-    private God godCard;
+    private final int playerId;
+    private final List<Worker> workers;
 
-    public void setGodCard(God godCard) {
-        this.godCard = godCard;
+    public Player(int playerId) {
+        this.playerId = playerId;
+        this.workers = new ArrayList<>();
     }
 
-    public God getGodCard() {
-        return godCard;
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public List<Worker> getWorkers() {
+        return workers;
     }
 }

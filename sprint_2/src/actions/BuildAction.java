@@ -1,10 +1,10 @@
-package src.actions;
+package actions;
 
 import java.util.List;
 
-import src.actors.Player;
-import src.buildings.Block;
-import src.main.GamePanel;
+import actors.Player;
+//import buildings.Block;
+import main.GamePanel;
 
 public class BuildAction extends Action {
 

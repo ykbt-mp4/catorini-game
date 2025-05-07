@@ -1,7 +1,7 @@
 package src.actions;
 
-import src.actors.Player;
-import src.main.GamePanel;
+import actors.Player;
+import main.GamePanel;
 
 public abstract class Action {
     public abstract String execute(Player player, GamePanel gamePanel);

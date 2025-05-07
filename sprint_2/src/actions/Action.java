@@ -1,4 +1,4 @@
-package src.actions;
+package actions;
 
 import actors.Player;
 import main.GamePanel;

@@ -2,6 +2,7 @@ package main;
 
 import actors.Player;
 import actors.Worker;
+import actions.MoveAction;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,6 +23,8 @@ public class GamePanel extends JPanel {
     int workerCount = 2;
     public static ArrayList<Worker> workerPos = new ArrayList<>();
     Random random = new Random();
+
+    MoveAction moveAction = new MoveAction();
 
     private final Player player1;
     private final Player player2;

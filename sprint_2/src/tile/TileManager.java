@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.Objects;
 import javax.imageio.ImageIO;
-import src.main.GamePanel;
+import main.GamePanel;
 
 //public final class TileManager {
 //        GamePanel gp;

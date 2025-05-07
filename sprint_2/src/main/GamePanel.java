@@ -1,4 +1,4 @@
-package main;
+package src.main;
 
 import actors.Player;
 import actors.Worker;

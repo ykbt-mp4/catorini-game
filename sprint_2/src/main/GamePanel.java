@@ -2,6 +2,7 @@ package main;
 
 import actors.Player;
 import actors.Worker;
+import actions.BuildAction;
 
 import javax.swing.*;
 import java.awt.*;
@@ -101,27 +102,25 @@ public class GamePanel extends JPanel {
     }
 
     private void handleClick(int mouseX, int mouseY) {
-        // Convert mouse coordinates to grid coordinates
-        int col = mouseX / tileSize;
-        int row = mouseY / tileSize;
+    int col = mouseX / tileSize;
+    int row = mouseY / tileSize;
 
-        // Check if click is within playable area
-        if (row < 1 || row > playTiles || col < 1 || col > playTiles) {
-            System.out.println("Clicked outside play area");
+    if (row < 1 || row > playTiles || col < 1 || col > playTiles) {
+        System.out.println("Clicked outside play area");
+        return;
+    }
+
+    for (Worker worker : workerPos) {
+        if (worker.getRow() == row && worker.getCol() == col) {
+            System.out.println("Worker clicked - Player ID: " + worker.getPlayerId());
+            
+            // Example: Trigger a build action
+            BuildAction buildAction = new BuildAction();
+            buildAction.execute(worker.getPlayerId() == player1.getPlayerId() ? player1 : player2, this);
             return;
         }
-
-        // Check if a worker exists at this position
-        for (Worker worker : workerPos) {
-            if (worker.getRow() == row && worker.getCol() == col) {
-                System.out.println("Worker clicked - " +
-                        "Player ID: " + worker.getPlayerId() + ", " +
-                        "Worker ID: " + worker.getWorkerId() + ", " +
-                        "Position: (" + worker.getRow() + ", " + worker.getCol() + ")");
-                return;
-            }
-        }
-
-        System.out.println("No worker at position (" + row + ", " + col + ")");
     }
+
+    System.out.println("No worker at position (" + row + ", " + col + ")");
+}
 }

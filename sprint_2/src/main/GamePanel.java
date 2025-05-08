@@ -28,10 +28,12 @@ public class GamePanel extends JPanel {
 
     private final Player player1;
     private final Player player2;
+    private Player currentPlayer;
 
     public GamePanel(Player player1, Player player2) {
         this.player1 = player1;
         this.player2 = player2;
+        this.currentPlayer = player1;
         setPreferredSize(new Dimension(boardWidth, boardHeight));
         setBackground(new Color(156, 212, 200));
 
@@ -62,6 +64,12 @@ public class GamePanel extends JPanel {
         for (Worker worker : workerPos) {
             int x = worker.getCol() * tileSize;
             int y = worker.getRow() * tileSize;
+
+            // Highlight selected worker
+            if (moveAction.getWorker() == worker) {
+                g2.setColor(new Color(255, 0, 0, 100)); // Red highlight
+                g2.fillOval(x, y, tileSize, tileSize);
+            }
 
             // Get the correct player based on worker's playerId
             Player player = worker.getPlayerId() == player1.getPlayerId() ? player1 : player2;
@@ -111,20 +119,49 @@ public class GamePanel extends JPanel {
         // Check if click is within playable area
         if (row < 1 || row > playTiles || col < 1 || col > playTiles) {
             System.out.println("Clicked outside play area");
+            moveAction.clearSelection();
+            repaint(); // Redraw component
             return;
         }
 
-        // Check if a worker exists at this position
+        Worker clickedWorker = getWorkerAtPosition(row, col);
+
+        // If worker is selected, check if movement is possible (Adjacent tiles)
+        if (moveAction.getWorker() != null) {
+            if (clickedWorker == null) {
+                if (moveAction.canMove(moveAction.getWorker(), row, col, workerPos)) {
+                    moveAction.moveWorker(row, col);
+                    System.out.println("Moved worker to (" + row + ", " + col + ")");
+                }
+                else {
+                    System.out.println("Invalid move");
+                }
+            }
+            else if (clickedWorker != moveAction.getWorker()) {
+                System.out.println("Cannot move to occupied space");
+            }
+            moveAction.clearSelection();
+        }
+        // If no worker is selected, select the clicked worker
+        else if (clickedWorker != null) {
+            moveAction.setWorker(clickedWorker);
+            System.out.println("Selected worker - " +
+                    "Player ID: " + clickedWorker.getPlayerId() + ", " +
+                    "Worker ID: " + clickedWorker.getWorkerId() + ", " +
+                    "Position: (" + clickedWorker.getRow() + ", " + clickedWorker.getCol() + ")");
+        }
+        else {
+            System.out.println("No worker at position (" + row + ", " + col + ")");
+        }
+        repaint();
+    }
+
+    private Worker getWorkerAtPosition(int row, int col) {
         for (Worker worker : workerPos) {
             if (worker.getRow() == row && worker.getCol() == col) {
-                System.out.println("Worker clicked - " +
-                        "Player ID: " + worker.getPlayerId() + ", " +
-                        "Worker ID: " + worker.getWorkerId() + ", " +
-                        "Position: (" + worker.getRow() + ", " + worker.getCol() + ")");
-                return;
+                return worker;
             }
         }
-
-        System.out.println("No worker at position (" + row + ", " + col + ")");
+        return null;
     }
 }

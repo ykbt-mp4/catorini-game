@@ -32,4 +32,23 @@ public class MoveAction{
         }
         return false;
     }
+
+    public Worker getWorker() {
+        return worker;
+    }
+
+    public void setWorker(Worker worker) {
+        this.worker = worker;
+    }
+
+    public void clearSelection() {
+        this.worker = null;
+    }
+
+    public void moveWorker(int targetRow, int targetCol) {
+        if (worker != null) {
+            worker.setRow(targetRow);
+            worker.setCol(targetCol);
+        }
+    }
 }

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="project2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/prototypes/yokabit-prototype/project.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

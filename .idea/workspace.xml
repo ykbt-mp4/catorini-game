@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b7b7afd1-34c9-44af-baa6-59d9e1384be8" name="Changes" comment="Ignore commit" />
+    <list default="true" id="b7b7afd1-34c9-44af-baa6-59d9e1384be8" name="Changes" comment="Ignore commit">
+      <change afterPath="$PROJECT_DIR$/out/production/sprint_2/Main.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/sprint_2/main/GamePanel$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/sprint_2/main/GamePanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sprint_2/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/sprint_2/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sprint_2/src/turn/StandardTurn.java" beforeDir="false" afterPath="$PROJECT_DIR$/sprint_2/src/turn/StandardTurn.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -55,7 +62,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "Merging main",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -142,7 +149,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746714139329</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Ignore commit">
+      <option name="closed" value="true" />
+      <created>1746716570777</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1746716570777</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -165,6 +180,7 @@
     <MESSAGE value="Added movement to workers via handleClick and worker highlight" />
     <MESSAGE value="Added player turns to GamePanel, now can only move current player's workers" />
     <MESSAGE value="Added some comments" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added some comments" />
+    <MESSAGE value="Ignore commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ignore commit" />
   </component>
 </project>

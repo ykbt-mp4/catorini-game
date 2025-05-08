@@ -3,6 +3,7 @@ package main;
 import actors.Player;
 import actors.Worker;
 import actions.MoveAction;
+import actions.BuildAction;
 
 import javax.swing.*;
 import java.awt.*;
@@ -112,9 +113,8 @@ public class GamePanel extends JPanel {
     }
 
     private void handleClick(int mouseX, int mouseY) {
-        // Convert mouse coordinates to grid coordinates
-        int col = mouseX / tileSize;
-        int row = mouseY / tileSize;
+    int col = mouseX / tileSize;
+    int row = mouseY / tileSize;
 
         // Check if click is within playable area
         if (row < 1 || row > playTiles || col < 1 || col > playTiles) {

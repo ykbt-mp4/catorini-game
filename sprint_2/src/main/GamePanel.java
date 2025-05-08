@@ -30,6 +30,8 @@ public class GamePanel extends JPanel {
     private final Player player2;
     private Player currentPlayer;
 
+    private boolean isGameStarted = false;
+
     public GamePanel(Player player1, Player player2) {
         this.player1 = player1;
         this.player2 = player2;
@@ -45,12 +47,35 @@ public class GamePanel extends JPanel {
         });
     }
 
+    public void gameStart() {
+        isGameStarted = true;
+        currentPlayer = player1;
+        System.out.println("Game start! Player: " + currentPlayer.getPlayerId() + "'s turn");
+    }
+
+    public void switchTurn() {
+        currentPlayer = (currentPlayer == player1) ? player2 : player1;
+        moveAction.clearSelection();
+        System.out.println("Player: " + currentPlayer.getPlayerId() + "'s turn");
+        repaint();
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
         g2.setColor(Color.BLACK); // Set line color
+
+        // Draw turn indicator
+        g2.setFont(new Font("Arial", Font.BOLD, 20));
+        String turnText = "Player " + currentPlayer.getPlayerId() + "'s turn";
+        g2.drawString(turnText, 20, 30);
+
 
         // Draw vertical lines
         for (int row = 1; row <= (playTiles); row++) {
@@ -112,6 +137,7 @@ public class GamePanel extends JPanel {
     }
 
     private void handleClick(int mouseX, int mouseY) {
+
         // Convert mouse coordinates to grid coordinates
         int col = mouseX / tileSize;
         int row = mouseY / tileSize;
@@ -127,11 +153,12 @@ public class GamePanel extends JPanel {
         Worker clickedWorker = getWorkerAtPosition(row, col);
 
         // If worker is selected, check if movement is possible (Adjacent tiles)
-        if (moveAction.getWorker() != null) {
+        if (moveAction.getWorker() != null && moveAction.getWorker().getPlayerId() == currentPlayer.getPlayerId()) {
             if (clickedWorker == null) {
                 if (moveAction.canMove(moveAction.getWorker(), row, col, workerPos)) {
                     moveAction.moveWorker(row, col);
                     System.out.println("Moved worker to (" + row + ", " + col + ")");
+                    switchTurn();
                 }
                 else {
                     System.out.println("Invalid move");
@@ -144,11 +171,16 @@ public class GamePanel extends JPanel {
         }
         // If no worker is selected, select the clicked worker
         else if (clickedWorker != null) {
-            moveAction.setWorker(clickedWorker);
-            System.out.println("Selected worker - " +
-                    "Player ID: " + clickedWorker.getPlayerId() + ", " +
-                    "Worker ID: " + clickedWorker.getWorkerId() + ", " +
-                    "Position: (" + clickedWorker.getRow() + ", " + clickedWorker.getCol() + ")");
+            if (clickedWorker.getPlayerId() == currentPlayer.getPlayerId()) {
+                moveAction.setWorker(clickedWorker);
+                System.out.println("Selected worker - " +
+                        "Player ID: " + clickedWorker.getPlayerId() + ", " +
+                        "Worker ID: " + clickedWorker.getWorkerId() + ", " +
+                        "Position: (" + clickedWorker.getRow() + ", " + clickedWorker.getCol() + ")");
+            }
+            else {
+                System.out.println("Cannot select " + currentPlayer.getPlayerId() + "'s worker!");
+            }
         }
         else {
             System.out.println("No worker at position (" + row + ", " + col + ")");

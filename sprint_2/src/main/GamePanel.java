@@ -2,6 +2,7 @@ package main;
 
 import actors.Player;
 import actors.Worker;
+import actions.MoveAction;
 import actions.BuildAction;
 
 import javax.swing.*;
@@ -24,12 +25,16 @@ public class GamePanel extends JPanel {
     public static ArrayList<Worker> workerPos = new ArrayList<>();
     Random random = new Random();
 
+    MoveAction moveAction = new MoveAction();
+
     private final Player player1;
     private final Player player2;
+    private Player currentPlayer;
 
     public GamePanel(Player player1, Player player2) {
         this.player1 = player1;
         this.player2 = player2;
+        this.currentPlayer = player1;
         setPreferredSize(new Dimension(boardWidth, boardHeight));
         setBackground(new Color(156, 212, 200));
 
@@ -60,6 +65,12 @@ public class GamePanel extends JPanel {
         for (Worker worker : workerPos) {
             int x = worker.getCol() * tileSize;
             int y = worker.getRow() * tileSize;
+
+            // Highlight selected worker
+            if (moveAction.getWorker() == worker) {
+                g2.setColor(new Color(255, 0, 0, 100)); // Red highlight
+                g2.fillOval(x, y, tileSize, tileSize);
+            }
 
             // Get the correct player based on worker's playerId
             Player player = worker.getPlayerId() == player1.getPlayerId() ? player1 : player2;
@@ -105,22 +116,52 @@ public class GamePanel extends JPanel {
     int col = mouseX / tileSize;
     int row = mouseY / tileSize;
 
-    if (row < 1 || row > playTiles || col < 1 || col > playTiles) {
-        System.out.println("Clicked outside play area");
-        return;
-    }
-
-    for (Worker worker : workerPos) {
-        if (worker.getRow() == row && worker.getCol() == col) {
-            System.out.println("Worker clicked - Player ID: " + worker.getPlayerId());
-            
-            // Example: Trigger a build action
-            BuildAction buildAction = new BuildAction();
-            buildAction.execute(worker.getPlayerId() == player1.getPlayerId() ? player1 : player2, this);
+        // Check if click is within playable area
+        if (row < 1 || row > playTiles || col < 1 || col > playTiles) {
+            System.out.println("Clicked outside play area");
+            moveAction.clearSelection();
+            repaint(); // Redraw component
             return;
         }
+
+        Worker clickedWorker = getWorkerAtPosition(row, col);
+
+        // If worker is selected, check if movement is possible (Adjacent tiles)
+        if (moveAction.getWorker() != null) {
+            if (clickedWorker == null) {
+                if (moveAction.canMove(moveAction.getWorker(), row, col, workerPos)) {
+                    moveAction.moveWorker(row, col);
+                    System.out.println("Moved worker to (" + row + ", " + col + ")");
+                }
+                else {
+                    System.out.println("Invalid move");
+                }
+            }
+            else if (clickedWorker != moveAction.getWorker()) {
+                System.out.println("Cannot move to occupied space");
+            }
+            moveAction.clearSelection();
+        }
+        // If no worker is selected, select the clicked worker
+        else if (clickedWorker != null) {
+            moveAction.setWorker(clickedWorker);
+            System.out.println("Selected worker - " +
+                    "Player ID: " + clickedWorker.getPlayerId() + ", " +
+                    "Worker ID: " + clickedWorker.getWorkerId() + ", " +
+                    "Position: (" + clickedWorker.getRow() + ", " + clickedWorker.getCol() + ")");
+        }
+        else {
+            System.out.println("No worker at position (" + row + ", " + col + ")");
+        }
+        repaint();
     }
 
-    System.out.println("No worker at position (" + row + ", " + col + ")");
-}
+    private Worker getWorkerAtPosition(int row, int col) {
+        for (Worker worker : workerPos) {
+            if (worker.getRow() == row && worker.getCol() == col) {
+                return worker;
+            }
+        }
+        return null;
+    }
 }

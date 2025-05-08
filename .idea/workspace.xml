@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b7b7afd1-34c9-44af-baa6-59d9e1384be8" name="Changes" comment="Added some comments" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="feature/turn" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitLabMergeRequestFiltersHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPENED&quot;,
+    &quot;assignee&quot;: {
+      &quot;type&quot;: &quot;org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAssigneeFilterValue&quot;,
+      &quot;username&quot;: &quot;jsan0064&quot;,
+      &quot;fullname&quot;: &quot;Jason Santoso&quot;
+    }
+  }
+}</component>
+  <component name="GitLabMergeRequestsSettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;first&quot;: &quot;https://git.infotech.monash.edu/FIT3077/fit3077-s1-2025/assignment-groups/CL_Tuesday04pm_Team041/project.git&quot;,
+    &quot;second&quot;: &quot;dab725a0-6d17-4c92-836c-df822402b7fa&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2wUOYvCz2rK0OnP9igcKWJIsURh" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.435" />
+        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-IU-251.23774.435" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b7b7afd1-34c9-44af-baa6-59d9e1384be8" name="Changes" comment="" />
+      <created>1746092736481</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1746092736481</updated>
+      <workItem from="1746092737707" duration="4606000" />
+      <workItem from="1746605757385" duration="6026000" />
+      <workItem from="1746686977332" duration="7791000" />
+    </task>
+    <task id="LOCAL-00001" summary="Fixed GamePanel, Main, Player&#10;Commented out TileManager until able to implement">
+      <option name="closed" value="true" />
+      <created>1746094704582</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1746094704582</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Created MoveAction with canMove to check if worker can move to tile">
+      <option name="closed" value="true" />
+      <created>1746611811653</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1746611811655</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Created MoveAction with canMove to check if worker can move to tile">
+      <option name="closed" value="true" />
+      <created>1746611844248</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1746611844248</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Created MoveAction with canMove to check if worker can move to tile">
+      <option name="closed" value="true" />
+      <created>1746687477886</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1746687477886</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Added movement to workers via handleClick and worker highlight">
+      <option name="closed" value="true" />
+      <created>1746695345329</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1746695345329</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added player turns to GamePanel, now can only move current player's workers">
+      <option name="closed" value="true" />
+      <created>1746713000431</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1746713000431</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Added some comments">
+      <option name="closed" value="true" />
+      <created>1746714139329</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1746714139329</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Fixed GamePanel, Main, Player&#10;Commented out TileManager until able to implement" />
+    <MESSAGE value="Created MoveAction with canMove to check if worker can move to tile" />
+    <MESSAGE value="Added movement to workers via handleClick and worker highlight" />
+    <MESSAGE value="Added player turns to GamePanel, now can only move current player's workers" />
+    <MESSAGE value="Added some comments" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added some comments" />
+  </component>
+</project>

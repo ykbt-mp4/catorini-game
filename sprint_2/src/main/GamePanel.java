@@ -2,6 +2,8 @@ package main;
 
 import actors.Player;
 import actors.Worker;
+import buildings.Building;
+import actions.BuildAction;
 import actions.MoveAction;
 
 import javax.swing.*;
@@ -22,14 +24,18 @@ public class GamePanel extends JPanel {
 
     int workerCount = 2;
     public static ArrayList<Worker> workerPos = new ArrayList<>();
+    public static ArrayList<Building> buildings = new ArrayList<>();
     Random random = new Random();
 
     MoveAction moveAction = new MoveAction();
+    BuildAction buildAction = new BuildAction();
 
     private final Player player1;
     private final Player player2;
     private Player currentPlayer;
 
+    private boolean isBuildingPhase = false;
+    private Worker workerThatMoved;
     private boolean isGameStarted = false;
 
     public GamePanel(Player player1, Player player2) {
@@ -54,7 +60,7 @@ public class GamePanel extends JPanel {
     }
 
     public void switchTurn() {
-        currentPlayer = (currentPlayer == player1) ? player2 : player1;
+        this.currentPlayer = (currentPlayer == player1) ? player2 : player1;
         moveAction.clearSelection();
         System.out.println("Player: " + currentPlayer.getPlayerId() + "'s turn");
         repaint();
@@ -85,6 +91,16 @@ public class GamePanel extends JPanel {
                 g2.drawRect(x, y, tileSize, tileSize);
             }
         }
+
+        // Draw buildings
+        for (Building building : buildings) {
+            if (building.getBuildingImage() != null) {
+                int x = building.getCol() * tileSize;
+                int y = building.getRow() * tileSize;
+                g2.drawImage(building.getBuildingImage(), x, y, tileSize, tileSize, null);
+            }
+        }
+
         // Draw workers
         for (Worker worker : workerPos) {
             int x = worker.getCol() * tileSize;
@@ -103,6 +119,7 @@ public class GamePanel extends JPanel {
             g2.setColor(Color.BLACK);
             g2.drawOval(x, y, tileSize, tileSize);
         }
+                
     }
 
     public void setWorkerPos() {
@@ -115,7 +132,7 @@ public class GamePanel extends JPanel {
                 int r = random.nextInt(playTiles)+1; // + 1 to account for padding
                 int c = random.nextInt(playTiles)+1;
 
-                Worker worker = new Worker(player.getPlayerId(), workerLeft, r, c);
+                Worker worker = new Worker(player.getPlayerId(), workerLeft, r, c, 0);
 
                 if (!isPositionOccupied(r, c)) {
                     workerPos.add(worker);
@@ -150,40 +167,90 @@ public class GamePanel extends JPanel {
             return;
         }
 
-        Worker clickedWorker = getWorkerAtPosition(row, col);
+        if (isBuildingPhase) {
+            if (workerThatMoved != null) {
+                if (buildAction.canBuild(workerThatMoved, row, col, workerPos, buildings)) {
+                    buildAction.build(row, col);
+                    System.out.println("Player " + workerThatMoved.getPlayerId() + " built at (" + row + ", " + col + ")");
+                    
+                    // Check for win condition after building (optional, add later if needed)
 
-        // If worker is selected, check if movement is possible (Adjacent tiles)
-        if (moveAction.getWorker() != null && moveAction.getWorker().getPlayerId() == currentPlayer.getPlayerId()) {
-            if (clickedWorker == null) {
-                if (moveAction.canMove(moveAction.getWorker(), row, col, workerPos)) {
-                    moveAction.moveWorker(row, col);
-                    System.out.println("Moved worker to (" + row + ", " + col + ")");
+                    isBuildingPhase = false;
+                    workerThatMoved = null;
+                    // Switch player
                     switchTurn();
+                    System.out.println("Turn: Player " + currentPlayer.getPlayerId());
+                } else {
+                    System.out.println("Cannot build there. Try an adjacent, unoccupied, and buildable tile.");
+                    // Player remains in building phase to try another spot
+        // // If worker is selected, check if movement is possible (Adjacent tiles)
+        // if (moveAction.getWorker() != null && moveAction.getWorker().getPlayerId() == currentPlayer.getPlayerId()) {
+        //     if (clickedWorker == null) {
+        //         if (moveAction.canMove(moveAction.getWorker(), row, col, workerPos)) {
+        //             moveAction.moveWorker(row, col);
+        //             System.out.println("Moved worker to (" + row + ", " + col + ")");
+        //             switchTurn();
                 }
-                else {
-                    System.out.println("Invalid move");
+            } else {
+                // This case should ideally not be reached if logic is correct
+                System.err.println("Error: In building phase but no worker is designated to build.");
+                isBuildingPhase = false; // Reset to avoid getting stuck
+                currentPlayer = (currentPlayer == player1) ? player2 : player1; // Switch turn to be safe
+                 System.out.println("Turn: Player " + currentPlayer.getPlayerId());
+            }
+        } else { // Move phase or worker selection
+            Worker clickedWorker = getWorkerAtPosition(row, col);
+
+            if (moveAction.getWorker() != null && moveAction.getWorker().getPlayerId() == currentPlayer.getPlayerId()) { // A worker is already selected, try to move it
+                Worker selectedWorker = moveAction.getWorker();
+                if (clickedWorker == null) { 
+                    if (selectedWorker.getPlayerId() == currentPlayer.getPlayerId()) {
+                        if (moveAction.canMove(selectedWorker, row, col, workerPos, buildings)) {
+                            // Store previous position for win condition check if needed before move
+                            // int prevHeight = selectedWorker.getHeight();
+                            moveAction.moveWorker(row, col); // Worker's height is updated in moveWorker
+                            System.out.println("Player " + selectedWorker.getPlayerId() + " moved worker to (" + row + ", " + col + ")");
+                            
+                            // Check for win condition after moving (e.g. reaching level 3)
+                            // Building targetBuilding = getBuildingAtPosition(row, col);
+                            // if (targetBuilding != null && targetBuilding.getLevel() == BuildingLevel.LEVEL_THREE && prevHeight < BuildingLevel.LEVEL_THREE.getHeight()){
+                            //    System.out.println("Player " + selectedWorker.getPlayerId() + " wins!");
+                            //    // Handle game over
+                            //    return;
+                            // }
+
+                            isBuildingPhase = true;
+                            workerThatMoved = selectedWorker;
+                            moveAction.clearSelection();
+                            System.out.println("Player " + workerThatMoved.getPlayerId() + " must now build.");
+                        } else {
+                            System.out.println("Invalid move for Player " + selectedWorker.getPlayerId() + ".");
+                            moveAction.clearSelection(); // Clear selection on invalid move attempt
+                        }
+                    } else {
+                        System.out.println("Not Player " + currentPlayer.getPlayerId() + "'s worker to move.");
+                        moveAction.clearSelection();
+                    }
+                } else if (clickedWorker == selectedWorker) { // Clicked on the already selected worker
+                    moveAction.clearSelection(); // Deselect
+                    System.out.println("Deselected worker.");
+                } else { // Target tile has another worker
+                    System.out.println("Cannot move to a tile occupied by another worker.");
+                    // moveAction.clearSelection(); // Keep worker selected to try another move
                 }
-            }
-            else if (clickedWorker != moveAction.getWorker()) {
-                System.out.println("Cannot move to occupied space");
-            }
-            moveAction.clearSelection();
-        }
-        // If no worker is selected, select the clicked worker
-        else if (clickedWorker != null) {
-            if (clickedWorker.getPlayerId() == currentPlayer.getPlayerId()) {
-                moveAction.setWorker(clickedWorker);
-                System.out.println("Selected worker - " +
+            } else if (clickedWorker != null) { // No worker selected, try to select this one
+                if (clickedWorker.getPlayerId() == currentPlayer.getPlayerId()) {
+                    moveAction.setWorker(clickedWorker);
+                     System.out.println("Selected worker - " +
                         "Player ID: " + clickedWorker.getPlayerId() + ", " +
                         "Worker ID: " + clickedWorker.getWorkerId() + ", " +
                         "Position: (" + clickedWorker.getRow() + ", " + clickedWorker.getCol() + ")");
+                } else {
+                    System.out.println("Cannot select Player " + clickedWorker.getPlayerId()+ "'s worker!");
+                }
+            } else { // Clicked on an empty tile with no worker selected
+                System.out.println("No worker at position (" + row + ", " + col + ")");
             }
-            else {
-                System.out.println("Cannot select Player " + clickedWorker.getPlayerId()+ "'s worker!");
-            }
-        }
-        else {
-            System.out.println("No worker at position (" + row + ", " + col + ")");
         }
         repaint();
     }
@@ -192,6 +259,16 @@ public class GamePanel extends JPanel {
         for (Worker worker : workerPos) {
             if (worker.getRow() == row && worker.getCol() == col) {
                 return worker;
+            }
+        }
+        return null;
+    }
+
+    // Helper to get building at position, useful for win condition or other logic
+    private Building getBuildingAtPosition(int row, int col) {
+        for (Building building : buildings) {
+            if (building.getRow() == row && building.getCol() == col) {
+                return building;
             }
         }
         return null;

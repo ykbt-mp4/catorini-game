@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b7b7afd1-34c9-44af-baa6-59d9e1384be8" name="Changes" comment="Ignore commit">
-      <change afterPath="$PROJECT_DIR$/out/production/sprint_2/Main.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/sprint_2/main/GamePanel$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/sprint_2/main/GamePanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sprint_2/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/sprint_2/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sprint_2/src/turn/StandardTurn.java" beforeDir="false" afterPath="$PROJECT_DIR$/sprint_2/src/turn/StandardTurn.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +58,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "main",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",

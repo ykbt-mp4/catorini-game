@@ -2,7 +2,6 @@ package turn;
 
 import actors.Player;
 import actors.Worker;
-import tile.TileManager;
 
 public class StandardTurn extends TurnTemplate {
     private final Player player;

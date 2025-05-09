@@ -2,8 +2,11 @@ package main;
 
 import actors.Player;
 import actors.Worker;
+<<<<<<< HEAD
 import buildings.Building;
 import actions.BuildAction;
+=======
+>>>>>>> main
 import actions.MoveAction;
 
 import javax.swing.*;
@@ -34,8 +37,12 @@ public class GamePanel extends JPanel {
     private final Player player2;
     private Player currentPlayer;
 
+<<<<<<< HEAD
     private boolean isBuildingPhase = false;
     private Worker workerThatMoved;
+=======
+    private boolean isGameStarted = false;
+>>>>>>> main
 
     public GamePanel(Player player1, Player player2) {
         this.player1 = player1;
@@ -52,12 +59,35 @@ public class GamePanel extends JPanel {
         });
     }
 
+    public void gameStart() {
+        isGameStarted = true;
+        currentPlayer = player1;
+        System.out.println("Game start! Player: " + currentPlayer.getPlayerId() + "'s turn");
+    }
+
+    public void switchTurn() {
+        currentPlayer = (currentPlayer == player1) ? player2 : player1;
+        moveAction.clearSelection();
+        System.out.println("Player: " + currentPlayer.getPlayerId() + "'s turn");
+        repaint();
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
         g2.setColor(Color.BLACK); // Set line color
+
+        // Draw turn indicator
+        g2.setFont(new Font("Arial", Font.BOLD, 20));
+        String turnText = "Player " + currentPlayer.getPlayerId() + "'s turn";
+        g2.drawString(turnText, 20, 30);
+
 
         // Draw vertical lines
         for (int row = 1; row <= (playTiles); row++) {
@@ -130,8 +160,10 @@ public class GamePanel extends JPanel {
     }
 
     private void handleClick(int mouseX, int mouseY) {
-    int col = mouseX / tileSize;
-    int row = mouseY / tileSize;
+
+        // Convert mouse coordinates to grid coordinates
+        int col = mouseX / tileSize;
+        int row = mouseY / tileSize;
 
         // Check if click is within playable area
         if (row < 1 || row > playTiles || col < 1 || col > playTiles) {
@@ -149,6 +181,7 @@ public class GamePanel extends JPanel {
                     
                     // Check for win condition after building (optional, add later if needed)
 
+<<<<<<< HEAD
                     isBuildingPhase = false;
                     workerThatMoved = null;
                     // Switch player
@@ -157,6 +190,15 @@ public class GamePanel extends JPanel {
                 } else {
                     System.out.println("Cannot build there. Try an adjacent, unoccupied, and buildable tile.");
                     // Player remains in building phase to try another spot
+=======
+        // If worker is selected, check if movement is possible (Adjacent tiles)
+        if (moveAction.getWorker() != null && moveAction.getWorker().getPlayerId() == currentPlayer.getPlayerId()) {
+            if (clickedWorker == null) {
+                if (moveAction.canMove(moveAction.getWorker(), row, col, workerPos)) {
+                    moveAction.moveWorker(row, col);
+                    System.out.println("Moved worker to (" + row + ", " + col + ")");
+                    switchTurn();
+>>>>>>> main
                 }
             } else {
                 // This case should ideally not be reached if logic is correct
@@ -217,6 +259,29 @@ public class GamePanel extends JPanel {
             } else { // Clicked on an empty tile with no worker selected
                 System.out.println("No worker at (" + row + ", " + col + ") to select.");
             }
+<<<<<<< HEAD
+=======
+            else if (clickedWorker != moveAction.getWorker()) {
+                System.out.println("Cannot move to occupied space");
+            }
+            moveAction.clearSelection();
+        }
+        // If no worker is selected, select the clicked worker
+        else if (clickedWorker != null) {
+            if (clickedWorker.getPlayerId() == currentPlayer.getPlayerId()) {
+                moveAction.setWorker(clickedWorker);
+                System.out.println("Selected worker - " +
+                        "Player ID: " + clickedWorker.getPlayerId() + ", " +
+                        "Worker ID: " + clickedWorker.getWorkerId() + ", " +
+                        "Position: (" + clickedWorker.getRow() + ", " + clickedWorker.getCol() + ")");
+            }
+            else {
+                System.out.println("Cannot select Player " + clickedWorker.getPlayerId()+ "'s worker!");
+            }
+        }
+        else {
+            System.out.println("No worker at position (" + row + ", " + col + ")");
+>>>>>>> main
         }
         repaint();
     }

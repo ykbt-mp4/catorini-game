@@ -25,7 +25,9 @@ public class Main {
 
         GamePanel gamePanel = new GamePanel(player1, player2);
 
+        // Initialise game
         gamePanel.setWorkerPos();
+        gamePanel.gameStart();
 
         window.add(gamePanel, BorderLayout.WEST);
         window.setVisible(true);

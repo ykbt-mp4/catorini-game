@@ -9,22 +9,23 @@ import java.util.Optional;
 public class BuildAction extends Action {
 
     // Constructor to accept the list of buildings
-    public BuildAction(ArrayList<Building> buildings) {
-        super(buildings);
+    public BuildAction(ArrayList<Building> buildings, ArrayList<Worker> workers) {
+        super(buildings, workers);
     }
 
     // Blocks can be built on empty tiles, tiles with a height of 3 or less, or adjacent to the worker's current position.
-    public boolean canBuild(Worker worker, int targetRow, int targetCol, ArrayList<Worker> allWorkers, ArrayList<Building> allBuildings) {
+    public boolean canBuild(Worker worker, int targetRow, int targetCol) { 
         if (!isAdjacent(worker, targetRow, targetCol)) {
             return false;
         }
 
-        if (isTileOccupiedByWorker(targetRow, targetCol, allWorkers)) {
+        // Uses the non-static version from Action class, which uses this.gameWorkers
+        if (isTileOccupiedByWorker(targetRow, targetCol)) { 
             return false; // Cannot build on a tile occupied by another worker
         }
 
-        // Check building status on the target tile
-        Optional<Building> existingBuildingOpt = allBuildings.stream() 
+        // Check building status on the target tile using this.gameBuildings
+        Optional<Building> existingBuildingOpt = this.gameBuildings.stream()  
                 .filter(b -> b.getRow() == targetRow && b.getCol() == targetCol)
                 .findFirst();
 

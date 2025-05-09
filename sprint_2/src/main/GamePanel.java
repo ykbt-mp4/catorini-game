@@ -1,17 +1,16 @@
 package main;
 
+import actions.BuildAction;
+import actions.MoveAction;
 import actors.Player;
 import actors.Worker;
 import buildings.Building;
-import actions.BuildAction;
-import actions.MoveAction;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.*;
 
 public class GamePanel extends JPanel {
 
@@ -42,8 +41,8 @@ public class GamePanel extends JPanel {
         this.player1 = player1;
         this.player2 = player2;
         this.currentPlayer = player1;
-        this.buildAction = new BuildAction(buildings);
-        this.moveAction = new MoveAction(buildings);
+        this.buildAction = new BuildAction(buildings, workerPos); 
+        this.moveAction = new MoveAction(buildings, workerPos); 
         setPreferredSize(new Dimension(boardWidth, boardHeight));
         setBackground(new Color(156, 212, 200));
 
@@ -125,7 +124,7 @@ public class GamePanel extends JPanel {
     }
 
     public void setWorkerPos() {
-        workerPos = new ArrayList<Worker>();
+        workerPos = new ArrayList<>(); 
 
         Player[] players = {player1, player2};
         for (Player player : players) {
@@ -171,9 +170,8 @@ public class GamePanel extends JPanel {
 
         if (isBuildingPhase) {
             if (workerThatMoved != null) {
-                // Pass GamePanel's 'buildings' list to canBuild, which is consistent
-                // as canBuild expects the current state of all buildings for its checks.
-                if (buildAction.canBuild(workerThatMoved, row, col, workerPos, buildings)) {
+                // Check if clicked tile is valid for building
+                if (buildAction.canBuild(workerThatMoved, row, col)) { 
                     buildAction.build(row, col);
                     System.out.println("Player " + workerThatMoved.getPlayerId() + " built at (" + row + ", " + col + ")");
                     
@@ -186,14 +184,6 @@ public class GamePanel extends JPanel {
                     System.out.println("Turn: Player " + currentPlayer.getPlayerId());
                 } else {
                     System.out.println("Cannot build there. Try an adjacent, unoccupied, and buildable tile.");
-                    // Player remains in building phase to try another spot
-        // // If worker is selected, check if movement is possible (Adjacent tiles)
-        // if (moveAction.getWorker() != null && moveAction.getWorker().getPlayerId() == currentPlayer.getPlayerId()) {
-        //     if (clickedWorker == null) {
-        //         if (moveAction.canMove(moveAction.getWorker(), row, col, workerPos)) {
-        //             moveAction.moveWorker(row, col);
-        //             System.out.println("Moved worker to (" + row + ", " + col + ")");
-        //             switchTurn();
                 }
             } else {
                 // This case should ideally not be reached if logic is correct
@@ -207,9 +197,9 @@ public class GamePanel extends JPanel {
 
             if (moveAction.getWorker() != null && moveAction.getWorker().getPlayerId() == currentPlayer.getPlayerId()) { // A worker is already selected, try to move it
                 Worker selectedWorker = moveAction.getWorker();
-                if (clickedWorker == null) { 
+                if (clickedWorker == null) {
                     if (selectedWorker.getPlayerId() == currentPlayer.getPlayerId()) {
-                        if (moveAction.canMove(selectedWorker, row, col, workerPos, buildings)) {
+                        if (moveAction.canMove(selectedWorker, row, col)) { 
                             // Store previous position for win condition check if needed before move
                             // int prevHeight = selectedWorker.getHeight();
                             moveAction.moveWorker(row, col); // Worker's height is updated in moveWorker

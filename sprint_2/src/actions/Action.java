@@ -7,9 +7,11 @@ import java.util.ArrayList;
 public abstract class Action {
 
     protected ArrayList<Building> gameBuildings;
+    protected ArrayList<Worker> gameWorkers;
 
-    public Action(ArrayList<Building> buildings) {
+    public Action(ArrayList<Building> buildings, ArrayList<Worker> workers) {
         this.gameBuildings = buildings;
+        this.gameWorkers = workers;
     }
 
     protected static boolean isAdjacent(Worker worker, int targetRow, int targetCol) {
@@ -22,8 +24,8 @@ public abstract class Action {
                (rowDiff == 1 && colDiff == 1);    // diagonal
     }
 
-    protected static boolean isTileOccupiedByWorker(int targetRow, int targetCol, ArrayList<Worker> allWorkers) {
-        for (Worker w : allWorkers) {
+    protected boolean isTileOccupiedByWorker(int targetRow, int targetCol) {
+        for (Worker w : this.gameWorkers) {
             if (w.getRow() == targetRow && w.getCol() == targetCol) {
                 return true;
             }

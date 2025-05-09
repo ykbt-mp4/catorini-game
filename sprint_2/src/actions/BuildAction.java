@@ -19,9 +19,15 @@ public class BuildAction extends Action {
             return false;
         }
 
-        // Uses the non-static version from Action class, which uses this.gameWorkers
-        if (isTileOccupiedByWorker(targetRow, targetCol)) { 
-            return false; // Cannot build on a tile occupied by another worker
+        // // Check if the target tile is occupied by another worker
+        // if (isTileOccupiedByWorker(targetRow, targetCol)) { 
+        //     return false;
+        // }
+        for (Worker w : this.gameWorkers) {
+            if (w.getRow() == targetRow && w.getCol() == targetCol) {
+                // Target tile is occupied by a worker
+                return false; // Cannot build
+            }
         }
 
         // Check building status on the target tile using this.gameBuildings

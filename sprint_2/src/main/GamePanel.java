@@ -22,8 +22,8 @@ public class GamePanel extends JPanel {
     int tileSize = boardWidth / tiles;
 
     int workerCount = 2;
-    public static ArrayList<Worker> workerPos = new ArrayList<>();
-    public static ArrayList<Building> buildings = new ArrayList<>();
+    public ArrayList<Worker> workerPos = new ArrayList<>();
+    public ArrayList<Building> buildings = new ArrayList<>();
     Random random = new Random();
 
     MoveAction moveAction;
@@ -41,8 +41,8 @@ public class GamePanel extends JPanel {
         this.player1 = player1;
         this.player2 = player2;
         this.currentPlayer = player1;
-        this.buildAction = new BuildAction(buildings, workerPos); 
-        this.moveAction = new MoveAction(buildings, workerPos); 
+        this.buildAction = new BuildAction(this.buildings, this.workerPos); 
+        this.moveAction = new MoveAction(this.buildings, this.workerPos); 
         setPreferredSize(new Dimension(boardWidth, boardHeight));
         setBackground(new Color(156, 212, 200));
 
@@ -124,7 +124,7 @@ public class GamePanel extends JPanel {
     }
 
     public void setWorkerPos() {
-        workerPos = new ArrayList<>(); 
+        this.workerPos.clear();
 
         Player[] players = {player1, player2};
         for (Player player : players) {
@@ -135,8 +135,8 @@ public class GamePanel extends JPanel {
 
                 Worker worker = new Worker(player.getPlayerId(), workerLeft, r, c, 0);
 
-                if (!isPositionOccupied(r, c)) {
-                    workerPos.add(worker);
+                if (!isPositionOccupied(r, c)) { 
+                    this.workerPos.add(worker);
                     workerLeft--;
                     player.getWorkers().add(worker);
                 }
@@ -146,7 +146,7 @@ public class GamePanel extends JPanel {
     }
 
     private boolean isPositionOccupied(int row, int col) {
-        for (Worker worker : workerPos) {
+        for (Worker worker : this.workerPos) {
             if (worker.getRow() == row && worker.getCol() == col) {
                 return true;
             }
@@ -250,7 +250,7 @@ public class GamePanel extends JPanel {
     }
 
     private Worker getWorkerAtPosition(int row, int col) {
-        for (Worker worker : workerPos) {
+        for (Worker worker : this.workerPos) {
             if (worker.getRow() == row && worker.getCol() == col) {
                 return worker;
             }
@@ -260,7 +260,7 @@ public class GamePanel extends JPanel {
 
     // Helper to get building at position, useful for win condition or other logic
     private Building getBuildingAtPosition(int row, int col) {
-        for (Building building : buildings) {
+        for (Building building : this.buildings) {
             if (building.getRow() == row && building.getCol() == col) {
                 return building;
             }

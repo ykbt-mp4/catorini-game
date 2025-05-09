@@ -33,7 +33,7 @@ public class MoveAction{
             for (Building building : buildings) {
                 if (building.getRow() == row && building.getCol() == col) {
                     // Can move to a tile occupied by a building and tile, if the building is lower level than the building the worker is on
-                    return building.getLevel().getHeight() < worker.getHeight() || 
+                    return building.getLevel().getHeight() <= worker.getHeight() || 
                             building.getLevel().getHeight() == worker.getHeight() + 1;
                 }
             }

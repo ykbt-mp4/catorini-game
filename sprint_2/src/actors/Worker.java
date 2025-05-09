@@ -5,12 +5,14 @@ public class Worker {
     public int col;
     public int workerId;
     public int playerId;
+    public int height;
 
-    public Worker(int playerId, int workerId, int row, int col) {
+    public Worker(int playerId, int workerId, int row, int col, int height) {
         this.playerId = playerId;
         this.workerId = workerId;
         this.row = row;
         this.col = col;
+        this.height = height;
 
     }
 
@@ -28,6 +30,15 @@ public class Worker {
 
     public void setCol(int col) {
         this.col = col;
+    }
+
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public int getWorkerId() {

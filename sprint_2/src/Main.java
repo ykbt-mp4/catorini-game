@@ -1,6 +1,5 @@
 import actors.Player;
 import main.GamePanel;
-import main.SidePanel;
 import util.GodCardAssigner;
 
 import javax.swing.*;
@@ -25,18 +24,11 @@ public class Main {
         System.out.println("Player 2: "+ player2.getGodCard().getName());
 
         GamePanel gamePanel = new GamePanel(player1, player2);
-        SidePanel sidePanel = new SidePanel(player1, player2);
 
-        // Initialise game
         gamePanel.setWorkerPos();
-        gamePanel.gameStart();
 
         window.add(gamePanel, BorderLayout.WEST);
-        window.add(sidePanel, BorderLayout.EAST);
         window.setVisible(true);
-
-
-
 
     }
 }

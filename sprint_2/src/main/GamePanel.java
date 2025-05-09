@@ -2,11 +2,8 @@ package main;
 
 import actors.Player;
 import actors.Worker;
-<<<<<<< HEAD
 import buildings.Building;
 import actions.BuildAction;
-=======
->>>>>>> main
 import actions.MoveAction;
 
 import javax.swing.*;
@@ -37,12 +34,9 @@ public class GamePanel extends JPanel {
     private final Player player2;
     private Player currentPlayer;
 
-<<<<<<< HEAD
     private boolean isBuildingPhase = false;
     private Worker workerThatMoved;
-=======
     private boolean isGameStarted = false;
->>>>>>> main
 
     public GamePanel(Player player1, Player player2) {
         this.player1 = player1;
@@ -66,7 +60,7 @@ public class GamePanel extends JPanel {
     }
 
     public void switchTurn() {
-        currentPlayer = (currentPlayer == player1) ? player2 : player1;
+        this.currentPlayer = (currentPlayer == player1) ? player2 : player1;
         moveAction.clearSelection();
         System.out.println("Player: " + currentPlayer.getPlayerId() + "'s turn");
         repaint();
@@ -181,24 +175,21 @@ public class GamePanel extends JPanel {
                     
                     // Check for win condition after building (optional, add later if needed)
 
-<<<<<<< HEAD
                     isBuildingPhase = false;
                     workerThatMoved = null;
                     // Switch player
-                    currentPlayer = (currentPlayer == player1) ? player2 : player1;
+                    switchTurn();
                     System.out.println("Turn: Player " + currentPlayer.getPlayerId());
                 } else {
                     System.out.println("Cannot build there. Try an adjacent, unoccupied, and buildable tile.");
                     // Player remains in building phase to try another spot
-=======
-        // If worker is selected, check if movement is possible (Adjacent tiles)
-        if (moveAction.getWorker() != null && moveAction.getWorker().getPlayerId() == currentPlayer.getPlayerId()) {
-            if (clickedWorker == null) {
-                if (moveAction.canMove(moveAction.getWorker(), row, col, workerPos)) {
-                    moveAction.moveWorker(row, col);
-                    System.out.println("Moved worker to (" + row + ", " + col + ")");
-                    switchTurn();
->>>>>>> main
+        // // If worker is selected, check if movement is possible (Adjacent tiles)
+        // if (moveAction.getWorker() != null && moveAction.getWorker().getPlayerId() == currentPlayer.getPlayerId()) {
+        //     if (clickedWorker == null) {
+        //         if (moveAction.canMove(moveAction.getWorker(), row, col, workerPos)) {
+        //             moveAction.moveWorker(row, col);
+        //             System.out.println("Moved worker to (" + row + ", " + col + ")");
+        //             switchTurn();
                 }
             } else {
                 // This case should ideally not be reached if logic is correct
@@ -210,9 +201,9 @@ public class GamePanel extends JPanel {
         } else { // Move phase or worker selection
             Worker clickedWorker = getWorkerAtPosition(row, col);
 
-            if (moveAction.getWorker() != null) { // A worker is already selected, try to move it
+            if (moveAction.getWorker() != null && moveAction.getWorker().getPlayerId() == currentPlayer.getPlayerId()) { // A worker is already selected, try to move it
                 Worker selectedWorker = moveAction.getWorker();
-                if (clickedWorker == null) { // Target tile is empty (no worker)
+                if (clickedWorker == null) { 
                     if (selectedWorker.getPlayerId() == currentPlayer.getPlayerId()) {
                         if (moveAction.canMove(selectedWorker, row, col, workerPos, buildings)) {
                             // Store previous position for win condition check if needed before move
@@ -250,38 +241,16 @@ public class GamePanel extends JPanel {
             } else if (clickedWorker != null) { // No worker selected, try to select this one
                 if (clickedWorker.getPlayerId() == currentPlayer.getPlayerId()) {
                     moveAction.setWorker(clickedWorker);
-                    System.out.println("Selected worker - Player ID: " + clickedWorker.getPlayerId() +
-                            ", Worker ID: " + clickedWorker.getWorkerId() +
-                            ", Position: (" + clickedWorker.getRow() + ", " + clickedWorker.getCol() + ")");
-                } else {
-                    System.out.println("Not your worker. It's Player " + clickedWorker.getPlayerId() + "'s worker. Current turn: Player " + currentPlayer.getPlayerId());
-                }
-            } else { // Clicked on an empty tile with no worker selected
-                System.out.println("No worker at (" + row + ", " + col + ") to select.");
-            }
-<<<<<<< HEAD
-=======
-            else if (clickedWorker != moveAction.getWorker()) {
-                System.out.println("Cannot move to occupied space");
-            }
-            moveAction.clearSelection();
-        }
-        // If no worker is selected, select the clicked worker
-        else if (clickedWorker != null) {
-            if (clickedWorker.getPlayerId() == currentPlayer.getPlayerId()) {
-                moveAction.setWorker(clickedWorker);
-                System.out.println("Selected worker - " +
+                     System.out.println("Selected worker - " +
                         "Player ID: " + clickedWorker.getPlayerId() + ", " +
                         "Worker ID: " + clickedWorker.getWorkerId() + ", " +
                         "Position: (" + clickedWorker.getRow() + ", " + clickedWorker.getCol() + ")");
+                } else {
+                    System.out.println("Cannot select Player " + clickedWorker.getPlayerId()+ "'s worker!");
+                }
+            } else { // Clicked on an empty tile with no worker selected
+                System.out.println("No worker at position (" + row + ", " + col + ")");
             }
-            else {
-                System.out.println("Cannot select Player " + clickedWorker.getPlayerId()+ "'s worker!");
-            }
-        }
-        else {
-            System.out.println("No worker at position (" + row + ", " + col + ")");
->>>>>>> main
         }
         repaint();
     }

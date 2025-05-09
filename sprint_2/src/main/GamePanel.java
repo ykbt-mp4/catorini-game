@@ -27,8 +27,8 @@ public class GamePanel extends JPanel {
     public static ArrayList<Building> buildings = new ArrayList<>();
     Random random = new Random();
 
-    MoveAction moveAction = new MoveAction();
-    BuildAction buildAction = new BuildAction();
+    MoveAction moveAction;
+    BuildAction buildAction;
 
     private final Player player1;
     private final Player player2;
@@ -42,6 +42,8 @@ public class GamePanel extends JPanel {
         this.player1 = player1;
         this.player2 = player2;
         this.currentPlayer = player1;
+        this.buildAction = new BuildAction(buildings);
+        this.moveAction = new MoveAction(buildings);
         setPreferredSize(new Dimension(boardWidth, boardHeight));
         setBackground(new Color(156, 212, 200));
 
@@ -169,6 +171,8 @@ public class GamePanel extends JPanel {
 
         if (isBuildingPhase) {
             if (workerThatMoved != null) {
+                // Pass GamePanel's 'buildings' list to canBuild, which is consistent
+                // as canBuild expects the current state of all buildings for its checks.
                 if (buildAction.canBuild(workerThatMoved, row, col, workerPos, buildings)) {
                     buildAction.build(row, col);
                     System.out.println("Player " + workerThatMoved.getPlayerId() + " built at (" + row + ", " + col + ")");

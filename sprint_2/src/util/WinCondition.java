@@ -5,6 +5,8 @@ import buildings.Building;
 import java.util.ArrayList;
 import main.GamePanel;
 
+import javax.swing.*;
+
 public class WinCondition {
     private GamePanel gamePanel;
     private ArrayList<Building> buildings;
@@ -31,5 +33,11 @@ public class WinCondition {
     public void handleWin(int winningPlayerId) {
         System.out.println("Player " + winningPlayerId + " wins!");
         gamePanel.setGameOver(true);
+
+        // Winning Message
+        JOptionPane.showMessageDialog(gamePanel,
+                "Player " + winningPlayerId + " wins!",
+                "Game Over",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 }

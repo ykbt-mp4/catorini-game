@@ -5,6 +5,7 @@ import actions.MoveAction;
 import actors.Player;
 import actors.Worker;
 import buildings.Building;
+import util.WinCondition;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -37,12 +38,16 @@ public class GamePanel extends JPanel {
     private Worker workerThatMoved;
     private boolean isGameStarted = false;
 
+    private WinCondition winCondition;
+    private boolean isGameOver = false;
+
     public GamePanel(Player player1, Player player2) {
         this.player1 = player1;
         this.player2 = player2;
         this.currentPlayer = player1;
         this.buildAction = new BuildAction(this.buildings, this.workerPos); 
-        this.moveAction = new MoveAction(this.buildings, this.workerPos); 
+        this.moveAction = new MoveAction(this.buildings, this.workerPos);
+        this.winCondition = new WinCondition(this, buildings, workerPos);
         setPreferredSize(new Dimension(boardWidth, boardHeight));
         setBackground(new Color(156, 212, 200));
 
@@ -154,7 +159,20 @@ public class GamePanel extends JPanel {
         return false;
     }
 
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        isGameOver = gameOver;
+    }
+
     private void handleClick(int mouseX, int mouseY) {
+        // Check if game is over
+        if (isGameOver) {
+            System.out.println("Game Over, cannot move anymore");
+            return;
+        }
 
         // Convert mouse coordinates to grid coordinates
         int col = mouseX / tileSize;
@@ -206,12 +224,11 @@ public class GamePanel extends JPanel {
                             System.out.println("Player " + selectedWorker.getPlayerId() + " moved worker to (" + row + ", " + col + ")");
                             
                             // Check for win condition after moving (e.g. reaching level 3)
-                            // Building targetBuilding = getBuildingAtPosition(row, col);
-                            // if (targetBuilding != null && targetBuilding.getLevel() == BuildingLevel.LEVEL_THREE && prevHeight < BuildingLevel.LEVEL_THREE.getHeight()){
-                            //    System.out.println("Player " + selectedWorker.getPlayerId() + " wins!");
-                            //    // Handle game over
-                            //    return;
-                            // }
+                            if (winCondition.checkWinCondition(selectedWorker)) {
+                                repaint();
+                                winCondition.handleWin(selectedWorker.getPlayerId());
+                                return; // Stop further processing
+                            }
 
                             isBuildingPhase = true;
                             workerThatMoved = selectedWorker;

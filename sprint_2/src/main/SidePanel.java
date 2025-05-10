@@ -7,13 +7,18 @@ import util.FontLoader;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Displays player information, god cards, and game status.
+ * Provides visual representation of player identities and their associated god powers.
+ */
 public class SidePanel extends JPanel {
+    // Panel dimensions
     int panelWidth = 500;
     int panelHeight = 700;
 
+    // Image dimensions
     int godImgWidth = 135;
     int godImgHeight = 180;
-
     int playerImgWidth = 100;
     int playerImgHeight = 100;
 
@@ -23,6 +28,13 @@ public class SidePanel extends JPanel {
     private final TileManager tileManager;
     private final FontLoader fontLoader;
 
+    /**
+     * Constructs a SidePanel for displaying player information.
+     *
+     * @param player1 The first player
+     * @param player2 The second player
+     * @param tileManager The tile manager to render the background
+     */
     public SidePanel(Player player1, Player player2, TileManager tileManager)  {
 
         this.setPreferredSize(new Dimension(panelWidth, panelHeight)); // fixed gameboard size
@@ -35,6 +47,15 @@ public class SidePanel extends JPanel {
 
     }
 
+    /**
+     * Renders the side panel components including:
+     * - Player avatars
+     * - God card illustrations
+     * - Player identifiers
+     * - Water tiles
+     *
+     * @param g The Graphics object to protect
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -63,7 +84,7 @@ public class SidePanel extends JPanel {
             player2.getGodCard().draw(g2, x2, y2, godImgWidth, godImgHeight);
             player2.draw(g2,pX2, pY2, playerImgWidth, playerImgHeight);
             g2.drawString("Player: " + player2.getPlayerId(), pX2, pY2);
+        }
     }
+}
 
-
-}}

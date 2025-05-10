@@ -7,20 +7,34 @@ import java.io.IOException;
 import java.util.Objects;
 import javax.imageio.ImageIO;
 
+/**
+ * Manages all tile-related operations including loading tile images and rendering the game board.
+ * Handles all the visual elements of the game's terrain and background elements.
+ */
 public final class TileManager {
     GamePanel gp;
     Tile[] tile;
 
+    // Coordinates
     int startX = 0;
     int startY = 0;
 
+    /**
+     * Constructs a TileManager and initializes tile images.
+     *
+     * @param gp The GamePanel this TileManager is assigned to
+     */
     public TileManager(GamePanel gp) {
         this.gp = gp;
         tile = new Tile[10];
         getTileImage();
     }
 
-    // load tile images
+    /**
+     * Loads all tile images from resources into the array.
+     *
+     * @throws RuntimeException if any image fails to load
+     */
     public void getTileImage() {
         try {
 
@@ -72,7 +86,11 @@ public final class TileManager {
         }
     }
 
-    // drawing the gameboard
+    /**
+     * Draws the water tile background across the entire panel.
+     *
+     * @param g2 The Graphics2D context to draw with
+     */
     public void draw(Graphics2D g2) {
 
         // Left top corner
@@ -124,5 +142,5 @@ public final class TileManager {
             }
         }
 
-}
+    }
 }

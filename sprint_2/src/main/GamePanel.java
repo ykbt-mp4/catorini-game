@@ -117,6 +117,11 @@ public class GamePanel extends JPanel {
         return currentPlayer;
     }
 
+    /**
+     * Renders all game components including tiles, buildings, workers, and UI elements.
+     *
+     * @param g The Graphics object
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -160,6 +165,9 @@ public class GamePanel extends JPanel {
 
     }
 
+    /**
+     * Randomly positions workers for both players at the start of the game.
+     */
     public void setWorkerPos() {
         this.workerPos.clear();
 
@@ -182,6 +190,13 @@ public class GamePanel extends JPanel {
         }
     }
 
+    /**
+     * Checks if a position is occupied by any worker.
+     *
+     * @param row The row to check
+     * @param col The column to check
+     * @return true if position is occupied, false otherwise
+     */
     private boolean isPositionOccupied(int row, int col) {
         for (Worker worker : this.workerPos) {
             if (worker.getRow() == row && worker.getCol() == col) {
@@ -191,14 +206,30 @@ public class GamePanel extends JPanel {
         return false;
     }
 
+    /**
+     * Checks if the game is over.
+     *
+     * @return true if game is over, false otherwise
+     */
     public boolean isGameOver() {
         return isGameOver;
     }
 
+    /**
+     * Sets the game over state.
+     *
+     * @param gameOver The game over state to set
+     */
     public void setGameOver(boolean gameOver) {
         isGameOver = gameOver;
     }
 
+    /**
+     * Handles all mouse click events for worker selection, movement, and building.
+     *
+     * @param mouseX The x-coordinate of the click
+     * @param mouseY The y-coordinate of the click
+     */
     private void handleClick(int mouseX, int mouseY) {
         // Check if game is over
         if (isGameOver) {
@@ -298,6 +329,13 @@ public class GamePanel extends JPanel {
         repaint();
     }
 
+    /**
+     * Gets the worker at a specific position.
+     *
+     * @param row The row to check
+     * @param col The column to check
+     * @return The Worker at the position, or null if none exists
+     */
     private Worker getWorkerAtPosition(int row, int col) {
         for (Worker worker : this.workerPos) {
             if (worker.getRow() == row && worker.getCol() == col) {
@@ -307,7 +345,13 @@ public class GamePanel extends JPanel {
         return null;
     }
 
-    // Helper to get building at position, useful for win condition or other logic
+    /**
+     * Gets the building at a specific position.
+     *
+     * @param row The row to check
+     * @param col The column to check
+     * @return The Building at the position, or null if none exists
+     */
     private Building getBuildingAtPosition(int row, int col) {
         for (Building building : this.buildings) {
             if (building.getRow() == row && building.getCol() == col) {

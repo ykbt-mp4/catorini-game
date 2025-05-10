@@ -27,15 +27,15 @@ public abstract class God {
         }
     }
 
-    public void draw(Graphics2D g2, int x, int y, int width, int height, String playerLabel) {
+    public void draw(Graphics2D g2, int x, int y, int width, int height) {
         if (godImage != null) {
             g2.drawImage(godImage, x, y, width, height, null);
 
             int godNameWidth = g2.getFontMetrics().stringWidth(name);
-            int labelWidth = g2.getFontMetrics().stringWidth(playerLabel);
+//            int labelWidth = g2.getFontMetrics().stringWidth(playerLabel);
 
-            g2.drawString(playerLabel, x + (width - labelWidth) / 2, y);
-            g2.drawString(name, x + (width - godNameWidth) / 2, y + height);
+//            g2.drawString(playerLabel, x + (width - labelWidth) / 2, y);
+            g2.drawString(name, x + (width - godNameWidth) / 2, y);
         }
     }
 

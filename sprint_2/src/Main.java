@@ -1,6 +1,7 @@
 import actors.Player;
 import main.GamePanel;
 import main.SidePanel;
+import tile.TileManager;
 import util.GodCardAssigner;
 
 import javax.swing.*;
@@ -25,7 +26,9 @@ public class Main {
         System.out.println("Player 2: "+ player2.getGodCard().getName());
 
         GamePanel gamePanel = new GamePanel(player1, player2);
-        SidePanel sidePanel = new SidePanel(player1, player2);
+        TileManager sharedTileManager = new TileManager(gamePanel);
+        SidePanel sidePanel = new SidePanel(player1, player2, sharedTileManager);
+
 
         // Initialise game
         gamePanel.setWorkerPos();

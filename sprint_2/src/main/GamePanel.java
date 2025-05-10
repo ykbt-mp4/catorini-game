@@ -7,6 +7,9 @@ import actors.Worker;
 import buildings.Building;
 import util.LossCondition;
 import util.WinCondition;
+import tile.TileManager;
+import util.FontLoader;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,12 +19,12 @@ import javax.swing.*;
 
 public class GamePanel extends JPanel {
 
-    int boardWidth = 700;
-    int boardHeight = 700;
+    public int boardWidth = 700;
+    public int boardHeight = 700;
     public int playTiles = 5;
-    int tiles = playTiles + 2;
+    public int tiles = playTiles + 2;
 
-    int tileSize = boardWidth / tiles;
+    public int tileSize = boardWidth / tiles;
 
     int workerCount = 2;
     public ArrayList<Worker> workerPos = new ArrayList<>();
@@ -38,6 +41,8 @@ public class GamePanel extends JPanel {
     private boolean isBuildingPhase = false;
     private Worker workerThatMoved;
     private boolean isGameStarted = false;
+    private final TileManager tileManager;
+    private final FontLoader fontLoader;
 
     private WinCondition winCondition;
     private boolean isGameOver = false;
@@ -54,6 +59,8 @@ public class GamePanel extends JPanel {
         this.lossCondition = new LossCondition(this, moveAction, buildings, workerPos);
         setPreferredSize(new Dimension(boardWidth, boardHeight));
         setBackground(new Color(156, 212, 200));
+        this.fontLoader = new FontLoader();
+        this.tileManager = new TileManager(this);
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -89,23 +96,16 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        g2.setFont(fontLoader.getPixelFont());
+        tileManager.drawWaterTile(g2);
+        tileManager.draw(g2);
 
         g2.setColor(Color.BLACK); // Set line color
 
         // Draw turn indicator
-        g2.setFont(new Font("Arial", Font.BOLD, 20));
-        String turnText = "Player " + currentPlayer.getPlayerId() + "'s turn";
-        g2.drawString(turnText, 20, 30);
+        String turnText = "Player " + currentPlayer.getPlayerId() + "'s Turn";
+        g2.drawString(turnText, boardWidth/2, tileSize/2);
 
-
-        // Draw vertical lines
-        for (int row = 1; row <= (playTiles); row++) {
-            for (int col = 1; col <= (playTiles); col++) {
-                int x = col * tileSize;
-                int y = row * tileSize;
-                g2.drawRect(x, y, tileSize, tileSize);
-            }
-        }
 
         // Draw buildings
         for (Building building : buildings) {
@@ -124,17 +124,15 @@ public class GamePanel extends JPanel {
             // Highlight selected worker
             if (moveAction.getWorker() == worker) {
                 g2.setColor(new Color(255, 0, 0, 100)); // Red highlight
-                g2.fillOval(x, y, tileSize, tileSize);
+                g2.fillRect(x, y, tileSize, tileSize);
             }
 
             // Get the correct player based on worker's playerId
             Player player = worker.getPlayerId() == player1.getPlayerId() ? player1 : player2;
             player.draw(g2, x, y, tileSize, tileSize);
 
-            g2.setColor(Color.BLACK);
-            g2.drawOval(x, y, tileSize, tileSize);
         }
-                
+
     }
 
     public void setWorkerPos() {
@@ -149,7 +147,7 @@ public class GamePanel extends JPanel {
 
                 Worker worker = new Worker(player.getPlayerId(), workerLeft, r, c, 0);
 
-                if (!isPositionOccupied(r, c)) { 
+                if (!isPositionOccupied(r, c)) {
                     this.workerPos.add(worker);
                     workerLeft--;
                     player.getWorkers().add(worker);
@@ -198,10 +196,10 @@ public class GamePanel extends JPanel {
         if (isBuildingPhase) {
             if (workerThatMoved != null) {
                 // Check if clicked tile is valid for building
-                if (buildAction.canBuild(workerThatMoved, row, col)) { 
+                if (buildAction.canBuild(workerThatMoved, row, col)) {
                     buildAction.build(row, col);
                     System.out.println("Player " + workerThatMoved.getPlayerId() + " built at (" + row + ", " + col + ")");
-                    
+
                     // Check for win condition after building (optional, add later if needed)
 
                     isBuildingPhase = false;
@@ -217,7 +215,7 @@ public class GamePanel extends JPanel {
                 System.err.println("Error: In building phase but no worker is designated to build.");
                 isBuildingPhase = false; // Reset to avoid getting stuck
                 currentPlayer = (currentPlayer == player1) ? player2 : player1; // Switch turn to be safe
-                 System.out.println("Turn: Player " + currentPlayer.getPlayerId());
+                System.out.println("Turn: Player " + currentPlayer.getPlayerId());
             }
         } else { // Move phase or worker selection
             Worker clickedWorker = getWorkerAtPosition(row, col);
@@ -226,12 +224,12 @@ public class GamePanel extends JPanel {
                 Worker selectedWorker = moveAction.getWorker();
                 if (clickedWorker == null) {
                     if (selectedWorker.getPlayerId() == currentPlayer.getPlayerId()) {
-                        if (moveAction.canMove(selectedWorker, row, col)) { 
+                        if (moveAction.canMove(selectedWorker, row, col)) {
                             // Store previous position for win condition check if needed before move
                             // int prevHeight = selectedWorker.getHeight();
                             moveAction.moveWorker(row, col); // Worker's height is updated in moveWorker
                             System.out.println("Player " + selectedWorker.getPlayerId() + " moved worker to (" + row + ", " + col + ")");
-                            
+
                             // Check for win condition after moving (e.g. reaching level 3)
                             if (winCondition.checkWinCondition(selectedWorker)) {
                                 repaint();
@@ -261,10 +259,10 @@ public class GamePanel extends JPanel {
             } else if (clickedWorker != null) { // No worker selected, try to select this one
                 if (clickedWorker.getPlayerId() == currentPlayer.getPlayerId()) {
                     moveAction.setWorker(clickedWorker);
-                     System.out.println("Selected worker - " +
-                        "Player ID: " + clickedWorker.getPlayerId() + ", " +
-                        "Worker ID: " + clickedWorker.getWorkerId() + ", " +
-                        "Position: (" + clickedWorker.getRow() + ", " + clickedWorker.getCol() + ")");
+                    System.out.println("Selected worker - " +
+                            "Player ID: " + clickedWorker.getPlayerId() + ", " +
+                            "Worker ID: " + clickedWorker.getWorkerId() + ", " +
+                            "Position: (" + clickedWorker.getRow() + ", " + clickedWorker.getCol() + ")");
                 } else {
                     System.out.println("Cannot select Player " + clickedWorker.getPlayerId()+ "'s worker!");
                 }

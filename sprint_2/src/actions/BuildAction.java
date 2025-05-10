@@ -6,14 +6,34 @@ import buildings.BuildingLevel;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * Handles building actions in the game, allowing workers to construct building on adjacent tiles according to game rules.
+ */
 public class BuildAction extends Action {
 
-    // Constructor to accept the list of buildings
+    /**
+     * Constructs a BuildAction that references the game state.
+     *
+     * @param buildings The list of all buildings in the game currently
+     * @param workers The list of all workers in the game
+     */
     public BuildAction(ArrayList<Building> buildings, ArrayList<Worker> workers) {
         super(buildings, workers);
     }
 
-    // Blocks can be built on empty tiles, tiles with a height of 3 or less, or adjacent to the worker's current position.
+    /**
+     * Determines if a worker can build on a chosen tile.
+     * A building can be built on a tile if:
+     * - It is adjacent to the specified worker
+     * - Not occupied by another worker
+     * - Tile is empty
+     * - Contains a tile with a height of 3 or less
+     *
+     * @param worker The selected worker that will build
+     * @param targetRow The row index of the chosen tile position
+     * @param targetCol The column index of the chosen tile position
+     * @return true if a building is able to be built on the chosen tile position, false otherwise
+     */
     public boolean canBuild(Worker worker, int targetRow, int targetCol) { 
         if (!isAdjacent(worker, targetRow, targetCol)) {
             return false;
@@ -42,6 +62,13 @@ public class BuildAction extends Action {
             return true; // Can build on empty tile
         }
     }
+
+    /**
+     * Executes the build action on a chosen tile position
+     *
+     * @param targetRow The row index of the chosen tile position
+     * @param targetCol The column index of the chosen tile position
+     */
     
     public void build(int targetRow, int targetCol) {
         Optional<Building> existingBuildingOpt = this.gameBuildings.stream()

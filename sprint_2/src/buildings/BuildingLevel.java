@@ -1,5 +1,9 @@
 package buildings;
 
+/**
+ * Enumerates the possible levels of buildings in the game, including their visual representation and progression rules.
+ * Defines the building hierarchy from ground level to dome.
+ */
 public enum BuildingLevel {
     GROUND(0, null),
     LEVEL_ONE(1, "/buildings/block1.png"),
@@ -10,23 +14,49 @@ public enum BuildingLevel {
     private final int height;
     private final String imagePath;
 
+    /**
+     * Constructs a BuildingLevel enum constant.
+     *
+     * @param height The numerical height value
+     * @param imagePath Path to the image resource for this level, or null for ground
+     */
     BuildingLevel(int height, String imagePath) {
         this.height = height;
         this.imagePath = imagePath;
     }
 
+    /**
+     * Gets the numerical height value of this building level.
+     *
+     * @return The height value (0 for ground, 1-3 for levels, 4 for dome)
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Gets the path to the image resource for this building level.
+     *
+     * @return The image resource path, or null for ground level
+     */
     public String getImagePath() {
         return imagePath;
     }
 
+    /**
+     * Determines if this level can be built upon.
+     *
+     * @return true if this level can be upgraded (not a dome), false otherwise (dome)
+     */
     public boolean isBuildable() {
         return this != DOME;
     }
 
+    /**
+     * Gets the next level in the building progression.
+     *
+     * @return The next BuildingLevel in sequence, or null if this is the maximum level (dome)
+     */
     public BuildingLevel getNextLevel() {
         switch (this) {
             case GROUND: return LEVEL_ONE;

@@ -17,38 +17,52 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 
+/**
+ * The main game panel that handles rendering and game logic.
+ * Manages the game state, player turns, worker movements, and building construction.
+ */
 public class GamePanel extends JPanel {
 
+    // Game board dimensions
     public int boardWidth = 700;
     public int boardHeight = 700;
-    public int playTiles = 5;
-    public int tiles = playTiles + 2;
+    public int playTiles = 5; // Number of playable tiles (5x5 grid)
+    public int tiles = playTiles + 2; // Total tiles including border
+    public int tileSize = boardWidth / tiles; // Size of tiles in pixels
 
-    public int tileSize = boardWidth / tiles;
-
+    // Game entities
     int workerCount = 2;
     public ArrayList<Worker> workerPos = new ArrayList<>();
     public ArrayList<Building> buildings = new ArrayList<>();
     Random random = new Random();
 
+    // Game Actions
     MoveAction moveAction;
     BuildAction buildAction;
 
+    // Players
     private final Player player1;
     private final Player player2;
     private Player currentPlayer;
 
+    // Game state
     private boolean isBuildingPhase = false;
     private Worker workerThatMoved;
     private boolean isGameStarted = false;
     private final TileManager tileManager;
     private final FontLoader fontLoader;
 
+    // Win/Loss conditions
     private WinCondition winCondition;
     private boolean isGameOver = false;
-
     private LossCondition lossCondition;
 
+    /**
+     * Constructs the game panel with 2 players.
+     *
+     * @param player1 The first player
+     * @param player2 The second player
+     */
     public GamePanel(Player player1, Player player2) {
         this.player1 = player1;
         this.player2 = player2;
@@ -70,12 +84,18 @@ public class GamePanel extends JPanel {
         });
     }
 
+    /**
+     * Starts the game and sets the first player's turn.
+     */
     public void gameStart() {
         isGameStarted = true;
         currentPlayer = player1;
         System.out.println("Game start! Player: " + currentPlayer.getPlayerId() + "'s turn");
     }
 
+    /**
+     * Switches turns between players and checks if all workers are able to move (lossCondition)
+     */
     public void switchTurn() {
         this.currentPlayer = (currentPlayer == player1) ? player2 : player1;
         if (lossCondition.checkLossCondition(currentPlayer)) {
@@ -88,6 +108,11 @@ public class GamePanel extends JPanel {
         repaint();
     }
 
+    /**
+     * Gets the current player whose turn it is.
+     *
+     * @return The current Player object
+     */
     public Player getCurrentPlayer() {
         return currentPlayer;
     }

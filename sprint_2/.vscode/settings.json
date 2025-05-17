@@ -1,8 +1,0 @@
-{
-    "java.project.explorer.showNonJavaResources": true,
-    "java.dependency.packagePresentation": "flat",
-    "java.project.sourcePaths": [
-        "."
-    ],
-    "java.project.referencedLibraries": []
-}

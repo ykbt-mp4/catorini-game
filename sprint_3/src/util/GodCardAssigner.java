@@ -3,6 +3,7 @@ package util;
 import actors.Player;
 import actors.gods.Artemis;
 import actors.gods.Demeter;
+import actors.gods.Triton;
 import actors.gods.God;
 
 import java.util.ArrayList;
@@ -13,7 +14,8 @@ public class GodCardAssigner {
 
     private static final List<God> availableGods = new ArrayList<>(List.of(
             new Artemis(),
-            new Demeter()
+            new Demeter(),
+            new Triton()
     ));
 
     public static void assignRandomGod(Player player) {

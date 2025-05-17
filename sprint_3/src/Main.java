@@ -1,11 +1,9 @@
 import actors.Player;
 import main.GamePanel;
-import main.SidePanel;
-import tile.TileManager;
 import util.GodCardAssigner;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import java.awt.BorderLayout;
 
 public class Main {
 
@@ -16,7 +14,6 @@ public class Main {
         window.setResizable(false);
         window.setLocationRelativeTo(null);
 
-
         Player player1 = new Player(1);
         Player player2 = new Player(2);
 
@@ -26,20 +23,12 @@ public class Main {
         System.out.println("Player 2: "+ player2.getGodCard().getName());
 
         GamePanel gamePanel = new GamePanel(player1, player2);
-        TileManager sharedTileManager = new TileManager(gamePanel);
-        SidePanel sidePanel = new SidePanel(player1, player2, sharedTileManager);
-
-
-        // Initialise game
-        gamePanel.setWorkerPos();
         gamePanel.gameStart();
 
+
+
         window.add(gamePanel, BorderLayout.WEST);
-        window.add(sidePanel, BorderLayout.EAST);
         window.setVisible(true);
-
-
-
 
     }
 }

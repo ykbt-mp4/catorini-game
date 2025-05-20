@@ -14,13 +14,29 @@ public class BuildAction extends Action {
 
     @Override
     public boolean onTileClick(int row, int col) {
-//        if (worker != null && board[row][col].isBuildable()) {
-//            board[row][col].buildLevel();
-//            System.out.println("Built on " + row + "," + col);
-//        } else {
-//            System.out.println("Cannot build there.");
-//        }
-        System.out.println("done");
+        Tile[][] board = gp.getBoard();
+
+        if (row < 0 || row >= gp.playTiles || col < 0 || col >= gp.playTiles) {
+            System.out.println("Invalid tile clicked.");
+            return false;
+        }
+
+        Tile targetTile = board[row][col];
+        Tile currentTile = board[worker.getRow()][worker.getCol()];
+
+        if (!currentTile.isAdjacentTo(row, col)) {
+            System.out.println("Can only build on adjacent tiles.");
+            return false;
+        }
+
+        if (!targetTile.isEmpty()) {
+            System.out.println("Cannot build here: either occupied or has dome.");
+            return false;
+        }
+
+        targetTile.build();  // Increase level or place dome
+        System.out.println("Built on tile " + row + "," + col + " | Level now: " + targetTile.getLevel() + (targetTile.hasDome() ? " with Dome" : ""));
+        gp.repaint();
         return true;
     }
 }

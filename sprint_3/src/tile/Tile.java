@@ -1,23 +1,23 @@
 package tile;
 
 import actors.Worker;
+import buildings.Building;
+import buildings.BuildingLevel;
 
 public class Tile {
-    private final int row;  // Add these fields
+    private final int row;
     private final int col;
-    private Worker worker;
-    private int level;
-    private boolean hasDome;
 
-    public Tile(int row, int col) {  // Modified constructor
+    private Worker worker;
+    private Building building;
+
+    public Tile(int row, int col) {
         this.row = row;
         this.col = col;
         this.worker = null;
-        this.level = 0;
-        this.hasDome = false;
+        this.building = new Building();
     }
 
-    // Getters for position
     public int getRow() {
         return row;
     }
@@ -26,21 +26,13 @@ public class Tile {
         return col;
     }
 
-    // Check if a worker occupies a tile
     public boolean isOccupiedByWorker() {
         return worker != null;
     }
 
     public boolean isEmpty() {
-        return !isOccupiedByWorker() && !hasDome;
+        return !isOccupiedByWorker() && !hasDome();
     }
-
-    public boolean isAdjacentTo(int adjRow, int adjCol) {
-        int rowDiff = Math.abs(worker.getRow() - adjRow);
-        int colDiff = Math.abs(worker.getCol() - adjCol);
-        return (rowDiff <= 1 && colDiff <= 1) && (rowDiff + colDiff != 0);
-    }
-
 
     public void setWorker(Worker worker) {
         this.worker = worker;
@@ -50,28 +42,38 @@ public class Tile {
         return worker;
     }
 
-    // Clear worker
     public void clearWorker() {
         this.worker = null;
     }
 
-    // Building level management
     public int getLevel() {
-        return level;
+        return building.getHeight();
     }
 
-    public void increaseLevel() {
-        if (level < 3) {
-            level++;
+    public boolean isBuildable() {
+        return !isOccupiedByWorker() && building.canBuild();
+    }
+
+    public void build() {
+        if (isBuildable()) {
+            building.build();
+        } else {
+            System.out.println("Cannot build on this tile.");
         }
     }
 
     public boolean hasDome() {
-        return hasDome;
+        return building.hasDome();
     }
 
-    public void setDome(boolean hasDome) {
-        this.hasDome = hasDome;
+    // need to implement restrictions for when workers move on top of buildings
+    public boolean isOneLevelHigher() {
+        return building.getLevel() == BuildingLevel.GROUND;
     }
 
+    public boolean isAdjacentTo(int adjRow, int adjCol) {
+        int rowDiff = Math.abs(worker.getRow() - adjRow);
+        int colDiff = Math.abs(worker.getCol() - adjCol);
+        return (rowDiff <= 1 && colDiff <= 1) && (rowDiff + colDiff != 0);
+    }
 }

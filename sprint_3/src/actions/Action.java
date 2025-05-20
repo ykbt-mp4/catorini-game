@@ -17,5 +17,5 @@ public abstract class Action {
         return null;
     }
 
-    public abstract void onTileClick(int row, int col);
+    public abstract boolean onTileClick(int row, int col);
 }

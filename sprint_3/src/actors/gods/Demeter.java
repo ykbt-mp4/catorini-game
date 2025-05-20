@@ -21,12 +21,16 @@ public class Demeter extends God {
 
         @Override
         public void execute(Worker worker, GamePanel gamePanel) {
+            super.execute(worker, gamePanel);
             System.out.println("Executing demeter build action");
         }
 
         @Override
-        public void onTileClick(int row, int col) {
+        public boolean onTileClick(int row, int col) {
             System.out.println("done");
+
+
+            return true;
         }
     }
 }

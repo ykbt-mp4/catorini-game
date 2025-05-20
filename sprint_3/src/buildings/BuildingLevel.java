@@ -1,9 +1,5 @@
 package buildings;
 
-/**
- * Enumerates the possible levels of buildings in the game, including their visual representation and progression rules.
- * Defines the building hierarchy from ground level to dome.
- */
 public enum BuildingLevel {
     GROUND(0, null),
     LEVEL_ONE(1, "/buildings/block1.png"),

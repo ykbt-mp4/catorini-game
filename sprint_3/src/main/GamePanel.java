@@ -113,23 +113,27 @@ public class GamePanel extends JPanel {
         if (currentAction == null) {
             selectWorker(clickedTile); // initialize currentAction and index
         } else {
-            currentAction.onTileClick(clickedTile.getRow(), clickedTile.getCol());
+            boolean success = currentAction.onTileClick(clickedTile.getRow(), clickedTile.getCol());
 
-            // Move to next action if it exists
-            currentActionIndex++;
-            ActionList actions = currentPlayer.getGodCard().getActions();
+            if (success) {
+                currentActionIndex++;
+                ActionList actions = currentPlayer.getGodCard().getActions();
 
-            if (currentActionIndex < actions.size()) {
-                currentAction = actions.get(currentActionIndex);
-                currentAction.execute(selectedWorker, this);
+                if (currentActionIndex < actions.size()) {
+                    currentAction = actions.get(currentActionIndex);
+                    currentAction.execute(selectedWorker, this);
+                } else {
+                    currentAction = null;
+                    currentActionIndex = 0;
+                    selectedWorker = null;
+                    switchTurn(); // done with all actions
+                }
+
+                repaint();
             } else {
-                currentAction = null;
-                currentActionIndex = 0;
-                selectedWorker = null;
-                switchTurn(); // done with all actions
+                // Just wait for valid click
+                System.out.println("Try a different tile.");
             }
-
-            repaint();
         }
     }
 

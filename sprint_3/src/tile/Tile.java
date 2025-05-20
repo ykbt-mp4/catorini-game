@@ -35,6 +35,13 @@ public class Tile {
         return !isOccupiedByWorker() && !hasDome;
     }
 
+    public boolean isAdjacentTo(int adjRow, int adjCol) {
+        int rowDiff = Math.abs(worker.getRow() - adjRow);
+        int colDiff = Math.abs(worker.getCol() - adjCol);
+        return (rowDiff <= 1 && colDiff <= 1) && (rowDiff + colDiff != 0);
+    }
+
+
     public void setWorker(Worker worker) {
         this.worker = worker;
     }

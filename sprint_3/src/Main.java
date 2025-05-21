@@ -1,9 +1,10 @@
 import actors.Player;
 import main.GamePanel;
+import main.TitleScreenPanel;
 import util.GodCardAssigner;
 
-import javax.swing.JFrame;
-import java.awt.BorderLayout;
+import javax.swing.*;
+import java.awt.*;
 
 public class Main {
 
@@ -13,20 +14,26 @@ public class Main {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.setLocationRelativeTo(null);
+        window.setLayout(new BorderLayout());
 
-        Player player1 = new Player(1);
-        Player player2 = new Player(2);
+        // Create title screen and set up button callback
+        TitleScreenPanel titleScreen = new TitleScreenPanel(window, new Runnable() {
+            @Override
+            public void run() {
+                Player player1 = new Player(1);
+                Player player2 = new Player(2);
+                GodCardAssigner.assignRandomGod(player1);
+                GodCardAssigner.assignRandomGod(player2);
+                GamePanel gamePanel = new GamePanel(player1, player2);
+                gamePanel.gameStart();
+                window.getContentPane().removeAll();
+                window.add(gamePanel, BorderLayout.WEST);
+                window.revalidate();
+                window.repaint();
+            }
+        });
 
-        GodCardAssigner.assignRandomGod(player1);
-        GodCardAssigner.assignRandomGod(player2);
-        System.out.println("Player 1: "+ player1.getGodCard().getName());
-        System.out.println("Player 2: "+ player2.getGodCard().getName());
-
-        GamePanel gamePanel = new GamePanel(player1, player2);
-        gamePanel.gameStart();
-
-        window.add(gamePanel, BorderLayout.WEST);
+        window.add(titleScreen, BorderLayout.CENTER);
         window.setVisible(true);
-
     }
 }

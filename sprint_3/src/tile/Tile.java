@@ -2,7 +2,8 @@ package tile;
 
 import actors.Worker;
 import buildings.Building;
-import buildings.BuildingLevel;
+
+import java.awt.image.BufferedImage;
 
 public class Tile {
     private final int row;
@@ -10,6 +11,8 @@ public class Tile {
 
     private Worker worker;
     private Building building;
+
+    public BufferedImage image;
 
     public Tile(int row, int col) {
         this.row = row;
@@ -66,14 +69,9 @@ public class Tile {
         return building.hasDome();
     }
 
-    // need to implement restrictions for when workers move on top of buildings
-    public boolean isOneLevelHigher() {
-        return building.getLevel() == BuildingLevel.GROUND;
-    }
-
     public boolean isAdjacentTo(int adjRow, int adjCol) {
-        int rowDiff = Math.abs(worker.getRow() - adjRow);
-        int colDiff = Math.abs(worker.getCol() - adjCol);
+        int rowDiff = Math.abs(this.row - adjRow);
+        int colDiff = Math.abs(this.col - adjCol);
         return (rowDiff <= 1 && colDiff <= 1) && (rowDiff + colDiff != 0);
     }
 }

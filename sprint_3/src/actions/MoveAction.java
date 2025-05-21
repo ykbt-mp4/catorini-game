@@ -33,6 +33,14 @@ public class MoveAction extends Action {
             return false;
         }
 
+        int currentLevel = currentTile.getLevel();
+        int targetLevel = targetTile.getLevel();
+
+        if (targetLevel - currentLevel > 1) {
+            System.out.println("Cannot move up more than 1 level.");
+            return false;
+        }
+
         // Move worker to the new tile
         int currentRow = worker.getRow();
         int currentCol = worker.getCol();

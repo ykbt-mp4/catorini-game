@@ -8,10 +8,6 @@ public class Building {
         this.level = BuildingLevel.GROUND;
     }
 
-    public BuildingLevel getLevel() {
-        return level;
-    }
-
     public boolean canBuild() {
         return level != BuildingLevel.DOME;
     }

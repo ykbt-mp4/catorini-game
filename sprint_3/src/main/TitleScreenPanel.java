@@ -21,19 +21,51 @@ public class TitleScreenPanel extends JPanel {
         title.setBorder(BorderFactory.createEmptyBorder(100, 0, 50, 0));
         add(title, BorderLayout.NORTH);
 
-        JButton startButton = new JButton("Start Game");
-        startButton.setFont(new Font("Arial", Font.BOLD, 30));
-        startButton.setFocusPainted(false);
-        startButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                onStartGame.run(); // Calls the passed game start logic
-            }
-        });
+        try {
+            int width = 190;
+            int height = 60;
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(new Color(30, 30, 60));
-        buttonPanel.add(startButton);
-        add(buttonPanel, BorderLayout.CENTER);
+            ImageIcon defaultIcon = new ImageIcon(
+                    new ImageIcon(getClass().getResource("/uiextra/playbutton1.png"))
+                            .getImage()
+                            .getScaledInstance(width, height, Image.SCALE_SMOOTH)
+            );
+
+            ImageIcon pressedIcon = new ImageIcon(
+                    new ImageIcon(getClass().getResource("/uiextra/playbutton2.png"))
+                            .getImage()
+                            .getScaledInstance(width, height, Image.SCALE_SMOOTH)
+            );
+
+            JButton startButton = new JButton();
+            startButton.setIcon(defaultIcon);
+            startButton.setPressedIcon(pressedIcon);
+
+            JButton exitButton = new JButton();
+            exitButton.setIcon(defaultIcon);
+            exitButton.setPressedIcon(pressedIcon);
+
+            // Make it look clean
+            startButton.setBorderPainted(false);
+            startButton.setContentAreaFilled(false);
+            startButton.setFocusPainted(false);
+            startButton.setOpaque(false);
+
+            startButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    onStartGame.run(); // Run your start game logic
+                }
+            });
+
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.setBackground(new Color(30, 30, 60));
+            buttonPanel.add(startButton);
+            add(buttonPanel, BorderLayout.CENTER);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.out.println("Failed to load button images.");
+        }
     }
 }

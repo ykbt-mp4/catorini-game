@@ -7,10 +7,17 @@ public class Worker {
     public int workerId;
     public int playerId;
     public int height;
+    private int lastRow = -1;
+    private int lastCol = -1;
+    private int lastBuildRow = -1;
+    private int lastBuildCol = -1;
+
 
     public Worker(int playerId, int workerId, int row, int col, int height) {
         this.playerId = playerId;
         this.workerId = workerId;
+        this.lastRow = this.row;
+        this.lastCol = this.col;
         this.row = row;
         this.col = col;
         this.height = height;
@@ -45,6 +52,21 @@ public class Worker {
         return col;
     }
 
+    public void setLastRow(int lastRow) {
+        this.lastRow = lastRow;
+    }
+    public void setLastCol(int lastCol) {
+        this.lastCol = lastCol;
+    }
+
+    public int getLastRow() {
+        return lastRow;
+    }
+
+    public int getLastCol() {
+        return lastCol;
+    }
+
     public void setCol(int col) {
         this.col = col;
     }
@@ -61,5 +83,20 @@ public class Worker {
         this.row = row;
         this.col = col;
     }
+
+
+    public void setLastBuildPosition(int row, int col) {
+        this.lastBuildRow = row;
+        this.lastBuildCol = col;
+    }
+
+    public int getLastBuildRow() {
+        return lastBuildRow;
+    }
+
+    public int getLastBuildCol() {
+        return lastBuildCol;
+    }
+
 
 }

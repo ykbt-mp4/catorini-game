@@ -33,7 +33,6 @@ public class Main {
             }
         });
 
-
         window.add(titleScreen, BorderLayout.CENTER);
         window.setVisible(true);
     }

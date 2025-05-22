@@ -5,18 +5,24 @@ import actions.Action;
 import actions.ActionList;
 import actors.Player;
 import actors.Worker;
+import tile.TileManager;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Random;
 
 
 public class GamePanel extends JPanel {
 
-    int BOARD_WIDTH = 700;
-    int BOARD_HEIGHT = 700;
+    public int BOARD_WIDTH = 700;
+    public int BOARD_HEIGHT = 700;
 
     public int playTiles = 5;
     public int tileSize = BOARD_HEIGHT/(playTiles + 2);
@@ -24,19 +30,22 @@ public class GamePanel extends JPanel {
     int startX = tileSize;
     int startY = tileSize;
 
-    private Tile[][] board = new Tile[playTiles][playTiles];
+    public Tile[][] board = new Tile[playTiles][playTiles];
 
-    private final Player player1;
-    private final Player player2;
+    public final Player player1;
+    public final Player player2;
     private Player currentPlayer;
 
     public ArrayList<Worker> workerPos = new ArrayList<>();
+    int workerCount = 2;
+    Random random = new Random();
 
     private Worker selectedWorker = null;
 
     private Action currentAction = null;
     private int currentActionIndex = 0;
 
+    private TileManager tileManager;
 
     public GamePanel(Player player1, Player player2) {
         setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
@@ -44,6 +53,9 @@ public class GamePanel extends JPanel {
         this.player1 = player1;
         this.player2 = player2;
         this.currentPlayer = player1;
+        this.tileManager = new TileManager(this);
+
+        setCustomCursor();
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -56,30 +68,14 @@ public class GamePanel extends JPanel {
     public void gameStart() {
         currentPlayer = player1;
 
-        // Initialize board
+        // Initialise board
         for (int row = 0; row < playTiles; row++) {
             for (int col = 0; col < playTiles; col++) {
                 board[row][col] = new Tile(row, col);
             }
         }
 
-        // Create workers for both players
-        Worker w1 = new Worker(player1.getPlayerId(), 1, 0, 0, 0);
-        Worker w2 = new Worker(player1.getPlayerId(), 2, 0, 1, 0);
-        Worker w3 = new Worker(player2.getPlayerId(), 1, 4, 4, 0);
-        Worker w4 = new Worker(player2.getPlayerId(), 2, 4, 3, 0);
-
-        // Place workers on board
-        board[0][0].setWorker(w1);
-        board[0][1].setWorker(w2);
-        board[4][4].setWorker(w3);
-        board[4][3].setWorker(w4);
-
-        // Add workers to players
-        player1.getWorkers().add(w1);
-        player1.getWorkers().add(w2);
-        player2.getWorkers().add(w3);
-        player2.getWorkers().add(w4);
+        setWorkerPos();
 
         repaint();
         System.out.println("Game start! Player: " + currentPlayer.getPlayerId() + "'s turn");
@@ -93,6 +89,31 @@ public class GamePanel extends JPanel {
         this.currentPlayer = (currentPlayer == player1) ? player2 : player1;
         System.out.println("Player: " + currentPlayer.getPlayerId() + "'s turn");
         repaint();
+    }
+
+    public void setWorkerPos() {
+        this.workerPos.clear();
+
+        Player[] players = {player1, player2};
+        for (Player player : players) {
+            int workerLeft = workerCount;
+            while (workerLeft > 0) {
+                int r = random.nextInt(playTiles); // + 1 to account for padding
+                int c = random.nextInt(playTiles);
+
+                // create worker
+                Worker worker = new Worker(player.getPlayerId(), workerLeft, r, c, 0);
+
+                if (!board[r][c].isOccupiedByWorker()) {
+                    this.workerPos.add(worker);
+                    board[r][c].setWorker(worker);
+                    workerLeft--;
+                    player.getWorkers().add(worker);
+                    System.out.println(workerPos);
+                }
+                System.out.println(worker.getRow() + " " + worker.getCol());
+            }
+        }
     }
 
     private void handleClick(int mouseX, int mouseY) {
@@ -113,23 +134,27 @@ public class GamePanel extends JPanel {
         if (currentAction == null) {
             selectWorker(clickedTile); // initialize currentAction and index
         } else {
-            currentAction.onTileClick(clickedTile.getRow(), clickedTile.getCol());
+            boolean success = currentAction.onTileClick(clickedTile.getRow(), clickedTile.getCol());
 
-            // Move to next action if it exists
-            currentActionIndex++;
-            ActionList actions = currentPlayer.getGodCard().getActions();
+            if (success) {
+                currentActionIndex++;
+                ActionList actions = currentPlayer.getGodCard().getActions();
 
-            if (currentActionIndex < actions.size()) {
-                currentAction = actions.get(currentActionIndex);
-                currentAction.execute(selectedWorker, this);
+                if (currentActionIndex < actions.size()) {
+                    currentAction = actions.get(currentActionIndex);
+                    currentAction.execute(selectedWorker, this);
+                } else {
+                    currentAction = null;
+                    currentActionIndex = 0;
+                    selectedWorker = null;
+                    switchTurn(); // done with all actions
+                }
+
+                repaint();
             } else {
-                currentAction = null;
-                currentActionIndex = 0;
-                selectedWorker = null;
-                switchTurn(); // done with all actions
+                // Just wait for valid click
+                System.out.println("Try a different tile.");
             }
-
-            repaint();
         }
     }
 
@@ -162,14 +187,9 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 5; col++) {
-                int x = startX + col * tileSize;
-                int y = startY + row * tileSize;
-                g2.drawRect(x, y, tileSize, tileSize);
-
-            }
-        }
+        tileManager.drawBoardTiles(g2);
+        tileManager.drawBuildings(g2);
+        tileManager.drawWorkers(g2);
 
         if (selectedWorker != null) {
             int highlightX = startX + selectedWorker.getCol() * tileSize;
@@ -178,8 +198,26 @@ public class GamePanel extends JPanel {
             g2.setColor(new Color(255, 215, 0, 128)); // semi-transparent yellow
             g2.fillRect(highlightX, highlightY, tileSize, tileSize);
         }
+    }
 
+    private void setCustomCursor() {
+        try {
+            BufferedImage cursorImage = ImageIO.read(
+                    Objects.requireNonNull(getClass().getResource("/uiextra/cursor.png"))
+            );
 
+            // Choose where the click point (hotspot) is
+            Point hotspot = new Point(0, 0); // top-left of image
+
+            Cursor customCursor = Toolkit.getDefaultToolkit()
+                    .createCustomCursor(cursorImage, hotspot, "Custom Cursor");
+
+            setCursor(customCursor);
+
+        } catch (IOException | NullPointerException e) {
+            System.err.println("Failed to load custom cursor.");
+            e.printStackTrace();
+        }
     }
 
 }

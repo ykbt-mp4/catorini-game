@@ -9,6 +9,9 @@ public class Worker {
     public int height;
     private int lastRow = -1;
     private int lastCol = -1;
+    private int lastBuildRow = -1;
+    private int lastBuildCol = -1;
+
 
     public Worker(int playerId, int workerId, int row, int col, int height) {
         this.playerId = playerId;
@@ -80,5 +83,20 @@ public class Worker {
         this.row = row;
         this.col = col;
     }
+
+
+    public void setLastBuildPosition(int row, int col) {
+        this.lastBuildRow = row;
+        this.lastBuildCol = col;
+    }
+
+    public int getLastBuildRow() {
+        return lastBuildRow;
+    }
+
+    public int getLastBuildCol() {
+        return lastBuildCol;
+    }
+
 
 }

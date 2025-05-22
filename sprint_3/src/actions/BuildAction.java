@@ -34,7 +34,8 @@ public class BuildAction extends Action {
             return false;
         }
 
-        targetTile.build();  // Increase level or place dome
+        targetTile.build();
+        worker.setLastBuildPosition(row, col);
         System.out.println("Built on tile " + row + "," + col + " | Level now: " + targetTile.getLevel() + (targetTile.hasDome() ? " with Dome" : ""));
         gp.repaint();
         return true;

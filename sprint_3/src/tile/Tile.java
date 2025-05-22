@@ -10,7 +10,7 @@ public class Tile {
     private final int col;
 
     private Worker worker;
-    private Building building;
+    public Building building;
 
     public BufferedImage image;
 
@@ -74,4 +74,5 @@ public class Tile {
         int colDiff = Math.abs(this.col - adjCol);
         return (rowDiff <= 1 && colDiff <= 1) && (rowDiff + colDiff != 0);
     }
+
 }

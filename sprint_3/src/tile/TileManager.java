@@ -8,10 +8,14 @@ import java.io.IOException;
 import java.util.Objects;
 import javax.imageio.ImageIO;
 import actors.Player;
+import util.FontLoader;
 
 public final class TileManager {
     private final GamePanel gp;
     private final Tile[] tile;
+
+    private final FontLoader fontLoader;
+
 
     int startX = 0;
     int startY = 0;
@@ -20,6 +24,7 @@ public final class TileManager {
         this.gp = gp;
         this.tile = new Tile[10]; // Store different tile graphics
         getTileImage();
+        this.fontLoader = new FontLoader();
     }
 
     public void getTileImage() {
@@ -74,12 +79,6 @@ public final class TileManager {
         int tileSize = gp.tileSize;
         int playTiles = gp.playTiles;
 
-        // Draw corners
-        g2.drawImage(tile[0].image, startX + tileSize, startY + tileSize, tileSize, tileSize, null); // top-left
-        g2.drawImage(tile[2].image, startX + playTiles * tileSize, startY + tileSize, tileSize, tileSize, null); // top-right
-        g2.drawImage(tile[6].image, startX + tileSize, startY + playTiles * tileSize, tileSize, tileSize, null); // bottom-left
-        g2.drawImage(tile[8].image, startX + playTiles * tileSize, startY + playTiles * tileSize, tileSize, tileSize, null); // bottom-right
-
         // Top edge
         for (int col = 1; col <= playTiles - 1; col++) {
             int x = startX + col * tileSize;
@@ -116,13 +115,33 @@ public final class TileManager {
                 g2.drawImage(tile[4].image, x, y, tileSize, tileSize, null);
             }
         }
+
+        // Draw corners
+        g2.drawImage(tile[0].image, startX + tileSize, startY + tileSize, tileSize, tileSize, null); // top-left
+        g2.drawImage(tile[2].image, startX + playTiles * tileSize, startY + tileSize, tileSize, tileSize, null); // top-right
+        g2.drawImage(tile[6].image, startX + tileSize, startY + playTiles * tileSize, tileSize, tileSize, null); // bottom-left
+        g2.drawImage(tile[8].image, startX + playTiles * tileSize, startY + playTiles * tileSize, tileSize, tileSize, null); // bottom-right
     }
 
     public void drawBuildings(Graphics2D g2) {
+        int tileSize = gp.tileSize;
+        int playTiles = gp.playTiles;
+        Tile[][] board = gp.getBoard();
 
+        for (int row = 0; row < playTiles; row++) {
+            for (int col = 0; col < playTiles; col++) {
+                Tile tile = board[row][col];
+                int x = startX + tileSize + col * tileSize;
+                int y = startY + tileSize + row * tileSize;
+
+                tile.building.draw(g2, x, y, tileSize, tileSize);
+            }
+        }
     }
 
     public void drawWorkers(Graphics2D g2) {
+        g2.setFont(fontLoader.getPixelFont().deriveFont(20f));
+
         int tileSize = gp.tileSize;
 
         for (Worker worker : gp.workerPos) {
@@ -131,9 +150,15 @@ public final class TileManager {
 
             // Get the correct player based on worker's playerId
             Player player = worker.getPlayerId() == gp.player1.getPlayerId() ? gp.player1 : gp.player2;
+
+            String name = "Player" + player.getPlayerId();
+            int playerNameWidth = g2.getFontMetrics().stringWidth(name);
             player.draw(g2, x, y, tileSize, tileSize);
+            g2.drawString(name, x, y);
         }
     }
+
+
 
 
 }

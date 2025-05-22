@@ -44,7 +44,7 @@ public class Player {
      * Loads the image that represents a specific player based on their ID.
      */
     protected void loadPlayerImage() {
-        String imagePath = String.format("/actors/worker%d.png", playerId);
+        String imagePath = String.format("/actors/character.png");
         try {
             playerImage = ImageIO.read(getClass().getResourceAsStream(imagePath));
         } catch (IOException e) {

@@ -75,7 +75,6 @@ public class GamePanel extends JPanel {
             }
         }
 
-        // initalise workers for each player
         setWorkerPos();
 
         repaint();
@@ -92,9 +91,6 @@ public class GamePanel extends JPanel {
         repaint();
     }
 
-    /**
-     * Randomly positions workers for both players at the start of the game.
-     */
     public void setWorkerPos() {
         this.workerPos.clear();
 
@@ -192,6 +188,7 @@ public class GamePanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
 
         tileManager.drawBoardTiles(g2);
+        tileManager.drawBuildings(g2);
         tileManager.drawWorkers(g2);
 
         if (selectedWorker != null) {

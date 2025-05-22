@@ -2,10 +2,10 @@ package buildings;
 
 public enum BuildingLevel {
     GROUND(0, null),
-    LEVEL_ONE(1, "/buildings/building.png"),
-    LEVEL_TWO(2, "/buildings/building.png"),
-    LEVEL_THREE(3, "/buildings/building.png"),
-    DOME(4, "/buildings/catdome.png");
+    LEVEL_ONE(1, "/buildings/building1.png"),
+    LEVEL_TWO(2, "/buildings/building2.png"),
+    LEVEL_THREE(3, "/buildings/building3.png"),
+    DOME(4, "/buildings/flowerdome.png");
 
     private final int height;
     private final String imagePath;
@@ -29,7 +29,7 @@ public enum BuildingLevel {
             case LEVEL_ONE -> LEVEL_TWO;
             case LEVEL_TWO -> LEVEL_THREE;
             case LEVEL_THREE -> DOME;
-            case DOME -> DOME; // No change after dome
+            case DOME -> DOME;
         };
     }
 }

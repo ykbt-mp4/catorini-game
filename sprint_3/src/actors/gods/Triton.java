@@ -1,6 +1,5 @@
 package actors.gods;
 
-import actions.Action;
 import actions.BuildAction;
 import actions.MoveAction;
 import tile.Tile;
@@ -17,19 +16,41 @@ public class Triton extends God {
         actions.add(new BuildAction());
     }
 
-    private static class TritonAction extends Action {
+    private static class TritonAction extends MoveAction {
+
+        public TritonAction() {
+            setGodAction(true);
+        }
 
         @Override
         public void execute(Worker worker, GamePanel gamePanel) {
             super.execute(worker, gamePanel);
-            System.out.println("Executing triton move action");
+            boolean isOnPerimeter =
+                    worker.getRow() == 0 || worker.getRow() == gp.playTiles - 1 ||
+                            worker.getCol() == 0 || worker.getCol() == gp.playTiles - 1;
+            if (!isOnPerimeter) {
+                System.out.println("Triton: Worker not on perimeter. Skipping optional move.");
+                gp.skipCurrentAction();
+            } else {
+                System.out.println("Triton: Worker is on perimeter. Awaiting optional move.");
+            }
         }
 
         @Override
         public boolean onTileClick(int row, int col) {
-            System.out.println("done");
+            Tile targetTile = getTile(row, col);
+            Tile currentTile = getTile(worker.getRow(), worker.getCol());
+
+            if (isNotValidTile(row, col)) {
+                return false;
+            }
+
+            if (!isActionLegal(currentTile, targetTile)) {
+                return false;
+            }
+
+            moveWorker(currentTile, targetTile, row, col);
             return true;
         }
     }
-
 }

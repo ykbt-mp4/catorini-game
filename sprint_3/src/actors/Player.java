@@ -40,11 +40,9 @@ public class Player {
         this.godCard = godCard;
     }
 
-    /**
-     * Loads the image that represents a specific player based on their ID.
-     */
+
     protected void loadPlayerImage() {
-        String imagePath = String.format("/actors/character.png");
+        String imagePath = "/actors/character.png";
         try {
             playerImage = ImageIO.read(getClass().getResourceAsStream(imagePath));
         } catch (IOException e) {
@@ -52,15 +50,6 @@ public class Player {
         }
     }
 
-    /**
-     * Draws the player's worker image at a specified position with a specified size.
-     *
-     * @param g2     The Graphics2D context to draw with
-     * @param x      The x coordinate (top-left corner)
-     * @param y      The y coordinate (top-left corner)
-     * @param width  The width of the image
-     * @param height The height of the image
-     */
     public void draw(Graphics2D g2, int x, int y, int width, int height) {
         if (playerImage != null) {
             g2.drawImage(playerImage, x, y, width, height, null);

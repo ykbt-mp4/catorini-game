@@ -7,6 +7,8 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
 import javax.imageio.ImageIO;
+import javax.swing.*;
+
 import actors.Player;
 import util.FontLoader;
 
@@ -90,7 +92,7 @@ public final class TileManager {
         for (int col = 1; col <= playTiles - 1; col++) {
             int x = startX + col * tileSize;
             int y = startY + playTiles * tileSize;
-            g2.drawImage(tile[7].image, x, y, tileSize, tileSize, null);
+            g2.drawImage(tile[7].image, x, y, tileSize, tileSize , null);
         }
 
         // Left edge
@@ -148,17 +150,28 @@ public final class TileManager {
             int x = startX + tileSize + worker.getCol() * tileSize;
             int y = startY + tileSize + worker.getRow() * tileSize;
 
-            // Get the correct player based on worker's playerId
             Player player = worker.getPlayerId() == gp.player1.getPlayerId() ? gp.player1 : gp.player2;
-
             String name = "Player" + player.getPlayerId();
-            int playerNameWidth = g2.getFontMetrics().stringWidth(name);
             player.draw(g2, x, y, tileSize, tileSize);
             g2.drawString(name, x, y);
         }
     }
 
+    public void drawValidTiles(Graphics2D g2) {
+        Tile[][] board = gp.getBoard();
+        int tileSize = gp.tileSize;
 
+        Image tileHighlight = new ImageIcon(getClass().getResource("/uiextra/tilehighlight.png")).getImage();
 
+        for (int row = 0; row < gp.playTiles; row++) {
+            for (int col = 0; col < gp.playTiles; col++) {
+                if (board[row][col].isHighlighted()) {
+                    int x = gp.tileSize + col * tileSize;
+                    int y = gp.tileSize + row * tileSize;
+                    g2.drawImage(tileHighlight, x, y, tileSize, tileSize, null);
+                }
+            }
+        }
+    }
 
 }

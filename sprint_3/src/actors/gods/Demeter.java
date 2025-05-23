@@ -18,6 +18,9 @@ public class Demeter extends God {
     }
 
     private static class DemeterAction extends Action {
+        public DemeterAction() {
+            setGodAction(true);
+        }
 
         @Override
         public void execute(Worker worker, GamePanel gamePanel) {

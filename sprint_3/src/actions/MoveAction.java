@@ -6,56 +6,56 @@ import tile.Tile;
 
 public class MoveAction extends Action {
 
-
+    @Override
     public void execute(Worker worker, GamePanel gamePanel) {
         super.execute(worker, gamePanel);
+        Tile[][] board = gp.getBoard();
+
+        Tile currentTile = board[worker.getRow()][worker.getCol()];
+
+        clearHighlights(board);
+
+        for (int row = 0; row < gp.playTiles; row++) {
+            for (int col = 0; col < gp.playTiles; col++) {
+                Tile target = board[row][col];
+
+                // Use your built-in adjacency check
+                if (currentTile.isAdjacentTo(row, col) && isActionLegal(currentTile, target)) {
+                    target.setHighlighted(true);  // You can add this flag to your Tile class
+                }
+            }
+        }
     }
 
     @Override
     public boolean onTileClick(int row, int col) {
-        Tile[][] board = gp.getBoard();
-
-        if (row < 0 || row >= gp.playTiles || col < 0 || col >= gp.playTiles) {
-            System.out.println("Invalid tile clicked.");
+        if (isNotValidTile(row, col)) {
             return false;
         }
 
-        Tile targetTile = board[row][col];
-        Tile currentTile = board[worker.getRow()][worker.getCol()];
+        Tile targetTile = getTile(row, col);
+        Tile currentTile = getTile(worker.getRow(), worker.getCol());
 
-        if (!currentTile.isAdjacentTo(row, col)) {
-            System.out.println("Can only move to adjacent tiles.");
+        if (!isActionLegal(currentTile, targetTile)) {
             return false;
         }
 
-        if (!targetTile.isEmpty()) {
-            System.out.println("Target tile occupied.");
-            return false;
-        }
 
-        int currentLevel = currentTile.getLevel();
-        int targetLevel = targetTile.getLevel();
+        moveWorker(currentTile, targetTile, row, col);
+        return true;
+    }
 
-        if (targetLevel - currentLevel > 1) {
-            System.out.println("Cannot move up more than 1 level.");
-            return false;
-        }
-
-        // Move worker to the new tile
+    protected void moveWorker(Tile currentTile, Tile targetTile, int row, int col) {
         int currentRow = worker.getRow();
         int currentCol = worker.getCol();
 
         currentTile.clearWorker();
-
         worker.setLastRow(currentRow);
         worker.setLastCol(currentCol);
         worker.setPosition(row, col);
-
         targetTile.setWorker(worker);
 
         System.out.println("Moved worker to " + row + "," + col);
         gp.repaint();
-
-        return true;
     }
 }

@@ -13,6 +13,7 @@ public class Tile {
     public Building building;
 
     public BufferedImage image;
+    private boolean highlighted = false;
 
     public Tile(int row, int col) {
         this.row = row;
@@ -75,4 +76,11 @@ public class Tile {
         return (rowDiff <= 1 && colDiff <= 1) && (rowDiff + colDiff != 0);
     }
 
+    public boolean isHighlighted() {
+        return highlighted;
+    }
+
+    public void setHighlighted(boolean highlighted) {
+        this.highlighted = highlighted;
+    }
 }

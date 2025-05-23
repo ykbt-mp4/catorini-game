@@ -53,7 +53,7 @@ public class Building {
     public void draw(Graphics2D g2, int x, int y, int width, int height) {
         for (BuildingLevel lvl : BuildingLevel.values()) {
             if (lvl.getHeight() > level.getHeight()) {
-                break; // Only draw up to current level
+                break;
             }
 
             BufferedImage img = levelImages.get(lvl);

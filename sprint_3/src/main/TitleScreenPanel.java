@@ -189,6 +189,6 @@ public class TitleScreenPanel extends JPanel {
         if (waterTile != null) {
             g.drawImage(waterTile, 0, 0, getWidth(), getHeight(), this);
         }
-        super.paintComponent(g); // draw components
+        super.paintComponent(g);
     }
 }

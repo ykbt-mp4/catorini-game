@@ -25,8 +25,8 @@ public class Artemis extends God {
         public void execute(Worker worker, GamePanel gamePanel) {
             super.execute(worker, gamePanel);
             System.out.println("Executing artemis move action");
-            Tile[][] board = gp.getBoard();
 
+            Tile[][] board = gp.getBoard();
             Tile currentTile = board[worker.getRow()][worker.getCol()];
 
             clearHighlights(board);
@@ -35,7 +35,7 @@ public class Artemis extends God {
                 for (int col = 0; col < gp.playTiles; col++) {
                     Tile target = board[row][col];
 
-                    if (currentTile.isAdjacentTo(row, col) && isActionLegal(currentTile, target)) {
+                    if (currentTile.isAdjacentTo(row, col) && isActionLegal(currentTile, target) && !isReturningToPreviousTile(worker, row, col)) {
                         target.setHighlighted(true);
                     }
                 }
@@ -48,15 +48,13 @@ public class Artemis extends God {
                 return false;
             }
 
-            Tile targetTile = getTile(row, col);
-            Tile currentTile = getTile(worker.getRow(), worker.getCol());
-
-            int lastRow = worker.getLastRow();
-            int lastCol = worker.getLastCol();
-            if (row == lastRow && col == lastCol) {
-                System.out.println("Cannot move back to the previous tile.");
+            if (isReturningToPreviousTile(worker, row, col)) {
+                System.out.println("Artemis: Cannot move back to the previous tile.");
                 return false;
             }
+
+            Tile targetTile = getTile(row, col);
+            Tile currentTile = getTile(worker.getRow(), worker.getCol());
 
             if (!isActionLegal(currentTile, targetTile)) {
                 return false;
@@ -65,5 +63,12 @@ public class Artemis extends God {
             moveWorker(currentTile, targetTile, row, col);
             return true;
         }
+
+        private boolean isReturningToPreviousTile(Worker worker, int targetRow, int targetCol) {
+            int lastRow = worker.getLastRow();
+            int lastCol = worker.getLastCol();
+            return targetRow == lastRow && targetCol == lastCol;
+        }
+
     }
 }

@@ -41,8 +41,8 @@ public class GamePanel extends JPanel {
 
     private Worker selectedWorker = null;
 
-    private Action currentAction = null;
-    private int currentActionIndex = 0;
+    public Action currentAction = null;
+    public int currentActionIndex = 0;
 
     private final TileManager tileManager;
 

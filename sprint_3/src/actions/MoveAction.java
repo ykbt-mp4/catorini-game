@@ -9,8 +9,8 @@ public class MoveAction extends Action {
     @Override
     public void execute(Worker worker, GamePanel gamePanel) {
         super.execute(worker, gamePanel);
-        Tile[][] board = gp.getBoard();
 
+        Tile[][] board = gp.getBoard();
         Tile currentTile = board[worker.getRow()][worker.getCol()];
 
         clearHighlights(board);
@@ -18,16 +18,13 @@ public class MoveAction extends Action {
         for (int row = 0; row < gp.playTiles; row++) {
             for (int col = 0; col < gp.playTiles; col++) {
                 Tile target = board[row][col];
-
-                // Use your built-in adjacency check
                 if (currentTile.isAdjacentTo(row, col) && isActionLegal(currentTile, target)) {
-                    target.setHighlighted(true);  // You can add this flag to your Tile class
+                    target.setHighlighted(true);
                 }
             }
         }
     }
 
-    @Override
     public boolean onTileClick(int row, int col) {
         if (isNotValidTile(row, col)) {
             return false;
@@ -39,7 +36,6 @@ public class MoveAction extends Action {
         if (!isActionLegal(currentTile, targetTile)) {
             return false;
         }
-
 
         moveWorker(currentTile, targetTile, row, col);
         return true;

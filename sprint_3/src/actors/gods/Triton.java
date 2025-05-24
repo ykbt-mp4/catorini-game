@@ -25,32 +25,55 @@ public class Triton extends God {
         @Override
         public void execute(Worker worker, GamePanel gamePanel) {
             super.execute(worker, gamePanel);
-            boolean isOnPerimeter =
-                    worker.getRow() == 0 || worker.getRow() == gp.playTiles - 1 ||
-                            worker.getCol() == 0 || worker.getCol() == gp.playTiles - 1;
-            if (!isOnPerimeter) {
-                System.out.println("Triton: Worker not on perimeter. Skipping optional move.");
+            System.out.println("Triton: Executing move");
+
+            Tile[][] board = gp.getBoard();
+            Tile currentTile = board[worker.getRow()][worker.getCol()];
+
+            clearHighlights(board);
+
+            for (int row = 0; row < gp.playTiles; row++) {
+                for (int col = 0; col < gp.playTiles; col++) {
+                    Tile target = board[row][col];
+                    if (currentTile.isAdjacentTo(row, col) && isActionLegal(currentTile, target)) {
+                        target.setHighlighted(true);
+                    }
+                }
+            }
+
+            if (!isOnPerimeter(worker)) {
+                System.out.println("Triton: Landed on non-perimeter — ending move phase.");
                 gp.skipCurrentAction();
-            } else {
-                System.out.println("Triton: Worker is on perimeter. Awaiting optional move.");
             }
         }
 
         @Override
         public boolean onTileClick(int row, int col) {
-            Tile targetTile = getTile(row, col);
-            Tile currentTile = getTile(worker.getRow(), worker.getCol());
-
             if (isNotValidTile(row, col)) {
                 return false;
             }
+
+            Tile targetTile = getTile(row, col);
+            Tile currentTile = getTile(worker.getRow(), worker.getCol());
 
             if (!isActionLegal(currentTile, targetTile)) {
                 return false;
             }
 
-            moveWorker(currentTile, targetTile, row, col);
+            if (isOnPerimeter(worker)) {
+                System.out.println("Triton: Landed on perimeter — may move again.");
+                moveWorker(currentTile, targetTile, row, col);
+                gp.currentActionIndex -= 1;
+            } else {
+                System.out.println("Triton: Landed on non-perimeter — ending move phase.");
+            }
             return true;
+        }
+
+        private boolean isOnPerimeter(Worker worker) {
+            int row = worker.getRow();
+            int col = worker.getCol();
+            return row == 0 || row == gp.playTiles - 1 || col == 0 || col == gp.playTiles - 1;
         }
     }
 }

@@ -11,35 +11,44 @@ public class BuildAction extends Action {
         super.execute(worker, gamePanel);
         System.out.println("Executing build");
 
-    }
-
-    @Override
-    public boolean onTileClick(int row, int col) {
         Tile[][] board = gp.getBoard();
-
-        if (row < 0 || row >= gp.playTiles || col < 0 || col >= gp.playTiles) {
-            System.out.println("Invalid tile clicked.");
-            return false;
-        }
-
-        Tile targetTile = board[row][col];
         Tile currentTile = board[worker.getRow()][worker.getCol()];
 
-        if (!currentTile.isAdjacentTo(row, col)) {
-            System.out.println("Can only build on adjacent tiles.");
+        clearHighlights(board);
+
+        for (int row = 0; row < gp.playTiles; row++) {
+            for (int col = 0; col < gp.playTiles; col++) {
+                Tile target = board[row][col];
+
+                if (currentTile.isAdjacentTo(row, col) && isActionLegal(currentTile, target)) {
+                    target.setHighlighted(true);
+                }
+            }
+        }
+
+    }
+
+    public boolean onTileClick(int row, int col) {
+        if (isNotValidTile(row, col)) {
             return false;
         }
 
-        if (!targetTile.isEmpty()) {
-            System.out.println("Cannot build here: either occupied or has dome.");
+        Tile targetTile = getTile(row, col);
+        Tile currentTile = getTile(worker.getRow(), worker.getCol());
+
+        if (!isActionLegal(currentTile, targetTile)) {
             return false;
         }
 
+        placeBuilding(targetTile, row, col);
+        return true;
+    }
+
+    protected void placeBuilding(Tile targetTile, int row, int col){
         targetTile.build();
         worker.setLastBuildPosition(row, col);
         System.out.println("Built on tile " + row + "," + col + " | Level now: " + targetTile.getLevel() + (targetTile.hasDome() ? " with Dome" : ""));
         gp.repaint();
-        return true;
     }
 }
 

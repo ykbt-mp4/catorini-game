@@ -1,6 +1,5 @@
 package actors.gods;
 
-import actions.Action;
 import actions.BuildAction;
 import actions.MoveAction;
 import main.GamePanel;
@@ -17,7 +16,7 @@ public class Demeter extends God {
         actions.add(new DemeterAction());
     }
 
-    private static class DemeterAction extends Action {
+    private static class DemeterAction extends BuildAction {
         public DemeterAction() {
             setGodAction(true);
         }
@@ -26,29 +25,32 @@ public class Demeter extends God {
         public void execute(Worker worker, GamePanel gamePanel) {
             super.execute(worker, gamePanel);
             System.out.println("Executing demeter build action");
+
+            Tile[][] board = gp.getBoard();
+
+            Tile currentTile = board[worker.getRow()][worker.getCol()];
+
+            clearHighlights(board);
+
+            for (int row = 0; row < gp.playTiles; row++) {
+                for (int col = 0; col < gp.playTiles; col++) {
+                    Tile target = board[row][col];
+
+                    if (currentTile.isAdjacentTo(row, col) && isActionLegal(currentTile, target)) {
+                        target.setHighlighted(true);
+                    }
+                }
+            }
         }
 
         @Override
         public boolean onTileClick(int row, int col) {
-            Tile[][] board = gp.getBoard();
-
-            if (row < 0 || row >= gp.playTiles || col < 0 || col >= gp.playTiles) {
-                System.out.println("Invalid tile clicked.");
+            if (isNotValidTile(row, col)) {
                 return false;
             }
 
-            Tile targetTile = board[row][col];
-            Tile currentTile = board[worker.getRow()][worker.getCol()];
-
-            if (!currentTile.isAdjacentTo(row, col)) {
-                System.out.println("Can only build on adjacent tiles.");
-                return false;
-            }
-
-            if (!targetTile.isEmpty()) {
-                System.out.println("Cannot build here: either occupied or has dome.");
-                return false;
-            }
+            Tile targetTile = getTile(row, col);
+            Tile currentTile = getTile(worker.getRow(), worker.getCol());
 
             int lastBuildRow = worker.getLastBuildRow();
             int lastBuildCol = worker.getLastBuildCol();
@@ -59,10 +61,11 @@ public class Demeter extends God {
                 return false;
             }
 
-            targetTile.build();
-            worker.setLastBuildPosition(row, col);
-            System.out.println("Built on tile " + row + "," + col + " | Level now: " + targetTile.getLevel() + (targetTile.hasDome() ? " with Dome" : ""));
-            gp.repaint();
+            if (!isActionLegal(currentTile, targetTile)) {
+                return false;
+            }
+
+            placeBuilding(targetTile, row, col);
             return true;
         }
     }

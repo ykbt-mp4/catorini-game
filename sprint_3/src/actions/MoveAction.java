@@ -9,6 +9,7 @@ public class MoveAction extends Action {
     @Override
     public void execute(Worker worker, GamePanel gamePanel) {
         super.execute(worker, gamePanel);
+        System.out.println("Move action. Executing...");
 
         Tile[][] board = gp.getBoard();
         Tile currentTile = board[worker.getRow()][worker.getCol()];
@@ -18,7 +19,8 @@ public class MoveAction extends Action {
         for (int row = 0; row < gp.playTiles; row++) {
             for (int col = 0; col < gp.playTiles; col++) {
                 Tile target = board[row][col];
-                if (currentTile.isAdjacentTo(row, col) && isActionLegal(currentTile, target)) {
+
+                if (getValidMoveTiles(currentTile, target)) {
                     target.setHighlighted(true);
                 }
             }
@@ -26,14 +28,11 @@ public class MoveAction extends Action {
     }
 
     public boolean onTileClick(int row, int col) {
-        if (isNotValidTile(row, col)) {
-            return false;
-        }
 
         Tile targetTile = getTile(row, col);
         Tile currentTile = getTile(worker.getRow(), worker.getCol());
 
-        if (!isActionLegal(currentTile, targetTile)) {
+        if (!isMoveActionLegal(currentTile, targetTile)) {
             return false;
         }
 
@@ -51,7 +50,7 @@ public class MoveAction extends Action {
         worker.setPosition(row, col);
         targetTile.setWorker(worker);
 
-        System.out.println("Moved worker to " + row + "," + col);
+        System.out.println("Moved worker to " + row + "," + col + "\n");
         gp.repaint();
     }
 }

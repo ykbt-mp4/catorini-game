@@ -8,7 +8,7 @@ public abstract class Action {
 
     protected Worker worker;
     protected GamePanel gp;
-    protected boolean isGodAction = false; // default is false
+    protected boolean isGodAction = false;
 
     public void execute(Worker worker, GamePanel gamePanel) {
         this.worker = worker;
@@ -27,18 +27,24 @@ public abstract class Action {
         return gp.getBoard()[row][col];
     }
 
-    protected boolean isNotValidTile(int row, int col) {
-        return (row < 0 || row >= gp.playTiles || col < 0 || col >= gp.playTiles);
+    protected boolean getValidMoveTiles(Tile currentTile, Tile targetTile){
+            if (!currentTile.isAdjacentTo(targetTile.getRow(), targetTile.getCol())) return false;
+            if (targetTile.getLevel() - currentTile.getLevel() > 1) return false;
+            if (targetTile.isOccupiedByWorker()) return false;
+            if (targetTile.hasDome()) return false;
+            return true;
     }
 
-    protected boolean isActionLegal(Tile currentTile, Tile targetTile) {
+    protected boolean getValidBuildTiles(Tile currentTile, Tile targetTile){
+        if (!currentTile.isAdjacentTo(targetTile.getRow(), targetTile.getCol())) return false;
+        if (targetTile.isOccupiedByWorker()) return false;
+        if (targetTile.hasDome()) return false;
+        return true;
+    }
+
+    protected boolean isMoveActionLegal(Tile currentTile, Tile targetTile) {
         if (!currentTile.isAdjacentTo(targetTile.getRow(), targetTile.getCol())) {
             System.out.println("Can only move to adjacent tiles.");
-            return false;
-        }
-
-        if (!targetTile.isEmpty()) {
-            System.out.println("Target tile occupied.");
             return false;
         }
 
@@ -48,6 +54,33 @@ public abstract class Action {
             return false;
         }
 
+        if (targetTile.isOccupiedByWorker()) {
+            System.out.println("Target tile is occupied by worker.");
+            return false;
+        }
+
+        if (targetTile.hasDome()) {
+            System.out.println("Target tile has a dome.");
+            return false;
+        }
+        return true;
+    }
+
+    protected boolean isBuildActionLegal(Tile currentTile, Tile targetTile) {
+        if (!currentTile.isAdjacentTo(targetTile.getRow(), targetTile.getCol())) {
+            System.out.println("Can only build on adjacent tiles.");
+            return false;
+        }
+
+        if (targetTile.isOccupiedByWorker()) {
+            System.out.println("Target tile is occupied by worker.");
+            return false;
+        }
+
+        if (targetTile.hasDome()) {
+            System.out.println("Target tile has a dome.");
+            return false;
+        }
         return true;
     }
 

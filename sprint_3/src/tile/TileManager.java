@@ -18,7 +18,6 @@ public final class TileManager {
 
     private final FontLoader fontLoader;
 
-
     int startX = 0;
     int startY = 0;
 
@@ -143,7 +142,6 @@ public final class TileManager {
 
     public void drawWorkers(Graphics2D g2) {
         g2.setFont(fontLoader.getPixelFont().deriveFont(20f));
-
         int tileSize = gp.tileSize;
 
         for (Worker worker : gp.workerPos) {
@@ -151,7 +149,7 @@ public final class TileManager {
             int y = startY + tileSize + worker.getRow() * tileSize;
 
             Player player = worker.getPlayerId() == gp.player1.getPlayerId() ? gp.player1 : gp.player2;
-            String name = "Player" + player.getPlayerId();
+            String name = "Player " + player.getPlayerId();
             player.draw(g2, x, y, tileSize, tileSize);
             g2.drawString(name, x, y);
         }
@@ -166,11 +164,22 @@ public final class TileManager {
         for (int row = 0; row < gp.playTiles; row++) {
             for (int col = 0; col < gp.playTiles; col++) {
                 if (board[row][col].isHighlighted()) {
-                    int x = gp.tileSize + col * tileSize;
-                    int y = gp.tileSize + row * tileSize;
+                    int x = tileSize + col * tileSize;
+                    int y = tileSize + row * tileSize;
                     g2.drawImage(tileHighlight, x, y, tileSize, tileSize, null);
                 }
             }
+        }
+    }
+
+    public void drawWorkerHighlight(Graphics2D g2, Worker selectedWorker) {
+        int tileSize = gp.tileSize;
+        Image workerHighlight = new ImageIcon(getClass().getResource("/uiextra/workerhighlight.png")).getImage();
+
+        if (selectedWorker != null) {
+            int x = tileSize + selectedWorker.getCol() * tileSize;
+            int y = tileSize + selectedWorker.getRow() * tileSize;
+            g2.drawImage(workerHighlight, x, y, tileSize, tileSize, null);
         }
     }
 

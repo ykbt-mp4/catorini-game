@@ -34,10 +34,6 @@ public class Tile {
         return worker != null;
     }
 
-    public boolean isEmpty() {
-        return !isOccupiedByWorker() && !hasDome();
-    }
-
     public void setWorker(Worker worker) {
         this.worker = worker;
     }

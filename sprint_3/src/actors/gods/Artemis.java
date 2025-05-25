@@ -10,7 +10,8 @@ public class Artemis extends God {
 
     public Artemis() {
         super("Artemis",
-                "Your Worker may move one additional time, but not back to its initial space.");
+                "Your Worker may move one additional time, but not back to its initial space.",
+                "/godImages/artemis.png");
         actions.add(new MoveAction());
         actions.add(new ArtemisAction());
         actions.add(new BuildAction());
@@ -24,7 +25,7 @@ public class Artemis extends God {
         @Override
         public void execute(Worker worker, GamePanel gamePanel) {
             super.execute(worker, gamePanel);
-            System.out.println("Executing artemis move action");
+            System.out.println("Artemis: Power action available. Moving again (Can skip).");
 
             Tile[][] board = gp.getBoard();
             Tile currentTile = board[worker.getRow()][worker.getCol()];
@@ -35,7 +36,7 @@ public class Artemis extends God {
                 for (int col = 0; col < gp.playTiles; col++) {
                     Tile target = board[row][col];
 
-                    if (currentTile.isAdjacentTo(row, col) && isActionLegal(currentTile, target) && !isReturningToPreviousTile(worker, row, col)) {
+                    if (getValidMoveTiles(currentTile, target) && !isReturningToPreviousTile(worker, row, col)) {
                         target.setHighlighted(true);
                     }
                 }
@@ -44,19 +45,15 @@ public class Artemis extends God {
 
         @Override
         public boolean onTileClick(int row, int col) {
-            if (isNotValidTile(row, col)) {
-                return false;
-            }
+            Tile targetTile = getTile(row, col);
+            Tile currentTile = getTile(worker.getRow(), worker.getCol());
 
             if (isReturningToPreviousTile(worker, row, col)) {
                 System.out.println("Artemis: Cannot move back to the previous tile.");
                 return false;
             }
 
-            Tile targetTile = getTile(row, col);
-            Tile currentTile = getTile(worker.getRow(), worker.getCol());
-
-            if (!isActionLegal(currentTile, targetTile)) {
+            if (!isMoveActionLegal(currentTile, targetTile)) {
                 return false;
             }
 
@@ -69,6 +66,5 @@ public class Artemis extends God {
             int lastCol = worker.getLastCol();
             return targetRow == lastRow && targetCol == lastCol;
         }
-
     }
 }

@@ -1,7 +1,6 @@
 package main;
 
 import util.FontLoader;
-import actors.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +18,7 @@ public class TitleScreenPanel extends JPanel {
         waterTile = new ImageIcon(getClass().getResource("/tiles/water.png")).getImage();
         setOpaque(false);
 
-        JLabel title = new JLabel("Cat-orini Game", SwingConstants.CENTER);
+        JLabel title = new JLabel("Cat-orini Game !!", SwingConstants.CENTER);
         title.setFont(pixelFont.deriveFont(48f));
         title.setBorder(BorderFactory.createEmptyBorder(100, 0, 50, 0));
         add(title, BorderLayout.NORTH);
@@ -34,33 +33,32 @@ public class TitleScreenPanel extends JPanel {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2 = (Graphics2D) g;
+                g2.setFont(pixelFont.deriveFont(20f));
 
                 Image landImage = new ImageIcon(getClass().getResource("/uiextra/Hills.png")).getImage();
+                Image charImage = new ImageIcon(getClass().getResource("/uiextra/charemoji.png")).getImage();
+                int imgSize = 200;
+                int charImgSize = 100;
+
+                int landX = (getWidth() - imgSize) / 4;
+                int landY = (3 * (getHeight() - imgSize) / 4) + 20;
+                g2.drawImage(landImage, landX, landY, imgSize, imgSize, this);
+
+                int charX = landX + (imgSize - charImgSize) / 2;
+                int charY = (landY + (imgSize - charImgSize) / 2) - 20;
+                g2.drawImage(charImage, charX, charY, charImgSize, charImgSize, this);
+
                 Image textBoxImage = new ImageIcon(getClass().getResource("/uiextra/dialog_box.png")).getImage();
-
-                Player player = new Player(1);
-                int imgSize = 200; // Adjust as needed
-                int imgX = (getWidth() - imgSize) / 4;
-                int imgY = 3*(getHeight() - imgSize) / 4;
-                g2.drawImage(landImage, imgX, imgY+20, imgSize, imgSize, this);
-                player.draw(g2, imgX, imgY, imgSize, imgSize);
-
-                // Draw dialog background
-                int boxX = 3* (getWidth() - imgSize) / 4;
+                int boxX = 3 * (getWidth() - imgSize) / 4;
                 int boxY = (getHeight() - imgSize) / 4;
                 int boxWidth = 200;
                 int boxHeight = 150;
-
                 g2.drawImage(textBoxImage, boxX, boxY, boxWidth, boxHeight, this);
-
-                g2.setFont(pixelFont.deriveFont(20f));
-                g2.setColor(Color.BLACK);
 
                 String message = "Meow!\nFIT3077 Sprint 3\nAssignment 2025";
                 int lineHeight = g2.getFontMetrics().getHeight();
                 int textX = 3* (getWidth() - imgSize) / 4 + 22;
                 int textY = (getHeight() - imgSize) / 4 + 60;
-
                 for (String line : message.split("\n")) {
                     g2.drawString(line, textX, textY);
                     textY += lineHeight;
@@ -71,7 +69,16 @@ public class TitleScreenPanel extends JPanel {
         imagePanel.setOpaque(false);
         add(imagePanel, BorderLayout.WEST);
 
-        JPanel imagePanel2 = new JPanel();
+        JPanel imagePanel2 = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g;
+
+                Image boardImage = new ImageIcon(getClass().getResource("/uiextra/menupanel.png")).getImage();
+                g2.drawImage(boardImage, 200/2, 0, getWidth() - 200, getHeight(), this);
+            }
+        };
         imagePanel2.setPreferredSize(new Dimension(500, 0));
         imagePanel2.setOpaque(false);
         add(imagePanel2, BorderLayout.EAST);
@@ -113,7 +120,6 @@ public class TitleScreenPanel extends JPanel {
             exitButton.setVerticalTextPosition(SwingConstants.CENTER);
             exitButton.setFont(pixelFont.deriveFont(20f));
 
-            // Make it look clean
             startButton.setBorderPainted(false);
             startButton.setContentAreaFilled(false);
             startButton.setFocusPainted(false);

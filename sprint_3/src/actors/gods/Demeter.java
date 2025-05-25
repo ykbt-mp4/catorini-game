@@ -10,7 +10,8 @@ public class Demeter extends God {
 
     public Demeter() {
         super("Demeter",
-                "Your Worker may build one additional time, but not on the same space.");
+                "Your Worker may build one additional time, but not on the same space.",
+                "/godImages/demeter.png");
         actions.add(new MoveAction());
         actions.add(new BuildAction());
         actions.add(new DemeterAction());
@@ -24,10 +25,9 @@ public class Demeter extends God {
         @Override
         public void execute(Worker worker, GamePanel gamePanel) {
             super.execute(worker, gamePanel);
-            System.out.println("Executing demeter build action");
+            System.out.println("Demeter: power action available. Build again (Can skip).");
 
             Tile[][] board = gp.getBoard();
-
             Tile currentTile = board[worker.getRow()][worker.getCol()];
 
             clearHighlights(board);
@@ -36,7 +36,7 @@ public class Demeter extends God {
                 for (int col = 0; col < gp.playTiles; col++) {
                     Tile target = board[row][col];
 
-                    if (currentTile.isAdjacentTo(row, col) && isActionLegal(currentTile, target)) {
+                    if (getValidBuildTiles(currentTile, target) && !isPreviousBuilding(worker, row, col)) {
                         target.setHighlighted(true);
                     }
                 }
@@ -45,28 +45,26 @@ public class Demeter extends God {
 
         @Override
         public boolean onTileClick(int row, int col) {
-            if (isNotValidTile(row, col)) {
-                return false;
-            }
-
             Tile targetTile = getTile(row, col);
             Tile currentTile = getTile(worker.getRow(), worker.getCol());
 
-            int lastBuildRow = worker.getLastBuildRow();
-            int lastBuildCol = worker.getLastBuildCol();
-            boolean previousBuilding = (row == lastBuildRow && col == lastBuildCol);
-
-            if (previousBuilding) {
-                System.out.println("Cannot build on the same tile twice in one turn.");
+            if (isPreviousBuilding(worker, row, col)) {
+                System.out.println("Demeter: Cannot build on the same tile twice in one turn.");
                 return false;
             }
 
-            if (!isActionLegal(currentTile, targetTile)) {
+            if (!isBuildActionLegal(currentTile, targetTile)) {
                 return false;
             }
 
             placeBuilding(targetTile, row, col);
             return true;
+        }
+
+        private boolean isPreviousBuilding(Worker worker, int row, int col) {
+            int lastBuildRow = worker.getLastBuildRow();
+            int lastBuildCol = worker.getLastBuildCol();
+            return row == lastBuildRow && col == lastBuildCol;
         }
     }
 }

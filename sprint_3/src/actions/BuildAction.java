@@ -9,7 +9,7 @@ public class BuildAction extends Action {
     @Override
     public void execute(Worker worker, GamePanel gamePanel) {
         super.execute(worker, gamePanel);
-        System.out.println("Executing build");
+        System.out.println("Build action. Executing...");
 
         Tile[][] board = gp.getBoard();
         Tile currentTile = board[worker.getRow()][worker.getCol()];
@@ -20,23 +20,18 @@ public class BuildAction extends Action {
             for (int col = 0; col < gp.playTiles; col++) {
                 Tile target = board[row][col];
 
-                if (currentTile.isAdjacentTo(row, col) && isActionLegal(currentTile, target)) {
+                if (getValidBuildTiles(currentTile, target)) {
                     target.setHighlighted(true);
                 }
             }
         }
-
     }
 
     public boolean onTileClick(int row, int col) {
-        if (isNotValidTile(row, col)) {
-            return false;
-        }
-
         Tile targetTile = getTile(row, col);
         Tile currentTile = getTile(worker.getRow(), worker.getCol());
 
-        if (!isActionLegal(currentTile, targetTile)) {
+        if (!isBuildActionLegal(currentTile, targetTile)) {
             return false;
         }
 
@@ -47,7 +42,7 @@ public class BuildAction extends Action {
     protected void placeBuilding(Tile targetTile, int row, int col){
         targetTile.build();
         worker.setLastBuildPosition(row, col);
-        System.out.println("Built on tile " + row + "," + col + " | Level now: " + targetTile.getLevel() + (targetTile.hasDome() ? " with Dome" : ""));
+        System.out.println("Built on tile " + row + "," + col + ". Level now: " + targetTile.getLevel() + (targetTile.hasDome() ? " with Dome" : " without Dome \n"));
         gp.repaint();
     }
 }

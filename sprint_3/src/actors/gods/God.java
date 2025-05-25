@@ -6,12 +6,14 @@ public abstract class God {
 
     protected String name;
     protected String description;
+    protected String imagePath;
     protected ActionList actions;
 
-    public God(String name, String description) {
+    public God(String name, String description, String imagePath) {
         this.name = name;
         this.description = description;
-        this.actions = new ActionList(); // default empty, subclasses should populate
+        this.actions = new ActionList();
+        this.imagePath = imagePath;
     }
 
     public String getName() {
@@ -19,7 +21,11 @@ public abstract class God {
     }
 
     public String getDescription() {
-        return name;
+        return description;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 
     public ActionList getActions() {

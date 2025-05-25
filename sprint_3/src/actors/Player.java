@@ -40,7 +40,6 @@ public class Player {
         this.godCard = godCard;
     }
 
-
     protected void loadPlayerImage() {
         String imagePath = "/actors/character.png";
         try {

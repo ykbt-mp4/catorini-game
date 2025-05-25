@@ -17,7 +17,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
-
 public class GamePanel extends JPanel {
 
     public int BOARD_WIDTH = 700;
@@ -25,9 +24,6 @@ public class GamePanel extends JPanel {
 
     public int playTiles = 5;
     public int tileSize = BOARD_HEIGHT/(playTiles + 2);
-
-    int startX = tileSize;
-    int startY = tileSize;
 
     public Tile[][] board = new Tile[playTiles][playTiles];
 
@@ -55,6 +51,8 @@ public class GamePanel extends JPanel {
         this.player2 = player2;
         this.currentPlayer = player1;
         this.tileManager = new TileManager(this);
+        this.setFont(pixelFont);
+        setLayout(new BorderLayout());
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -66,7 +64,7 @@ public class GamePanel extends JPanel {
 
     public void gameStart() {
         currentPlayer = player1;
-
+        System.out.println("Game started! Player: " + currentPlayer.getPlayerId() + "'s turn");
         for (int row = 0; row < playTiles; row++) {
             for (int col = 0; col < playTiles; col++) {
                 board[row][col] = new Tile(row, col);
@@ -98,7 +96,6 @@ public class GamePanel extends JPanel {
             skipButton.setVerticalTextPosition(SwingConstants.CENTER);
             skipButton.setFont(pixelFont.deriveFont(20f));
 
-            // Make it look clean
             skipButton.setBorderPainted(false);
             skipButton.setContentAreaFilled(false);
             skipButton.setFocusPainted(false);
@@ -115,9 +112,7 @@ public class GamePanel extends JPanel {
             ex.printStackTrace();
             System.out.println("Failed to load button images.");
         }
-
         repaint();
-        System.out.println("Game start! Player: " + currentPlayer.getPlayerId() + "'s turn");
     }
 
     public Tile[][] getBoard() {
@@ -142,7 +137,7 @@ public class GamePanel extends JPanel {
         for (Player player : players) {
             int workerLeft = workerCount;
             while (workerLeft > 0) {
-                int r = random.nextInt(playTiles); // + 1 to account for padding
+                int r = random.nextInt(playTiles);
                 int c = random.nextInt(playTiles);
 
                 // create worker
@@ -153,9 +148,7 @@ public class GamePanel extends JPanel {
                     board[r][c].setWorker(worker);
                     workerLeft--;
                     player.getWorkers().add(worker);
-                    System.out.println(workerPos);
                 }
-                System.out.println(worker.getRow() + " " + worker.getCol());
             }
         }
     }
@@ -167,23 +160,20 @@ public class GamePanel extends JPanel {
             if (currentActionIndex < actions.size() - 1) {
                 currentActionIndex++;
                 currentAction = actions.get(currentActionIndex);
+                System.out.println("Skipped God action. Next action: " + currentAction.getClass().getSimpleName() + "\n");
                 currentAction.execute(selectedWorker, this);
-                System.out.println("Skipped to next action: " + currentAction.getClass().getSimpleName());
             } else {
                 currentAction = null;
                 currentActionIndex = 0;
                 selectedWorker = null;
-                System.out.println("Skipped final god action. Ending turn.");
+                System.out.println("Skipped God action. Ending turn.\n");
                 switchTurn();
             }
-
             repaint();
         } else {
             System.out.println("Cannot skip a required action.");
         }
     }
-
-
 
     private void handleClick(int mouseX, int mouseY) {
         int col = mouseX / tileSize;
@@ -217,9 +207,8 @@ public class GamePanel extends JPanel {
                     currentAction = null;
                     currentActionIndex = 0;
                     selectedWorker = null;
-                    switchTurn(); // done with all actions
+                    switchTurn();
                 }
-
                 repaint();
             } else {
                 System.out.println("Try a different tile.");
@@ -232,7 +221,7 @@ public class GamePanel extends JPanel {
             Worker worker = tile.getWorker();
             if (worker.getPlayerId() == currentPlayer.getPlayerId()) {
                 selectedWorker = worker;
-                System.out.println("Selected Worker " + worker.getWorkerId());
+                System.out.println("Player " + currentPlayer.getPlayerId() + " selected worker " + worker.getWorkerId() + "\n");
                 repaint();
                 currentActionIndex = 0;
                 ActionList actions = currentPlayer.getGodCard().getActions();
@@ -261,14 +250,6 @@ public class GamePanel extends JPanel {
         tileManager.drawBuildings(g2);
         tileManager.drawWorkers(g2);
         tileManager.drawValidTiles(g2);
-
-        if (selectedWorker != null) {
-            int highlightX = startX + selectedWorker.getCol() * tileSize;
-            int highlightY = startY + selectedWorker.getRow() * tileSize;
-
-            g2.setColor(new Color(255, 215, 0, 128)); // semi-transparent yellow
-            g2.fillRect(highlightX, highlightY, tileSize, tileSize);
+        tileManager.drawWorkerHighlight(g2, selectedWorker);
         }
     }
-
-}

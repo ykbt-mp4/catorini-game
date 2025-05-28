@@ -4,31 +4,28 @@ import actors.Worker;
 import actors.Player;
 import main.GamePanel;
 import tile.Tile;
-import actions.Action;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class LossCondition {
-    private GamePanel gamePanel;
+    private final GamePanel gamePanel;
     private final FontLoader fontLoader;
-    private Action action;
 
     public LossCondition(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
         this.fontLoader = new FontLoader();
-        this.action = gamePanel.currentAction;
     }
 
     public boolean checkLossCondition(Player currentPlayer, GamePanel gamePanel) {
-        if (!canWorkerMove(currentPlayer, gamePanel)) {
+        if (!canAnyWorkerMove(currentPlayer, gamePanel)) {
             handleLoss(currentPlayer.getPlayerId());
             return true;
         }
         return false;
     }
 
-    public boolean canWorkerMove(Player currentPlayer, GamePanel gamePanel) {
+    public boolean canAnyWorkerMove(Player currentPlayer, GamePanel gamePanel) {
         Tile[][] board = gamePanel.getBoard();
 
         for (Worker worker : currentPlayer.getWorkers()) {
@@ -36,9 +33,14 @@ public class LossCondition {
 
             for (int row = 0; row < gamePanel.playTiles; row++) {
                 for (int col = 0; col < gamePanel.playTiles; col++) {
-                    Tile target = board[row][col];
+                    Tile targetTile = board[row][col];
 
-                    if (action.getValidMoveTiles(currentTile, target)) {
+                    if (!currentTile.isAdjacentTo(targetTile.getRow(), targetTile.getCol())) continue;
+                    if (targetTile.isOccupiedByWorker()) continue;
+                    if (targetTile.hasDome()) continue;
+
+                    int levelDiff = targetTile.getLevel() - currentTile.getLevel();
+                    if (levelDiff <= 1) {
                         return true;
                     }
                 }
@@ -49,15 +51,15 @@ public class LossCondition {
 
     public void handleLoss(int losingPlayerId) {
         int winningPlayerId = (losingPlayerId == 1) ? 2 : 1;
-        System.out.println("Player " + winningPlayerId + " wins!");
         System.out.println("Player " + losingPlayerId + " has no valid moves!");
+        System.out.println("Player " + winningPlayerId + " wins!");
         gamePanel.gameOver();
 
         ImageIcon originalIcon = new ImageIcon(getClass().getResource("/uiextra/winemoji.png"));
         Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
-        JLabel messageLabel = new JLabel("Player " + losingPlayerId + " has no valid moves!\n" + "Player " + winningPlayerId + " wins!");
+        JLabel messageLabel = new JLabel("Player " + losingPlayerId + " has no valid moves! " + "Player " + winningPlayerId + " wins!");
         messageLabel.setFont(fontLoader.getPixelFont().deriveFont(20f));
         messageLabel.setForeground(Color.BLACK);
 
@@ -66,10 +68,12 @@ public class LossCondition {
         panel.add(messageLabel, BorderLayout.CENTER);
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JOptionPane.showMessageDialog(gamePanel,
-                panel,
-                "Game Over",
-                JOptionPane.INFORMATION_MESSAGE,
-                scaledIcon);
+        SwingUtilities.invokeLater(() -> {
+            JOptionPane.showMessageDialog(gamePanel,
+                    panel,
+                    "Game Over!",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    scaledIcon);
+        });
     }
 }

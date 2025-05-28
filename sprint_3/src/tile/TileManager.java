@@ -183,4 +183,73 @@ public final class TileManager {
         }
     }
 
+    public JPanel createControlPanel() {
+        Font pixelFont = fontLoader.getPixelFont().deriveFont(20f);
+        int width = 190;
+        int height = 60;
+
+        ImageIcon defaultIcon = new ImageIcon(
+                new ImageIcon(getClass().getResource("/uiextra/button1.png"))
+                        .getImage()
+                        .getScaledInstance(width, height, Image.SCALE_SMOOTH)
+        );
+        ImageIcon pressedIcon = new ImageIcon(
+                new ImageIcon(getClass().getResource("/uiextra/button2.png"))
+                        .getImage()
+                        .getScaledInstance(width, height, Image.SCALE_SMOOTH)
+        );
+
+        JButton skipButton = new JButton("Skip");
+        skipButton.setIcon(defaultIcon);
+        skipButton.setPressedIcon(pressedIcon);
+        skipButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        skipButton.setVerticalTextPosition(SwingConstants.CENTER);
+        skipButton.setFont(pixelFont);
+        skipButton.setBorderPainted(false);
+        skipButton.setContentAreaFilled(false);
+        skipButton.setFocusPainted(false);
+        skipButton.setOpaque(false);
+
+        skipButton.addActionListener(e -> gp.skipCurrentAction());
+
+        JButton saveButton = new JButton("Save");
+        saveButton.setIcon(defaultIcon);
+        saveButton.setPressedIcon(pressedIcon);
+        saveButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        saveButton.setVerticalTextPosition(SwingConstants.CENTER);
+        saveButton.setFont(pixelFont);
+        saveButton.setBorderPainted(false);
+        saveButton.setContentAreaFilled(false);
+        saveButton.setFocusPainted(false);
+        saveButton.setOpaque(false);
+
+        saveButton.addActionListener(e -> {
+            System.out.println("Save button clicked!");
+            // Add Save logic here
+        });
+
+        JButton mainButton = new JButton("Main Menu");
+        mainButton.setIcon(defaultIcon);
+        mainButton.setPressedIcon(pressedIcon);
+        mainButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        mainButton.setVerticalTextPosition(SwingConstants.CENTER);
+        mainButton.setFont(pixelFont);
+        mainButton.setBorderPainted(false);
+        mainButton.setContentAreaFilled(false);
+        mainButton.setFocusPainted(false);
+        mainButton.setOpaque(false);
+
+        mainButton.addActionListener(e -> {
+            System.out.println("Hint button clicked!");
+            // Add hint logic here
+        });
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        buttonPanel.setOpaque(false);
+        buttonPanel.add(skipButton);
+        buttonPanel.add(saveButton);
+        buttonPanel.add(mainButton);
+
+        return buttonPanel;
+    }
 }

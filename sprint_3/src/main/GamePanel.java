@@ -81,45 +81,9 @@ public class GamePanel extends JPanel {
 
         setWorkerPos();
 
-        try {
-            int width = 190;
-            int height = 60;
+        JPanel controlPanel = tileManager.createControlPanel();
+        add(controlPanel, BorderLayout.NORTH);
 
-            ImageIcon defaultIcon = new ImageIcon(
-                    new ImageIcon(getClass().getResource("/uiextra/button1.png"))
-                            .getImage()
-                            .getScaledInstance(width, height, Image.SCALE_SMOOTH)
-            );
-
-            ImageIcon pressedIcon = new ImageIcon(
-                    new ImageIcon(getClass().getResource("/uiextra/button2.png"))
-                            .getImage()
-                            .getScaledInstance(width, height, Image.SCALE_SMOOTH)
-            );
-
-            JButton skipButton = new JButton("Skip");
-            skipButton.setIcon(defaultIcon);
-            skipButton.setPressedIcon(pressedIcon);
-            skipButton.setHorizontalTextPosition(SwingConstants.CENTER);
-            skipButton.setVerticalTextPosition(SwingConstants.CENTER);
-            skipButton.setFont(pixelFont.deriveFont(20f));
-
-            skipButton.setBorderPainted(false);
-            skipButton.setContentAreaFilled(false);
-            skipButton.setFocusPainted(false);
-            skipButton.setOpaque(false);
-
-            skipButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    skipCurrentAction();
-                }
-            });
-            add(skipButton, BorderLayout.SOUTH);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            System.out.println("Failed to load button images.");
-        }
         repaint();
     }
 
@@ -140,11 +104,10 @@ public class GamePanel extends JPanel {
                 board[row][col].setHighlighted(false);
             }
         }
-//        if (!lossCondition.canWorkerMove(currentPlayer, this)) {
-//            lossCondition.handleLoss(currentPlayer.getPlayerId());
-//            gameOver();
-//            return;
-//        }
+        if (lossCondition.checkLossCondition(currentPlayer, this)) {
+            gameOver();
+            return;
+        }
         repaint();
     }
 

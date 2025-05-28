@@ -27,12 +27,12 @@ public abstract class Action {
         return gp.getBoard()[row][col];
     }
 
-    protected boolean getValidMoveTiles(Tile currentTile, Tile targetTile){
-            if (!currentTile.isAdjacentTo(targetTile.getRow(), targetTile.getCol())) return false;
-            if (targetTile.getLevel() - currentTile.getLevel() > 1) return false;
-            if (targetTile.isOccupiedByWorker()) return false;
-            if (targetTile.hasDome()) return false;
-            return true;
+    public boolean getValidMoveTiles(Tile currentTile, Tile targetTile){
+        if (!currentTile.isAdjacentTo(targetTile.getRow(), targetTile.getCol())) return false;
+        if (targetTile.getLevel() - currentTile.getLevel() > 1) return false;
+        if (targetTile.isOccupiedByWorker()) return false;
+        if (targetTile.hasDome()) return false;
+        return true;
     }
 
     protected boolean getValidBuildTiles(Tile currentTile, Tile targetTile){

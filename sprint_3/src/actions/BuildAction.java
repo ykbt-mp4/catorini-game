@@ -46,5 +46,3 @@ public class BuildAction extends Action {
         gp.repaint();
     }
 }
-
-

@@ -159,7 +159,7 @@ public class TitleScreenPanel extends JPanel {
 //                }
 //            });
 
-           exitButton.addActionListener(new ActionListener() {
+            exitButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     System.exit(0);

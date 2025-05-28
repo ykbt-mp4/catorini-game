@@ -7,6 +7,8 @@ import actors.Player;
 import actors.Worker;
 import tile.TileManager;
 import util.FontLoader;
+import util.LossCondition;
+import util.WinCondition;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,6 +43,9 @@ public class GamePanel extends JPanel {
     public int currentActionIndex = 0;
 
     private final TileManager tileManager;
+    private final WinCondition winCondition;
+    private final LossCondition lossCondition;
+
 
     Font pixelFont = new FontLoader().getPixelFont();
 
@@ -51,6 +56,9 @@ public class GamePanel extends JPanel {
         this.player2 = player2;
         this.currentPlayer = player1;
         this.tileManager = new TileManager(this);
+        this.winCondition = new WinCondition(this);
+        this.lossCondition = new LossCondition(this);
+
         this.setFont(pixelFont);
         setLayout(new BorderLayout());
 
@@ -115,6 +123,11 @@ public class GamePanel extends JPanel {
         repaint();
     }
 
+    public void gameOver() {
+        System.out.println("Game over!");
+        repaint();
+    }
+
     public Tile[][] getBoard() {
         return board;
     }
@@ -127,6 +140,11 @@ public class GamePanel extends JPanel {
                 board[row][col].setHighlighted(false);
             }
         }
+//        if (!lossCondition.canWorkerMove(currentPlayer, this)) {
+//            lossCondition.handleLoss(currentPlayer.getPlayerId());
+//            gameOver();
+//            return;
+//        }
         repaint();
     }
 
@@ -173,6 +191,7 @@ public class GamePanel extends JPanel {
         } else {
             System.out.println("Cannot skip a required action.");
         }
+        repaint();
     }
 
     private void handleClick(int mouseX, int mouseY) {
@@ -197,6 +216,11 @@ public class GamePanel extends JPanel {
             boolean success = currentAction.onTileClick(clickedTile.getRow(), clickedTile.getCol());
 
             if (success) {
+                if (winCondition != null && winCondition.checkWinCondition(selectedWorker)) {
+                    winCondition.handleWin(currentPlayer.getPlayerId());
+                    gameOver();
+                    return;
+                }
                 currentActionIndex++;
                 ActionList actions = currentPlayer.getGodCard().getActions();
 
@@ -251,5 +275,5 @@ public class GamePanel extends JPanel {
         tileManager.drawWorkers(g2);
         tileManager.drawValidTiles(g2);
         tileManager.drawWorkerHighlight(g2, selectedWorker);
-        }
     }
+}

@@ -4,6 +4,8 @@ import actors.Worker;
 import main.GamePanel;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Objects;
 import javax.imageio.ImageIO;
@@ -209,24 +211,9 @@ public final class TileManager {
         skipButton.setContentAreaFilled(false);
         skipButton.setFocusPainted(false);
         skipButton.setOpaque(false);
+        if (gp.isGameEnded()) skipButton.setEnabled(false);
 
-        skipButton.addActionListener(e -> gp.skipCurrentAction());
-
-        JButton saveButton = new JButton("Save");
-        saveButton.setIcon(defaultIcon);
-        saveButton.setPressedIcon(pressedIcon);
-        saveButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        saveButton.setVerticalTextPosition(SwingConstants.CENTER);
-        saveButton.setFont(pixelFont);
-        saveButton.setBorderPainted(false);
-        saveButton.setContentAreaFilled(false);
-        saveButton.setFocusPainted(false);
-        saveButton.setOpaque(false);
-
-        saveButton.addActionListener(e -> {
-            System.out.println("Save button clicked!");
-            // Add Save logic here
-        });
+        skipButton.addActionListener(e -> gp.turnManager.skipCurrentAction());
 
         JButton mainButton = new JButton("Main Menu");
         mainButton.setIcon(defaultIcon);
@@ -239,16 +226,38 @@ public final class TileManager {
         mainButton.setFocusPainted(false);
         mainButton.setOpaque(false);
 
-        mainButton.addActionListener(e -> {
-            System.out.println("Hint button clicked!");
-            // Add hint logic here
-        });
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/uiextra/winemoji.png"));
+        Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+        JLabel messageLabel = new JLabel("Return to main menu? Current game progress will be lost.");
+        messageLabel.setFont(fontLoader.getPixelFont().deriveFont(20f));
+        messageLabel.setForeground(Color.BLACK);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.add(messageLabel, BorderLayout.CENTER);
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+//        mainButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                int result = JOptionPane.showConfirmDialog(gp,
+//                    panel,
+//                    "Confirm",
+//                    JOptionPane.YES_NO_OPTION,
+//                    JOptionPane.WARNING_MESSAGE,
+//                    scaledIcon);
+//            if (result == JOptionPane.YES_OPTION) {
+//
+//            }
+//
+//        });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         buttonPanel.setOpaque(false);
-        buttonPanel.add(skipButton);
-        buttonPanel.add(saveButton);
         buttonPanel.add(mainButton);
+        buttonPanel.add(skipButton);
 
         return buttonPanel;
     }

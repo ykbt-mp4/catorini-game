@@ -5,6 +5,7 @@ import actions.MoveAction;
 import tile.Tile;
 import actors.Worker;
 import main.GamePanel;
+import main.TurnManager;
 
 public class Triton extends God {
 
@@ -43,7 +44,7 @@ public class Triton extends God {
 
             if (!isOnPerimeter(worker)) {
                 System.out.println("Triton: Power action not available.");
-                gp.skipCurrentAction();
+                gp.turnManager.skipCurrentAction();
             } else {
                 System.out.println("Triton: Power action available. Move again (Can skip).");
             }
@@ -60,7 +61,7 @@ public class Triton extends God {
 
             if (isOnPerimeter(worker)) {
                 moveWorker(currentTile, targetTile, row, col);
-                gp.currentActionIndex -= 1;
+                gp.turnManager.currentActionIndex -= 1;
             }
             return true;
         }

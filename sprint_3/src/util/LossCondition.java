@@ -53,7 +53,6 @@ public class LossCondition {
         int winningPlayerId = (losingPlayerId == 1) ? 2 : 1;
         System.out.println("Player " + losingPlayerId + " has no valid moves!");
         System.out.println("Player " + winningPlayerId + " wins!");
-        gamePanel.gameOver();
 
         ImageIcon originalIcon = new ImageIcon(getClass().getResource("/uiextra/winemoji.png"));
         Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
@@ -68,12 +67,10 @@ public class LossCondition {
         panel.add(messageLabel, BorderLayout.CENTER);
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        SwingUtilities.invokeLater(() -> {
-            JOptionPane.showMessageDialog(gamePanel,
-                    panel,
-                    "Game Over!",
-                    JOptionPane.INFORMATION_MESSAGE,
-                    scaledIcon);
-        });
+        JOptionPane.showMessageDialog(gamePanel,
+                panel,
+                "Game Over!",
+                JOptionPane.INFORMATION_MESSAGE,
+                scaledIcon);
     }
 }

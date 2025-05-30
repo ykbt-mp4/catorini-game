@@ -1,6 +1,9 @@
 package main;
 
+import actors.Player;
 import util.FontLoader;
+//import util.GameStateManager;
+import util.GodCardAssigner;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +31,7 @@ public class TitleScreenPanel extends JPanel {
         title2.setBorder(BorderFactory.createEmptyBorder(50, 0, 100, 0));
         add(title2, BorderLayout.SOUTH);
 
+        // image only panel
         JPanel imagePanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -65,6 +69,8 @@ public class TitleScreenPanel extends JPanel {
                 }
             }
         };
+
+        // leader board
         imagePanel.setPreferredSize(new Dimension(500, 0));
         imagePanel.setOpaque(false);
         add(imagePanel, BorderLayout.WEST);
@@ -84,7 +90,7 @@ public class TitleScreenPanel extends JPanel {
         add(imagePanel2, BorderLayout.EAST);
 
         try {
-            int width = 190;
+            int width = 180;
             int height = 60;
 
             ImageIcon defaultIcon = new ImageIcon(
@@ -106,13 +112,6 @@ public class TitleScreenPanel extends JPanel {
             startButton.setVerticalTextPosition(SwingConstants.CENTER);
             startButton.setFont(pixelFont.deriveFont(20f));
 
-            JButton loadButton = new JButton("Load Game");
-            loadButton.setIcon(defaultIcon);
-            loadButton.setPressedIcon(pressedIcon);
-            loadButton.setHorizontalTextPosition(SwingConstants.CENTER);
-            loadButton.setVerticalTextPosition(SwingConstants.CENTER);
-            loadButton.setFont(pixelFont.deriveFont(20f));
-
             JButton exitButton = new JButton("Exit Game");
             exitButton.setIcon(defaultIcon);
             exitButton.setPressedIcon(pressedIcon);
@@ -125,11 +124,6 @@ public class TitleScreenPanel extends JPanel {
             startButton.setFocusPainted(false);
             startButton.setOpaque(false);
 
-            loadButton.setBorderPainted(false);
-            loadButton.setContentAreaFilled(false);
-            loadButton.setFocusPainted(false);
-            loadButton.setOpaque(false);
-
             exitButton.setBorderPainted(false);
             exitButton.setContentAreaFilled(false);
             exitButton.setFocusPainted(false);
@@ -138,26 +132,23 @@ public class TitleScreenPanel extends JPanel {
             startButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    onStartGame.run(); // Run your start game logic
+                    Player player1 = new Player(1);
+                    Player player2 = new Player(2);
+                    GodCardAssigner.assignRandomGod(player1);
+                    GodCardAssigner.assignRandomGod(player2);
+
+                    GamePanel gamePanel = new GamePanel(player1, player2);
+                    SidePanel sidePanel = new SidePanel(player1, player2);
+                    gamePanel.gameStart();
+
+                    window.getContentPane().removeAll();
+                    window.add(gamePanel, BorderLayout.CENTER);
+                    window.add(sidePanel, BorderLayout.EAST);
+                    window.revalidate();
+                    window.repaint();
+
                 }
             });
-
-//            loadButton.addActionListener(e -> {
-//                try {
-//                    JFileChooser fileChooser = new JFileChooser();
-//                    int result = fileChooser.showOpenDialog(window);
-//                    if (result == JFileChooser.APPROVE_OPTION) {
-//                        GamePanel loadedGame = GameSaveManager.loadGame(fileChooser.getSelectedFile().getAbsolutePath());
-//                        GameStateManager.setState(GameState.PLAYER_TURN);
-//                        window.setContentPane(loadedGame);
-//                        window.revalidate();
-//                        window.repaint();
-//                    }
-//                } catch (IOException ex) {
-//                    ex.printStackTrace();
-//                    JOptionPane.showMessageDialog(window, "Failed to load game.");
-//                }
-//            });
 
             exitButton.addActionListener(new ActionListener() {
                 @Override
@@ -167,22 +158,20 @@ public class TitleScreenPanel extends JPanel {
             });
 
             startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            loadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+            // buttons (middle panel)
             JPanel buttonPanel = new JPanel();
             buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
             buttonPanel.setOpaque(false);
 
-            int spacing = 20;
-            buttonPanel.add(startButton);
+            int spacing = 50;
             buttonPanel.add(Box.createRigidArea(new Dimension(0, spacing)));
-            buttonPanel.add(loadButton);
+            buttonPanel.add(startButton);
             buttonPanel.add(Box.createRigidArea(new Dimension(0, spacing)));
             buttonPanel.add(exitButton);
 
             add(buttonPanel, BorderLayout.CENTER);
-
 
         } catch (Exception ex) {
             ex.printStackTrace();

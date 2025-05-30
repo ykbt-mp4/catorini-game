@@ -17,12 +17,22 @@ public class WinCondition {
     }
 
     /**
-     * Checks if the specified worker has met the win condition (standing on a level 3 building).
-     *
-     * @param selectedWorker The worker to check for win condition.
-     * @return true if the worker is on a level 3 building, false otherwise.
+     * Checks if the specified worker meets the win condition.
+     * If so, triggers the win handler and returns true.
      */
     public boolean checkWinCondition(Worker selectedWorker) {
+        if (hasWon(selectedWorker)) {
+            int winningPlayerId = selectedWorker.getPlayerId();
+            handleWin(winningPlayerId);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if the worker is standing on a level 3 tile.
+     */
+    public boolean hasWon(Worker selectedWorker) {
         int row = selectedWorker.getRow();
         int col = selectedWorker.getCol();
         Tile tile = gamePanel.getBoard()[row][col];
@@ -31,9 +41,7 @@ public class WinCondition {
     }
 
     /**
-     * Handles the win condition when triggered, showing a game over message and declaring the specified player as the winner.
-     *
-     * @param winningPlayerId The ID of the player who has won.
+     * Handles showing the win message dialog.
      */
     public void handleWin(int winningPlayerId) {
         System.out.println("Player " + winningPlayerId + " wins!");
@@ -57,5 +65,4 @@ public class WinCondition {
                 JOptionPane.INFORMATION_MESSAGE,
                 scaledIcon);
     }
-
 }

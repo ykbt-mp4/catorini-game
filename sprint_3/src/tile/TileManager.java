@@ -4,8 +4,6 @@ import actors.Worker;
 import main.GamePanel;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Objects;
 import javax.imageio.ImageIO;
@@ -17,6 +15,9 @@ import util.FontLoader;
 public final class TileManager {
     private final GamePanel gp;
     private final Tile[] tile;
+
+    private JLabel timerLabel; // add this at the top
+
 
     private final FontLoader fontLoader;
 
@@ -254,11 +255,34 @@ public final class TileManager {
 //
 //        });
 
+        // Create the timer label
+        timerLabel = new JLabel("⏱ Time Left: 15s");
+        timerLabel.setFont(pixelFont);
+        timerLabel.setForeground(Color.BLACK);
+        timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+// Timer panel
+        JPanel timerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        timerPanel.setOpaque(false);
+        timerPanel.add(timerLabel);
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         buttonPanel.setOpaque(false);
         buttonPanel.add(mainButton);
         buttonPanel.add(skipButton);
 
-        return buttonPanel;
+// Final control panel
+        JPanel controlPanel = new JPanel();
+        controlPanel.setLayout(new BorderLayout());
+        controlPanel.setOpaque(false);
+        controlPanel.add(timerPanel, BorderLayout.NORTH);
+        controlPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        return controlPanel;
     }
+
+    public JLabel getTimerLabel() {
+        return timerLabel;
+    }
+
 }

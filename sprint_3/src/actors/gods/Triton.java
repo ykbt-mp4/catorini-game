@@ -5,7 +5,6 @@ import actions.MoveAction;
 import tile.Tile;
 import actors.Worker;
 import main.GamePanel;
-import main.TurnManager;
 
 public class Triton extends God {
 

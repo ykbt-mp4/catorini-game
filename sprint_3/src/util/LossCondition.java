@@ -73,4 +73,30 @@ public class LossCondition {
                 JOptionPane.INFORMATION_MESSAGE,
                 scaledIcon);
     }
+
+    public void handleTimeoutLoss(int losingPlayerId) {
+        int winningPlayerId = (losingPlayerId == 1) ? 2 : 1;
+        System.out.println("Player " + losingPlayerId + " ran out of time!");
+        System.out.println("Player " + winningPlayerId + " wins!");
+
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/uiextra/winemoji.png"));
+        Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+        JLabel messageLabel = new JLabel("Player " + losingPlayerId + " ran out of time! Player " + winningPlayerId + " wins!");
+        messageLabel.setFont(fontLoader.getPixelFont().deriveFont(20f));
+        messageLabel.setForeground(Color.BLACK);
+
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        panel.add(messageLabel, BorderLayout.CENTER);
+
+        JOptionPane.showMessageDialog(gamePanel,
+                panel,
+                "Game Over - Time's Up!",
+                JOptionPane.INFORMATION_MESSAGE,
+                scaledIcon);
+    }
+
 }
+

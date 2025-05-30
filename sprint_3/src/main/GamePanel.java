@@ -5,6 +5,7 @@ import actors.Player;
 import actors.Worker;
 import tile.TileManager;
 import util.FontLoader;
+import util.TurnTimer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -74,6 +75,12 @@ public class GamePanel extends JPanel {
 
         // setting the buttons needed for game functionality (skip button etc)
         JPanel controlPanel = tileManager.createControlPanel();
+        JLabel timerLabel = tileManager.getTimerLabel();
+
+        TurnTimer turnTimer = new TurnTimer(this, 15, timerLabel);
+        turnManager.setTimer(turnTimer);
+        turnTimer.start(); // start first turn
+
         add(controlPanel, BorderLayout.NORTH);
 
         repaint();

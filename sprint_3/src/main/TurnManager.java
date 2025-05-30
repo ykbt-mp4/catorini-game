@@ -6,6 +6,7 @@ import actors.Player;
 import actors.Worker;
 import tile.Tile;
 import util.LossCondition;
+import util.TurnTimer;
 import util.WinCondition;
 
 public class TurnManager {
@@ -20,6 +21,7 @@ public class TurnManager {
 
     private final WinCondition winCondition;
     private final LossCondition lossCondition;
+    private TurnTimer turnTimer;
 
     public TurnManager(GamePanel gamePanel, Player player1, Player player2) {
         this.gamePanel = gamePanel;
@@ -38,9 +40,16 @@ public class TurnManager {
             gamePanel.gameOver();
         }
 
-        // Clear highlights
+        if (turnTimer != null) {
+            turnTimer.restart();
+        }
+
         clearHighlights(gamePanel);
         gamePanel.repaint();
+    }
+
+    public void setTimer(TurnTimer turnTimer) {
+        this.turnTimer = turnTimer;
     }
 
     public void handleClick(int mouseX, int mouseY) {
@@ -142,10 +151,6 @@ public class TurnManager {
 
     public Player getCurrentPlayer() {
         return currentPlayer;
-    }
-
-    public Worker getSelectedWorker() {
-        return selectedWorker;
     }
 
     private void clearHighlights(GamePanel gamePanel){

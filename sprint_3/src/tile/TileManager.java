@@ -186,7 +186,7 @@ public final class TileManager {
         }
     }
 
-    public JPanel createControlPanel() {
+    public JPanel createButtonPanel() {
         Font pixelFont = fontLoader.getPixelFont().deriveFont(20f);
         int width = 190;
         int height = 60;
@@ -216,6 +216,7 @@ public final class TileManager {
 
         skipButton.addActionListener(e -> gp.turnManager.skipCurrentAction());
 
+        // main button stuff
         JButton mainButton = new JButton("Main Menu");
         mainButton.setIcon(defaultIcon);
         mainButton.setPressedIcon(pressedIcon);
@@ -238,7 +239,7 @@ public final class TileManager {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.add(messageLabel, BorderLayout.CENTER);
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
 //        mainButton.addActionListener(new ActionListener() {
 //            @Override
@@ -255,30 +256,30 @@ public final class TileManager {
 //
 //        });
 
-        // Create the timer label
-        timerLabel = new JLabel("⏱ Time Left: 15s");
-        timerLabel.setFont(pixelFont);
-        timerLabel.setForeground(Color.BLACK);
-        timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-// Timer panel
-        JPanel timerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        timerPanel.setOpaque(false);
-        timerPanel.add(timerLabel);
-
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
         buttonPanel.add(mainButton);
         buttonPanel.add(skipButton);
 
-// Final control panel
-        JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new BorderLayout());
-        controlPanel.setOpaque(false);
-        controlPanel.add(timerPanel, BorderLayout.NORTH);
-        controlPanel.add(buttonPanel, BorderLayout.SOUTH);
+        return buttonPanel;
+    }
 
-        return controlPanel;
+    public JPanel createTimerPanel() {
+        Font pixelFont = fontLoader.getPixelFont().deriveFont(20f);
+        // Create the timer label
+        timerLabel = new JLabel("Time Left: 15s");
+        timerLabel.setFont(pixelFont);
+        timerLabel.setForeground(Color.BLACK);
+        timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        timerLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+        // Timer panel
+        JPanel timerPanel = new JPanel();
+        timerPanel.setOpaque(false);
+        timerPanel.add(timerLabel);
+
+        return timerPanel;
     }
 
     public JLabel getTimerLabel() {

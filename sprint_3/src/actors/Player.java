@@ -12,16 +12,22 @@ import javax.imageio.ImageIO;
 
 public class Player {
     private final int playerId;
+    private final String playerName;
     private final List<Worker> workers;
     private God godCard;
 
     protected BufferedImage playerImage;
 
-    public Player(int playerId) {
+    public Player(int playerId, String playerName) {
         this.playerId = playerId;
+        this.playerName = playerName;
         this.workers = new ArrayList<>();
         loadPlayerImage();
 
+    }
+
+    public String getPlayerName() {
+        return playerName;
     }
 
     public int getPlayerId() {

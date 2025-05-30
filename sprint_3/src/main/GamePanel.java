@@ -34,6 +34,8 @@ public class GamePanel extends JPanel {
 
     private final TileManager tileManager;
     public final TurnManager turnManager;
+    private TurnTimer turnTimer;
+
     Font pixelFont = new FontLoader().getPixelFont();
 
     private boolean gameEnded = false;
@@ -74,20 +76,26 @@ public class GamePanel extends JPanel {
         setWorkerPos();
 
         // setting the buttons needed for game functionality (skip button etc)
-        JPanel controlPanel = tileManager.createControlPanel();
+        JPanel buttonPanel = tileManager.createButtonPanel();
+        JPanel timePanel = tileManager.createTimerPanel();
         JLabel timerLabel = tileManager.getTimerLabel();
 
-        TurnTimer turnTimer = new TurnTimer(this, 15, timerLabel);
+        this.turnTimer = new TurnTimer(this, 20, timerLabel);
+
         turnManager.setTimer(turnTimer);
         turnTimer.start(); // start first turn
 
-        add(controlPanel, BorderLayout.NORTH);
+        add(buttonPanel, BorderLayout.SOUTH);
+        add(timePanel, BorderLayout.NORTH);
 
         repaint();
     }
 
     public void gameOver() {
         System.out.println("Game over!");
+        if (turnTimer != null) {
+            turnTimer.stop();
+        }
         setGameEnded(true);
         repaint();
     }

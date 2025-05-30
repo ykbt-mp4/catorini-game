@@ -39,6 +39,7 @@ public class SidePanel extends JPanel {
     public SidePanel(Player player1, Player player2)  {
 
         this.setPreferredSize(new Dimension(panelWidth, panelHeight)); // fixed side panel size
+        this.setBackground(new Color(156, 212, 200));
         this.player1 = player1;
         this.player2 = player2;
         this.fontLoader = new FontLoader();
@@ -104,14 +105,14 @@ public class SidePanel extends JPanel {
             Image godImage = new ImageIcon(getClass().getResource(player1.getGodCard().getImagePath())).getImage();
             g2.drawImage(godImage, startX, godY1, godImgWidth, godImgHeight, null);
             g2.drawImage(dialogBox, godImgWidth, dialogY1, dialogBoxWidth, dialogBoxHeight, null);
-            g2.drawString("Player " + player1.getPlayerId() + ": " + player1.getGodCard().getName(), godImgWidth + 10, dialogY1);
+            g2.drawString("Player " + player1.getPlayerId() + " ("+ player1.getPlayerName() + ")" + ": " + player1.getGodCard().getName(), godImgWidth + 10, dialogY1);
         }
 
         if (player2.getGodCard() != null) {
             Image godImage = new ImageIcon(getClass().getResource(player2.getGodCard().getImagePath())).getImage();
             g2.drawImage(godImage, startX, godY2, godImgWidth, godImgHeight, null);
             g2.drawImage(dialogBox, godImgWidth, dialogY2, dialogBoxWidth, dialogBoxHeight, null);
-            g2.drawString("Player " + player2.getPlayerId() + ": " + player2.getGodCard().getName(), godImgWidth + 10, dialogY2);
+            g2.drawString("Player " + player2.getPlayerId() + " ("+ player2.getPlayerName() + ")" + ": " + player2.getGodCard().getName(), godImgWidth + 10, dialogY2);
         }
 
         g2.drawImage(printBox, startX, panelHeight/2, printBoxWidth, printBoxHeight, null);

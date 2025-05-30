@@ -18,11 +18,7 @@ public class LossCondition {
     }
 
     public boolean checkLossCondition(Player currentPlayer, GamePanel gamePanel) {
-        if (!canAnyWorkerMove(currentPlayer, gamePanel)) {
-            handleLoss(currentPlayer.getPlayerId());
-            return true;
-        }
-        return false;
+        return !canAnyWorkerMove(currentPlayer, gamePanel);
     }
 
     public boolean canAnyWorkerMove(Player currentPlayer, GamePanel gamePanel) {
@@ -79,7 +75,7 @@ public class LossCondition {
         System.out.println("Player " + losingPlayerId + " ran out of time!");
         System.out.println("Player " + winningPlayerId + " wins!");
 
-        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/uiextra/winemoji.png"));
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/uiextra/timeremoji.png"));
         Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
 

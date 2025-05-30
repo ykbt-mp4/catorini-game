@@ -2,7 +2,6 @@ package main;
 
 import actors.Player;
 import util.FontLoader;
-//import util.GameStateManager;
 import util.GodCardAssigner;
 
 import javax.swing.*;
@@ -129,26 +128,7 @@ public class TitleScreenPanel extends JPanel {
             exitButton.setFocusPainted(false);
             exitButton.setOpaque(false);
 
-            startButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    Player player1 = new Player(1);
-                    Player player2 = new Player(2);
-                    GodCardAssigner.assignRandomGod(player1);
-                    GodCardAssigner.assignRandomGod(player2);
-
-                    GamePanel gamePanel = new GamePanel(player1, player2);
-                    SidePanel sidePanel = new SidePanel(player1, player2);
-                    gamePanel.gameStart();
-
-                    window.getContentPane().removeAll();
-                    window.add(gamePanel, BorderLayout.CENTER);
-                    window.add(sidePanel, BorderLayout.EAST);
-                    window.revalidate();
-                    window.repaint();
-
-                }
-            });
+            startButton.addActionListener(e -> promptForNamesAndStartGame(window));
 
             exitButton.addActionListener(new ActionListener() {
                 @Override
@@ -178,6 +158,56 @@ public class TitleScreenPanel extends JPanel {
             System.out.println("Failed to load button images.");
         }
     }
+
+    public void promptForNamesAndStartGame(JFrame window) {
+        JTextField player1Field = new JTextField(10);
+        JTextField player2Field = new JTextField(10);
+
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/uiextra/titleemoji.png"));
+        Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+        JPanel panel = new JPanel(new GridLayout(3, 2));
+        panel.add(new JLabel("Player 1 Name:"));
+        panel.add(player1Field);
+        panel.add(new JLabel("Player 2 Name:"));
+        panel.add(player2Field);
+
+        int result = JOptionPane.showOptionDialog(this,
+                panel,
+                "Enter Player Names",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                scaledIcon,
+                null,
+                null);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String name1 = player1Field.getText().trim();
+            String name2 = player2Field.getText().trim();
+
+            if (!name1.isEmpty() && !name2.isEmpty()) {
+                Player player1 = new Player(1, name1);
+                Player player2 = new Player(2, name2);
+                GodCardAssigner.assignRandomGod(player1);
+                GodCardAssigner.assignRandomGod(player2);
+
+                GamePanel gamePanel = new GamePanel(player1, player2);
+                SidePanel sidePanel = new SidePanel(player1, player2);
+                gamePanel.gameStart();
+
+                window.getContentPane().removeAll();
+                window.add(gamePanel, BorderLayout.CENTER);
+                window.add(sidePanel, BorderLayout.EAST);
+                window.revalidate();
+                window.repaint();
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Please enter names for both players.");
+            }
+        }
+    }
+
 
     @Override
     protected void paintComponent(Graphics g) {

@@ -21,12 +21,7 @@ public class WinCondition {
      * If so, triggers the win handler and returns true.
      */
     public boolean checkWinCondition(Worker selectedWorker) {
-        if (hasWon(selectedWorker)) {
-            int winningPlayerId = selectedWorker.getPlayerId();
-            handleWin(winningPlayerId);
-            return true;
-        }
-        return false;
+        return hasWon(selectedWorker);
     }
 
     /**

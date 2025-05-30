@@ -33,11 +33,14 @@ public class TurnManager {
     }
 
     public void switchTurn() {
+
         this.currentPlayer = (currentPlayer == player1) ? player2 : player1;
         System.out.println("Player: " + currentPlayer.getPlayerId() + "'s turn");
 
         if (lossCondition.checkLossCondition(currentPlayer, gamePanel)) {
             gamePanel.gameOver();
+            turnTimer.stop();
+            lossCondition.handleLoss(currentPlayer.getPlayerId());
         }
 
         if (turnTimer != null) {
@@ -80,6 +83,8 @@ public class TurnManager {
             if (success) {
                 if (winCondition.checkWinCondition(selectedWorker)) {
                     gamePanel.gameOver();
+                    turnTimer.stop();
+                    winCondition.handleWin(currentPlayer.getPlayerId());
                     clearHighlights(gamePanel);
                     return;
                 }
@@ -95,7 +100,10 @@ public class TurnManager {
                     currentAction = null;
                     currentActionIndex = 0;
                     selectedWorker = null;
-                    switchTurn();
+
+                    if (!gamePanel.isGameEnded()) {
+                        switchTurn();
+                    }
                 }
                 gamePanel.repaint();
             } else {

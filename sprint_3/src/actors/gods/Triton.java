@@ -2,7 +2,7 @@ package actors.gods;
 
 import actions.BuildAction;
 import actions.MoveAction;
-import tile.Tile;
+import main.Tile;
 import actors.Worker;
 import main.GamePanel;
 

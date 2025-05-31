@@ -1,6 +1,8 @@
 package util;
 
 import main.GamePanel;
+import main.LossCondition;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,14 +11,11 @@ public class TurnTimer {
     private final Timer timer;
     private int timeLeft;
     private final int turnTimeLimit;
-    private final GamePanel gamePanel;
     private final JLabel timerLabel;
     private final LossCondition lossCondition;
 
-
     public TurnTimer(GamePanel gamePanel, int seconds, JLabel timerLabel) {
         this.turnTimeLimit = seconds;
-        this.gamePanel = gamePanel;
         this.timerLabel = timerLabel;
         this.timeLeft = seconds;
         this.lossCondition = new LossCondition(gamePanel);

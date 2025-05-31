@@ -1,6 +1,7 @@
-package main;
+package view;
 
 import actors.Player;
+import main.GamePanel;
 import util.FontLoader;
 import util.GodCardAssigner;
 

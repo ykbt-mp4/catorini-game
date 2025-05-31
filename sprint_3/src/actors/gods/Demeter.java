@@ -3,7 +3,7 @@ package actors.gods;
 import actions.BuildAction;
 import actions.MoveAction;
 import main.GamePanel;
-import tile.Tile;
+import main.Tile;
 import actors.Worker;
 
 public class Demeter extends God {

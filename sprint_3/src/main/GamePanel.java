@@ -1,11 +1,10 @@
 package main;
 
-import tile.Tile;
 import actors.Player;
 import actors.Worker;
-import tile.TileManager;
 import util.FontLoader;
 import util.TurnTimer;
+import view.BoardView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,7 +31,7 @@ public class GamePanel extends JPanel {
     int workerCount = 2;
     Random random = new Random();
 
-    private final TileManager tileManager;
+    private final BoardView boardView;
     public final TurnManager turnManager;
     private TurnTimer turnTimer;
 
@@ -46,7 +45,7 @@ public class GamePanel extends JPanel {
         this.player1 = player1;
         this.player2 = player2;
         this.currentPlayer = player1;
-        this.tileManager = new TileManager(this);
+        this.boardView = new BoardView(this);
         this.turnManager = new TurnManager(this, player1, player2);
 
         this.setFont(pixelFont);
@@ -58,6 +57,10 @@ public class GamePanel extends JPanel {
                 turnManager.handleClick(e.getX(), e.getY());
             }
         });
+    }
+
+    public String getPlayerName(int playerId) {
+        return playerId == 1 ? player1.getPlayerName() : player2.getPlayerName();
     }
 
     public void gameStart() {
@@ -76,9 +79,9 @@ public class GamePanel extends JPanel {
         setWorkerPos();
 
         // setting the buttons needed for game functionality (skip button etc)
-        JPanel buttonPanel = tileManager.createButtonPanel();
-        JPanel timePanel = tileManager.createTimerPanel();
-        JLabel timerLabel = tileManager.getTimerLabel();
+        JPanel buttonPanel = boardView.createButtonPanel();
+        JPanel timePanel = boardView.createTimerPanel();
+        JLabel timerLabel = boardView.getTimerLabel();
 
         this.turnTimer = new TurnTimer(this, 20, timerLabel);
 
@@ -143,11 +146,11 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        tileManager.drawWaterTile(g2);
-        tileManager.drawBoardTiles(g2);
-        tileManager.drawBuildings(g2);
-        tileManager.drawWorkers(g2);
-        tileManager.drawValidTiles(g2);
-        tileManager.drawWorkerHighlight(g2, turnManager.selectedWorker);
+        boardView.drawWaterTile(g2);
+        boardView.drawBoardTiles(g2);
+        boardView.drawBuildings(g2);
+        boardView.drawWorkers(g2);
+        boardView.drawValidTiles(g2);
+        boardView.drawWorkerHighlight(g2, turnManager.selectedWorker);
     }
 }

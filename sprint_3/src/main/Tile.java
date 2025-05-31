@@ -1,4 +1,4 @@
-package tile;
+package main;
 
 import actors.Worker;
 import buildings.Building;

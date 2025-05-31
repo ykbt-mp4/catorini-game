@@ -1,8 +1,8 @@
-package util;
+package main;
 
 import actors.Worker;
-import main.GamePanel;
-import tile.Tile;
+import util.FontLoader;
+import util.LeaderBoard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,23 +10,18 @@ import java.awt.*;
 public class WinCondition {
     private final GamePanel gamePanel;
     private final FontLoader fontLoader;
+    private final LeaderBoard leaderBoard;
 
     public WinCondition(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
         this.fontLoader = new FontLoader();
+        this.leaderBoard = new LeaderBoard();
     }
 
-    /**
-     * Checks if the specified worker meets the win condition.
-     * If so, triggers the win handler and returns true.
-     */
     public boolean checkWinCondition(Worker selectedWorker) {
         return hasWon(selectedWorker);
     }
 
-    /**
-     * Returns true if the worker is standing on a level 3 tile.
-     */
     public boolean hasWon(Worker selectedWorker) {
         int row = selectedWorker.getRow();
         int col = selectedWorker.getCol();
@@ -35,11 +30,10 @@ public class WinCondition {
         return tile.getLevel() == 3;
     }
 
-    /**
-     * Handles showing the win message dialog.
-     */
     public void handleWin(int winningPlayerId) {
+        String winnerName = gamePanel.getPlayerName(winningPlayerId);
         System.out.println("Player " + winningPlayerId + " wins!");
+        leaderBoard.addScore(winnerName, 1);
 
         ImageIcon originalIcon = new ImageIcon(getClass().getResource("/uiextra/winemoji.png"));
         Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);

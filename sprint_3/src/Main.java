@@ -1,4 +1,4 @@
-import main.TitleScreenPanel;
+import view.TitleScreenPanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

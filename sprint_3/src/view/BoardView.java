@@ -1,4 +1,4 @@
-package tile;
+package view;
 
 import actors.Worker;
 import main.GamePanel;
@@ -10,9 +10,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import actors.Player;
+import main.Tile;
 import util.FontLoader;
 
-public final class TileManager {
+public final class BoardView {
     private final GamePanel gp;
     private final Tile[] tile;
 
@@ -24,7 +25,7 @@ public final class TileManager {
     int startX = 0;
     int startY = 0;
 
-    public TileManager(GamePanel gp) {
+    public BoardView(GamePanel gp) {
         this.gp = gp;
         this.tile = new Tile[10]; // Store different tile graphics
         getTileImage();

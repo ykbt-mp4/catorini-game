@@ -1,9 +1,9 @@
-package util;
+package main;
 
 import actors.Worker;
 import actors.Player;
-import main.GamePanel;
-import tile.Tile;
+import util.FontLoader;
+import util.LeaderBoard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +11,12 @@ import java.awt.*;
 public class LossCondition {
     private final GamePanel gamePanel;
     private final FontLoader fontLoader;
+    private final LeaderBoard leaderBoard;
 
     public LossCondition(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
         this.fontLoader = new FontLoader();
+        this.leaderBoard = new LeaderBoard();
     }
 
     public boolean checkLossCondition(Player currentPlayer, GamePanel gamePanel) {
@@ -47,8 +49,13 @@ public class LossCondition {
 
     public void handleLoss(int losingPlayerId) {
         int winningPlayerId = (losingPlayerId == 1) ? 2 : 1;
+        String winnerName = gamePanel.getPlayerName(winningPlayerId);
+        String loserName = gamePanel.getPlayerName(losingPlayerId);
+
         System.out.println("Player " + losingPlayerId + " has no valid moves!");
         System.out.println("Player " + winningPlayerId + " wins!");
+
+        leaderBoard.addScore(winnerName, 1);
 
         ImageIcon originalIcon = new ImageIcon(getClass().getResource("/uiextra/winemoji.png"));
         Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
@@ -72,8 +79,13 @@ public class LossCondition {
 
     public void handleTimeoutLoss(int losingPlayerId) {
         int winningPlayerId = (losingPlayerId == 1) ? 2 : 1;
+        String winnerName = gamePanel.getPlayerName(winningPlayerId);
+        String loserName = gamePanel.getPlayerName(losingPlayerId);
+
         System.out.println("Player " + losingPlayerId + " ran out of time!");
         System.out.println("Player " + winningPlayerId + " wins!");
+
+        leaderBoard.addScore(winnerName, 1);
 
         ImageIcon originalIcon = new ImageIcon(getClass().getResource("/uiextra/timeremoji.png"));
         Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);

@@ -1,4 +1,4 @@
-package main;
+package view;
 
 import actors.Player;
 import util.FontLoader;

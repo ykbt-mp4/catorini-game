@@ -4,10 +4,7 @@ import actions.Action;
 import actions.ActionList;
 import actors.Player;
 import actors.Worker;
-import tile.Tile;
-import util.LossCondition;
 import util.TurnTimer;
-import util.WinCondition;
 
 public class TurnManager {
     private final GamePanel gamePanel;
@@ -135,6 +132,11 @@ public class TurnManager {
     }
 
     public void skipCurrentAction() {
+        if (gamePanel.isGameEnded()) {
+            System.out.println("Game has ended. No more moves allowed.");
+            return;
+        }
+
         if (currentAction != null && currentAction.isGodAction()) {
             ActionList actions = currentPlayer.getGodCard().getActions();
 

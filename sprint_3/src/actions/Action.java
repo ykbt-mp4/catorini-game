@@ -2,7 +2,7 @@ package actions;
 
 import actors.Worker;
 import main.GamePanel;
-import tile.Tile;
+import main.Tile;
 
 public abstract class Action {
 

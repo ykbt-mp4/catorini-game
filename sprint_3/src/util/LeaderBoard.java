@@ -26,34 +26,18 @@ public class LeaderBoard {
         saveScores();
     }
 
-    public int topScore() {
-        List<Integer> values = new ArrayList<>(scores.values());
-        Collections.sort(values, Collections.reverseOrder());
-
-        int sum = 0;
-        int count = Math.min(max_entries, values.size());
-        for (int i = 0; i < count; i++) {
-            sum += values.get(i);
-        }
-        return sum;
-    }
-
-    public List<Map.Entry<String, Integer>> getTopPlayers() {
-        List<Map.Entry<String, Integer>> entries = new ArrayList<>(scores.entrySet());
-        entries.sort((a, b) -> b.getValue().compareTo(a.getValue()));
-
-        return entries.subList(0, Math.min(max_entries, entries.size()));
-    }
 
     private void saveScores() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
-            for (Map.Entry<String, Integer> entry : scores.entrySet()) {
-                writer.println(entry.getKey() + ":" + entry.getValue());
+            try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
+                scores.entrySet().stream()
+                        .sorted(Map.Entry.<String, Integer>comparingByValue().reversed()) // sort high to low
+                        .limit(max_entries) // top 10
+                        .forEach(entry -> writer.println(entry.getKey() + ": " + entry.getValue()));
+            } catch (IOException e) {
+                System.err.println("Error saving leaderboard: " + e.getMessage());
             }
-        } catch (IOException e) {
-            System.err.println("Error saving leaderboard: " + e.getMessage());
         }
-    }
+
 
     private void loadScores() {
         scores.clear(); // Clear existing scores before loading
@@ -61,7 +45,7 @@ public class LeaderBoard {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(":");
+                String[] parts = line.split(": ");
                 if (parts.length == 2) {
                     try {
                         String playerName = parts[0];
@@ -76,5 +60,27 @@ public class LeaderBoard {
             System.err.println("Error loading leaderboard: " + e.getMessage());
         }
     }
+
+    public String readLeaderboardFile() {
+        StringBuilder content = new StringBuilder();
+        File file = new File(filePath);
+
+        if (file.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                int index = 1;
+                while ((line = reader.readLine()) != null) {
+                    content.append(index++).append(". ").append(line).append("\n");
+                }
+            } catch (IOException e) {
+                content.append("Error reading leaderboard file.");
+            }
+        } else {
+            content.append("No leaderboard data available.");
+        }
+
+        return content.toString();
+    }
+
 
 }

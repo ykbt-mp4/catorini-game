@@ -90,7 +90,7 @@ public class SidePanel extends JPanel {
         g2.setFont(fontLoader.getPixelFont().deriveFont(20f));
 
         Image dialogBox = new ImageIcon(getClass().getResource("/uiextra/dialog_box.png")).getImage();
-        Image printBox = new ImageIcon(getClass().getResource("/uiextra/menupanel.png")).getImage();
+        Image printBox = new ImageIcon(getClass().getResource("/uiextra/leaderboard.png")).getImage();
         Image waterTile = new ImageIcon(getClass().getResource("/tiles/water.png")).getImage();
 
         for (int row = 0; row < 7; row++) {

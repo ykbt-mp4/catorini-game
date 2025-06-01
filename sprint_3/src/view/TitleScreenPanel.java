@@ -4,20 +4,22 @@ import actors.Player;
 import main.GamePanel;
 import util.FontLoader;
 import util.GodCardAssigner;
+import util.LeaderBoard;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 
 public class TitleScreenPanel extends JPanel {
 
-    Font pixelFont = new FontLoader().getPixelFont();
     private final Image waterTile;
+    Font pixelFont = new FontLoader().getPixelFont();
+    LeaderBoard leaderBoard = new LeaderBoard();
 
     public TitleScreenPanel(JFrame window, Runnable onStartGame) {
         setLayout(new BorderLayout());
         setBackground(new Color(156, 212, 200));
+
         waterTile = new ImageIcon(getClass().getResource("/tiles/water.png")).getImage();
         setOpaque(false);
 
@@ -26,12 +28,12 @@ public class TitleScreenPanel extends JPanel {
         title.setBorder(BorderFactory.createEmptyBorder(100, 0, 50, 0));
         add(title, BorderLayout.NORTH);
 
-        JLabel title2 = new JLabel("Cat Themed Santorini Game", SwingConstants.CENTER);
-        title2.setFont(pixelFont.deriveFont(30f));
-        title2.setBorder(BorderFactory.createEmptyBorder(50, 0, 100, 0));
-        add(title2, BorderLayout.SOUTH);
+        JLabel subtitle = new JLabel("Cat Themed Santorini Game", SwingConstants.CENTER);
+        subtitle.setFont(pixelFont.deriveFont(30f));
+        subtitle.setBorder(BorderFactory.createEmptyBorder(50, 0, 100, 0));
+        add(subtitle, BorderLayout.SOUTH);
 
-        // image only panel
+        // image only panel - right panel
         JPanel imagePanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -69,82 +71,63 @@ public class TitleScreenPanel extends JPanel {
                 }
             }
         };
-
-        // leader board
         imagePanel.setPreferredSize(new Dimension(500, 0));
         imagePanel.setOpaque(false);
         add(imagePanel, BorderLayout.WEST);
 
-        JPanel imagePanel2 = new JPanel(){
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2 = (Graphics2D) g;
 
-                Image boardImage = new ImageIcon(getClass().getResource("/uiextra/menupanel.png")).getImage();
-                g2.drawImage(boardImage, 200/2, 0, getWidth() - 200, getHeight(), this);
+        // leader board panel
+        JPanel leaderPanel = new JPanel(null) {
+            @Override
+            protected void paintComponent(Graphics g2) {
+                super.paintComponent(g2);
+
+                g2.setFont(pixelFont.deriveFont(30f));
+                FontMetrics fm = g2.getFontMetrics();
+                String title = "Leaderboard";
+                int stringWidth = fm.stringWidth(title);
+                int x = (getWidth() - stringWidth) / 2;
+                int y = 60;
+
+                Image boardImage = new ImageIcon(getClass().getResource("/uiextra/leaderboard.png")).getImage();
+                g2.drawImage(boardImage, 100, 0, getWidth() - 200, getHeight(), this);
+
+                g2.drawString(title, x, y);
             }
         };
-        imagePanel2.setPreferredSize(new Dimension(500, 0));
-        imagePanel2.setOpaque(false);
-        add(imagePanel2, BorderLayout.EAST);
+
+        leaderPanel.setPreferredSize(new Dimension(500, 0));
+        leaderPanel.setOpaque(false);
+
+        JTextArea textArea = new JTextArea(leaderBoard.readLeaderboardFile());
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setFont(pixelFont.deriveFont(20f));
+        textArea.setBorder(BorderFactory.createEmptyBorder(10,10,10,10)); // Inner padding
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setOpaque(false);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setBounds(125, 75, 250, 250);
+
+        leaderPanel.add(scrollPane);
+        add(leaderPanel, BorderLayout.EAST);
+
+        // buttons panel - middle panel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setOpaque(false);
 
         try {
-            int width = 180;
-            int height = 60;
+            ImageIcon defaultIcon = loadScaledIcon("/uiextra/button1.png", 180, 60);
+            ImageIcon pressedIcon = loadScaledIcon("/uiextra/button2.png", 180, 60);
 
-            ImageIcon defaultIcon = new ImageIcon(
-                    new ImageIcon(getClass().getResource("/uiextra/button1.png"))
-                            .getImage()
-                            .getScaledInstance(width, height, Image.SCALE_SMOOTH)
-            );
-
-            ImageIcon pressedIcon = new ImageIcon(
-                    new ImageIcon(getClass().getResource("/uiextra/button2.png"))
-                            .getImage()
-                            .getScaledInstance(width, height, Image.SCALE_SMOOTH)
-            );
-
-            JButton startButton = new JButton("Start New Game");
-            startButton.setIcon(defaultIcon);
-            startButton.setPressedIcon(pressedIcon);
-            startButton.setHorizontalTextPosition(SwingConstants.CENTER);
-            startButton.setVerticalTextPosition(SwingConstants.CENTER);
-            startButton.setFont(pixelFont.deriveFont(20f));
-
-            JButton exitButton = new JButton("Exit Game");
-            exitButton.setIcon(defaultIcon);
-            exitButton.setPressedIcon(pressedIcon);
-            exitButton.setHorizontalTextPosition(SwingConstants.CENTER);
-            exitButton.setVerticalTextPosition(SwingConstants.CENTER);
-            exitButton.setFont(pixelFont.deriveFont(20f));
-
-            startButton.setBorderPainted(false);
-            startButton.setContentAreaFilled(false);
-            startButton.setFocusPainted(false);
-            startButton.setOpaque(false);
-
-            exitButton.setBorderPainted(false);
-            exitButton.setContentAreaFilled(false);
-            exitButton.setFocusPainted(false);
-            exitButton.setOpaque(false);
+            JButton startButton = createStyledButton("Start New Game", defaultIcon, pressedIcon);
+            JButton exitButton = createStyledButton("Exit Game", defaultIcon, pressedIcon);
 
             startButton.addActionListener(e -> promptForNamesAndStartGame(window));
-
-            exitButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    System.exit(0);
-                }
-            });
-
-            startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-            // buttons (middle panel)
-            JPanel buttonPanel = new JPanel();
-            buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-            buttonPanel.setOpaque(false);
+            exitButton.addActionListener(e -> System.exit(0));
 
             int spacing = 50;
             buttonPanel.add(Box.createRigidArea(new Dimension(0, spacing)));
@@ -164,9 +147,7 @@ public class TitleScreenPanel extends JPanel {
         JTextField player1Field = new JTextField(10);
         JTextField player2Field = new JTextField(10);
 
-        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/uiextra/titleemoji.png"));
-        Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        ImageIcon promptIcon = loadScaledIcon("/uiextra/titleemoji.png", 100, 100);
 
         JPanel panel = new JPanel(new GridLayout(3, 2));
         panel.add(new JLabel("Player 1 Name:"));
@@ -179,7 +160,7 @@ public class TitleScreenPanel extends JPanel {
                 "Enter Player Names",
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE,
-                scaledIcon,
+                promptIcon,
                 null,
                 null);
 
@@ -207,6 +188,28 @@ public class TitleScreenPanel extends JPanel {
                         "Please enter names for both players.");
             }
         }
+    }
+
+    private JButton createStyledButton(String text, ImageIcon defaultIcon, ImageIcon pressedIcon) {
+        JButton button = new JButton(text);
+        button.setIcon(defaultIcon);
+        button.setPressedIcon(pressedIcon);
+        button.setHorizontalTextPosition(SwingConstants.CENTER);
+        button.setVerticalTextPosition(SwingConstants.CENTER);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setFont(pixelFont.deriveFont(20f));
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
+        button.setOpaque(false);
+        return button;
+    }
+
+    private ImageIcon loadScaledIcon(String path, int width, int height) {
+        ImageIcon icon = new ImageIcon(getClass().getResource(path));
+        Image scaled = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaled);
     }
 
 

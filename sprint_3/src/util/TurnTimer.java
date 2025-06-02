@@ -8,83 +8,105 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * The TurnTimer class manages a countdown timer for each player's turn.
- * If the timer reaches zero, the current player automatically loses the game.
+ * Manages a countdown timer for each player's total game time.
+ * If a player's timer reaches zero, they lose the game.
  */
 public class TurnTimer {
 
     private final Timer timer;
-    private int timeLeft;
-    private final int turnTimeLimit;
+    private int player1TimeLeft;
+    private int player2TimeLeft;
+    private final int initialTime;
 
-    // JLabel used to display the timer countdown in the UI.
-    private final JLabel timerLabel;
-
+    private final JLabel player1TimerLabel; // UI label for player 1's time
+    private final JLabel player2TimerLabel; // UI label for player 2's time
     private final LossCondition lossCondition;
+    private final GamePanel gamePanel;
+
+    private int currentPlayerId;
 
     /**
-     * Constructs a TurnTimer with the specified game panel, time limit,
-     * and timer display label.
-     * @param gamePanel   the game panel associated with the timer
-     * @param seconds     the turn time limit in seconds
-     * @param timerLabel  the UI label to update with remaining time
+     * Constructs a TurnTimer with the specified game panel, time limit, and timer display labels.
+     * @param gamePanel         the game panel associated with the timer
+     * @param minutes          the total time limit per player in minutes
+     * @param player1TimerLabel the UI label for player 1's remaining time
+     * @param player2TimerLabel the UI label for player 2's remaining time
      */
-    public TurnTimer(GamePanel gamePanel, int seconds, JLabel timerLabel) {
-        this.turnTimeLimit = seconds;
-        this.timerLabel = timerLabel;
-        this.timeLeft = seconds;
+    public TurnTimer(GamePanel gamePanel, int minutes, JLabel player1TimerLabel, JLabel player2TimerLabel) {
+        this.gamePanel = gamePanel;
+        this.initialTime = minutes * 60; // Convert minutes to seconds
+        this.player1TimeLeft = initialTime;
+        this.player2TimeLeft = initialTime;
+        this.player1TimerLabel = player1TimerLabel;
+        this.player2TimerLabel = player2TimerLabel;
         this.lossCondition = new LossCondition(gamePanel);
+        this.currentPlayerId = 1; // Start with player 1
 
         this.timer = new Timer(1000, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
-                timeLeft--;
-                updateTimerLabel();
-
-                // If the timer reaches zero, the current player automatically loses the game
-                if (timeLeft <= 0) {
-                    timer.stop();
-                    lossCondition.handleTimeoutLoss(gamePanel.turnManager.getCurrentPlayer().getPlayerId());
-                    gamePanel.gameOver();
+                if (currentPlayerId == 1) {
+                    player1TimeLeft--;
+                    updateTimerLabel(player1TimerLabel, player1TimeLeft);
+                    if (player1TimeLeft <= 0) {
+                        timer.stop();
+                        lossCondition.handleTimeoutLoss(1);
+                        gamePanel.gameOver();
+                    }
+                } else {
+                    player2TimeLeft--;
+                    updateTimerLabel(player2TimerLabel, player2TimeLeft);
+                    if (player2TimeLeft <= 0) {
+                        timer.stop();
+                        lossCondition.handleTimeoutLoss(2);
+                        gamePanel.gameOver();
+                    }
                 }
             }
         });
     }
 
     /**
-     * Starts the turn timer from the beginning.
+     * Starts the timer for the current player.
      */
     public void start() {
-        reset();
         timer.start();
+        updateTimerLabels();
     }
 
     /**
-     * Stops the current timer without resetting the countdown.
+     * Stops the timer without resetting the time.
      */
     public void stop() {
         timer.stop();
     }
 
     /**
-     * Restarts the timer and resets the countdown.
+     * Switches the timer to the specified player's turn.
+     * @param playerId the ID of the player whose turn is starting (1 or 2)
      */
-    public void restart() {
-        reset();
-        timer.restart();
+    public void switchToPlayer(int playerId) {
+        this.currentPlayerId = playerId;
+        updateTimerLabels();
     }
 
     /**
-     * Resets the timer countdown to the full turn time limit.
+     * Updates the timer label with the current remaining time in MM:SS format.
+     * @param label the JLabel to update
+     * @param timeLeft the remaining time in seconds
      */
-    public void reset() {
-        this.timeLeft = turnTimeLimit;
-        updateTimerLabel();
+    private void updateTimerLabel(JLabel label, int timeLeft) {
+        int minutes = timeLeft / 60;
+        int seconds = timeLeft % 60;
+        label.setText(String.format("Player %d Time: %02d:%02d",
+                label == player1TimerLabel ? 1 : 2, minutes, seconds));
     }
 
     /**
-     * Updates the timer label on screen with the current remaining time.
+     * Updates both timer labels to reflect current times.
      */
-    private void updateTimerLabel() {
-        timerLabel.setText("Time Left: " + timeLeft + " sec");
+    private void updateTimerLabels() {
+        updateTimerLabel(player1TimerLabel, player1TimeLeft);
+        updateTimerLabel(player2TimerLabel, player2TimeLeft);
     }
 }

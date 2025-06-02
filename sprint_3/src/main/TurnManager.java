@@ -15,15 +15,12 @@ public class TurnManager {
     private final Player player1;
     private final Player player2;
     private Player currentPlayer;
-
     public Worker selectedWorker = null;
     private Action currentAction = null;
     public int currentActionIndex = 0;
-
     private final WinCondition winCondition;
     private final LossCondition lossCondition;
     private TurnTimer turnTimer;
-
 
     /**
      * Constructs the TurnManager to manage two players in the game.
@@ -42,23 +39,25 @@ public class TurnManager {
 
     /**
      * Switches the active player, checks for loss conditions,
-     * restarts the timer, and repaints the board.
+     * switches the timer, and repaints the board.
      */
     private void switchTurn() {
-
         this.currentPlayer = (currentPlayer == player1) ? player2 : player1;
         System.out.println("Player: " + currentPlayer.getPlayerId() + "'s turn");
 
-        // checks if the player can still make moves
+        // Checks if the player can still make moves
         if (lossCondition.checkLossCondition(currentPlayer, gamePanel)) {
             gamePanel.gameOver();
-            turnTimer.stop();
+            if (turnTimer != null) {
+                turnTimer.stop();
+            }
             lossCondition.handleLoss(currentPlayer.getPlayerId());
+            return;
         }
 
-        // restart timer for the current player
+        // Switch timer to the current player
         if (turnTimer != null) {
-            turnTimer.restart();
+            turnTimer.switchToPlayer(currentPlayer.getPlayerId());
         }
 
         clearHighlights(gamePanel);
@@ -66,7 +65,7 @@ public class TurnManager {
     }
 
     /**
-     * Sets the turn timer used to limit each player's turn duration.
+     * Sets the turn timer used to limit each player's total game time.
      * @param turnTimer the TurnTimer instance
      */
     public void setTimer(TurnTimer turnTimer) {
@@ -107,7 +106,9 @@ public class TurnManager {
             if (success) {
                 if (winCondition.checkWinCondition(selectedWorker)) {
                     gamePanel.gameOver();
-                    turnTimer.stop();
+                    if (turnTimer != null) {
+                        turnTimer.stop();
+                    }
                     winCondition.handleWin(currentPlayer.getPlayerId());
                     clearHighlights(gamePanel);
                     return;
@@ -203,12 +204,11 @@ public class TurnManager {
         return currentPlayer;
     }
 
-
     /**
      * Clears all tile highlights on the game board.
      * @param gamePanel the game panel to clear highlights from
      */
-    private void clearHighlights(GamePanel gamePanel){
+    private void clearHighlights(GamePanel gamePanel) {
         for (int row = 0; row < gamePanel.playTiles; row++) {
             for (int col = 0; col < gamePanel.playTiles; col++) {
                 gamePanel.getBoard()[row][col].setHighlighted(false);

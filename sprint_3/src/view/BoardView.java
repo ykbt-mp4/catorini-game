@@ -2,25 +2,25 @@ package view;
 
 import actors.Worker;
 import main.GamePanel;
+import main.Tile;
+import util.FontLoader;
+import actors.Player;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-
-import actors.Player;
-import main.Tile;
-import util.FontLoader;
 
 /**
  * Handles the visual rendering of the game board, including tiles, workers,
  * buildings, highlights of valid moves, UI buttons, and timer display.
  */
-public final class BoardView {
+public class BoardView {
     private final GamePanel gp;
     private final Tile[] tile;
-    private JLabel timerLabel;
+    private JLabel player1TimerLabel;
+    private JLabel player2TimerLabel;
     private final FontLoader fontLoader;
 
     private final int startX = 0;
@@ -33,8 +33,8 @@ public final class BoardView {
     public BoardView(GamePanel gp) {
         this.gp = gp;
         this.tile = new Tile[10];
-        getTileImage();
         this.fontLoader = new FontLoader();
+        getTileImage();
     }
 
     /**
@@ -100,7 +100,7 @@ public final class BoardView {
         for (int col = 1; col <= playTiles - 1; col++) {
             int x = startX + col * tileSize;
             int y = startY + playTiles * tileSize;
-            g2.drawImage(tile[7].image, x, y, tileSize, tileSize , null);
+            g2.drawImage(tile[7].image, x, y, tileSize, tileSize, null);
         }
 
         // Left edge
@@ -250,32 +250,47 @@ public final class BoardView {
     }
 
     /**
-     * Creates the UI panel that displays the turn timer.
-     * @return a JPanel containing the timer label
+     * Creates the UI panel that displays the turn timers for both players.
+     * @return a JPanel containing the timer labels
      */
     public JPanel createTimerPanel() {
         Font pixelFont = fontLoader.getPixelFont().deriveFont(20f);
-        // Create the timer label
-        timerLabel = new JLabel("Time Left: 15s");
-        timerLabel.setFont(pixelFont);
-        timerLabel.setForeground(Color.BLACK);
-        timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        timerLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
-        // Timer panel
-        JPanel timerPanel = new JPanel();
+        // Create timer labels for both players
+        player1TimerLabel = new JLabel("Player 1 Time: 15:00");
+        player1TimerLabel.setFont(pixelFont);
+        player1TimerLabel.setForeground(Color.BLACK);
+        player1TimerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        player1TimerLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        player2TimerLabel = new JLabel("Player 2 Time: 15:00");
+        player2TimerLabel.setFont(pixelFont);
+        player2TimerLabel.setForeground(Color.BLACK);
+        player2TimerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        player2TimerLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Timer panel with GridLayout to place labels side by side
+        JPanel timerPanel = new JPanel(new GridLayout(2, 1));
         timerPanel.setOpaque(false);
-        timerPanel.add(timerLabel);
+        timerPanel.add(player1TimerLabel);
+        timerPanel.add(player2TimerLabel);
 
         return timerPanel;
     }
 
     /**
-     * Gets the label used to display the turn timer.
-     * @return the timer JLabel
+     * Gets the label used to display player 1's timer.
+     * @return the player 1 timer JLabel
      */
-    public JLabel getTimerLabel() {
-        return timerLabel;
+    public JLabel getPlayer1TimerLabel() {
+        return player1TimerLabel;
     }
 
+    /**
+     * Gets the label used to display player 2's timer.
+     * @return the player 2 timer JLabel
+     */
+    public JLabel getPlayer2TimerLabel() {
+        return player2TimerLabel;
+    }
 }

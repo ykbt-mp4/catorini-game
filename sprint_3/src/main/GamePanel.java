@@ -88,7 +88,6 @@ public class GamePanel extends JPanel {
      * Initialises and starts the game: sets up board, workers, buttons, and timer.
      */
     public void gameStart() {
-        // setting player 1 as the first player
         currentPlayer = player1;
         System.out.println("Game started! Player: " + currentPlayer.getPlayerId() + "'s turn");
 
@@ -105,12 +104,12 @@ public class GamePanel extends JPanel {
         // setting the buttons needed for game functionality (skip button etc)
         JPanel buttonPanel = boardView.createButtonPanel();
         JPanel timePanel = boardView.createTimerPanel();
-        JLabel timerLabel = boardView.getTimerLabel();
+        JLabel player1TimerLabel = boardView.getPlayer1TimerLabel();
+        JLabel player2TimerLabel = boardView.getPlayer2TimerLabel();
 
-        this.turnTimer = new TurnTimer(this, 20, timerLabel);
-
+        this.turnTimer = new TurnTimer(this, 5, player1TimerLabel, player2TimerLabel); // 5 minutes per player
         turnManager.setTimer(turnTimer);
-        turnTimer.start(); // start first turn
+        turnTimer.start(); // Start first turn
 
         add(buttonPanel, BorderLayout.SOUTH);
         add(timePanel, BorderLayout.NORTH);
@@ -146,13 +145,11 @@ public class GamePanel extends JPanel {
         this.gameEnded = gameEnded;
     }
 
-
     /**
      * Returns the current state of the board.
      * @return the 2D Tile array representing the board.
      */
     public Tile[][] getBoard() {
-        // getter for the gameboard
         return board;
     }
 
@@ -160,7 +157,6 @@ public class GamePanel extends JPanel {
      * Randomly places each player's workers on unoccupied tiles.
      */
     private void setWorkerPos() {
-        // method to randomly place workers on the gameboard
         this.workerPos.clear();
 
         Player[] players = {player1, player2};

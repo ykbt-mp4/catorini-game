@@ -13,63 +13,64 @@ import actors.Player;
 import main.Tile;
 import util.FontLoader;
 
+/**
+ * Handles the visual rendering of the game board, including tiles, workers,
+ * buildings, highlights of valid moves, UI buttons, and timer display.
+ */
 public final class BoardView {
     private final GamePanel gp;
     private final Tile[] tile;
-
-    private JLabel timerLabel; // add this at the top
-
-
+    private JLabel timerLabel;
     private final FontLoader fontLoader;
 
-    int startX = 0;
-    int startY = 0;
+    private final int startX = 0;
+    private final int startY = 0;
 
+    /**
+     * Constructs a BoardView with a reference to the main GamePanel.
+     * @param gp the GamePanel containing the game state.
+     */
     public BoardView(GamePanel gp) {
         this.gp = gp;
-        this.tile = new Tile[10]; // Store different tile graphics
+        this.tile = new Tile[10];
         getTileImage();
         this.fontLoader = new FontLoader();
     }
 
-    public void getTileImage() {
+    /**
+     * Loads tile images from the resource folder and stores them in the tile array.
+     */
+    private void getTileImage() {
         try {
-
             tile[0] = new Tile(0, 0);
             tile[0].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/grass1.png")));
-
             tile[1] = new Tile(0, 0);
             tile[1].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/grass2.png")));
-
-            tile[2] = new Tile(0,0);
+            tile[2] = new Tile(0, 0);
             tile[2].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/grass3.png")));
-
-            tile[3] = new Tile(0,0);
+            tile[3] = new Tile(0, 0);
             tile[3].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/grass4.png")));
-
-            tile[4] = new Tile(0,0);
+            tile[4] = new Tile(0, 0);
             tile[4].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/grass5.png")));
-
-            tile[5] = new Tile(0,0);
+            tile[5] = new Tile(0, 0);
             tile[5].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/grass6.png")));
-
-            tile[6] = new Tile(0,0);
+            tile[6] = new Tile(0, 0);
             tile[6].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/hills1.png")));
-
-            tile[7] = new Tile(0,0);
+            tile[7] = new Tile(0, 0);
             tile[7].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/hills2.png")));
-
-            tile[8] = new Tile(0,0);
+            tile[8] = new Tile(0, 0);
             tile[8].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/hills3.png")));
-
-            tile[9] = new Tile(0,0);
+            tile[9] = new Tile(0, 0);
             tile[9].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/water.png")));
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Draws water tiles as the background for the board.
+     * @param g2 the graphics context to draw on
+     */
     public void drawWaterTile(Graphics2D g2) {
         for (int row = 0; row < 7; row++) {
             for (int col = 0; col < 7; col++) {
@@ -80,6 +81,10 @@ public final class BoardView {
         }
     }
 
+    /**
+     * Draws the main playable and edge tiles of the game board.
+     * @param g2 the graphics context to draw on
+     */
     public void drawBoardTiles(Graphics2D g2) {
         int tileSize = gp.tileSize;
         int playTiles = gp.playTiles;
@@ -128,6 +133,10 @@ public final class BoardView {
         g2.drawImage(tile[8].image, startX + playTiles * tileSize, startY + playTiles * tileSize, tileSize, tileSize, null); // bottom-right
     }
 
+    /**
+     * Draws buildings on the board according to their positions.
+     * @param g2 the graphics context to draw on
+     */
     public void drawBuildings(Graphics2D g2) {
         int tileSize = gp.tileSize;
         int playTiles = gp.playTiles;
@@ -144,6 +153,10 @@ public final class BoardView {
         }
     }
 
+    /**
+     * Draws all workers and their associated player labels.
+     * @param g2 the graphics context to draw on
+     */
     public void drawWorkers(Graphics2D g2) {
         g2.setFont(fontLoader.getPixelFont().deriveFont(20f));
         int tileSize = gp.tileSize;
@@ -159,6 +172,10 @@ public final class BoardView {
         }
     }
 
+    /**
+     * Draws highlighted tiles where the player can take valid actions.
+     * @param g2 the graphics context to draw on
+     */
     public void drawValidTiles(Graphics2D g2) {
         Tile[][] board = gp.getBoard();
         int tileSize = gp.tileSize;
@@ -176,6 +193,11 @@ public final class BoardView {
         }
     }
 
+    /**
+     * Highlights a selected worker on the board.
+     * @param g2 the graphics context to draw on
+     * @param selectedWorker the currently selected worker
+     */
     public void drawWorkerHighlight(Graphics2D g2, Worker selectedWorker) {
         int tileSize = gp.tileSize;
         Image workerHighlight = new ImageIcon(getClass().getResource("/uiextra/workerhighlight.png")).getImage();
@@ -187,6 +209,10 @@ public final class BoardView {
         }
     }
 
+    /**
+     * Creates the UI panel with the "Skip" button (can add extra buttons).
+     * @return a JPanel containing the skip button
+     */
     public JPanel createButtonPanel() {
         Font pixelFont = fontLoader.getPixelFont().deriveFont(20f);
         int width = 190;
@@ -213,59 +239,20 @@ public final class BoardView {
         skipButton.setContentAreaFilled(false);
         skipButton.setFocusPainted(false);
         skipButton.setOpaque(false);
-        if (gp.isGameEnded()) skipButton.setEnabled(false);
 
         skipButton.addActionListener(e -> gp.turnManager.skipCurrentAction());
 
-        // main button stuff
-        JButton mainButton = new JButton("Main Menu");
-        mainButton.setIcon(defaultIcon);
-        mainButton.setPressedIcon(pressedIcon);
-        mainButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        mainButton.setVerticalTextPosition(SwingConstants.CENTER);
-        mainButton.setFont(pixelFont);
-        mainButton.setBorderPainted(false);
-        mainButton.setContentAreaFilled(false);
-        mainButton.setFocusPainted(false);
-        mainButton.setOpaque(false);
-
-        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/uiextra/winemoji.png"));
-        Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(scaledImage);
-
-        JLabel messageLabel = new JLabel("Return to main menu? Current game progress will be lost.");
-        messageLabel.setFont(fontLoader.getPixelFont().deriveFont(20f));
-        messageLabel.setForeground(Color.BLACK);
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.add(messageLabel, BorderLayout.CENTER);
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-
-//        mainButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                int result = JOptionPane.showConfirmDialog(gp,
-//                    panel,
-//                    "Confirm",
-//                    JOptionPane.YES_NO_OPTION,
-//                    JOptionPane.WARNING_MESSAGE,
-//                    scaledIcon);
-//            if (result == JOptionPane.YES_OPTION) {
-//
-//            }
-//
-//        });
-
-
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
-        buttonPanel.add(mainButton);
         buttonPanel.add(skipButton);
 
         return buttonPanel;
     }
 
+    /**
+     * Creates the UI panel that displays the turn timer.
+     * @return a JPanel containing the timer label
+     */
     public JPanel createTimerPanel() {
         Font pixelFont = fontLoader.getPixelFont().deriveFont(20f);
         // Create the timer label
@@ -283,6 +270,10 @@ public final class BoardView {
         return timerPanel;
     }
 
+    /**
+     * Gets the label used to display the turn timer.
+     * @return the timer JLabel
+     */
     public JLabel getTimerLabel() {
         return timerLabel;
     }

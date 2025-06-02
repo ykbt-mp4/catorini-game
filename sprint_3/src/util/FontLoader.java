@@ -14,7 +14,6 @@ public class FontLoader {
     /**
      * Constructs a FontLoader and attempts to load the font from the specified path.
      * If unsuccessful, throws a RuntimeException.
-     *
      * @throws RuntimeException if any font fails to load
      */
     public FontLoader() {
@@ -30,7 +29,6 @@ public class FontLoader {
 
     /**
      * Gets the font to use in text
-     *
      * @return The pixel font used in the game
      */
     public Font getPixelFont() {

@@ -6,15 +6,8 @@ import main.Tile;
 import actors.Worker;
 import main.GamePanel;
 
-/**
- * Represents the God Triton, whose Worker may move again
- * immediately after moving into a perimeter space.
- */
 public class Triton extends God {
 
-    /**
-     * Constructs the Triton god card with its special actions.
-     */
     public Triton() {
         super("Triton",
                 "Each time your Worker moves into a perimeter space, it may immediately move again.",
@@ -24,26 +17,12 @@ public class Triton extends God {
         actions.add(new BuildAction());
     }
 
-
-    /**
-     * Special move action for Triton allowing an extra move
-     * if the worker lands on a perimeter tile.
-     */
     private static class TritonAction extends MoveAction {
 
-        /**
-         * Constructs the Triton special move action and marks it as a God action.
-         */
         public TritonAction() {
             setGodAction(true);
         }
 
-        /**
-         * Executes the Triton special move action, highlighting valid tiles.
-         * If the worker is not on a perimeter tile, skips the power action.
-         * @param worker the worker performing the move
-         * @param gamePanel the game panel context
-         */
         @Override
         public void execute(Worker worker, GamePanel gamePanel) {
             super.execute(worker, gamePanel);
@@ -70,13 +49,6 @@ public class Triton extends God {
             }
         }
 
-        /**
-         * Handles a tile click event to move the worker.
-         * If the worker is on perimeter, the action index is adjusted to allow an immediate move again.
-         * @param row the target row
-         * @param col the target column
-         * @return true if the move is successful; false otherwise
-         */
         @Override
         public boolean onTileClick(int row, int col) {
             Tile targetTile = getTile(row, col);
@@ -93,11 +65,6 @@ public class Triton extends God {
             return true;
         }
 
-        /**
-         * Checks if the worker is currently on a perimeter tile.
-         * @param worker the worker to check
-         * @return true if on perimeter; false otherwise
-         */
         private boolean isOnPerimeter(Worker worker) {
             int row = worker.getRow();
             int col = worker.getCol();

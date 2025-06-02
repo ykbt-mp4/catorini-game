@@ -4,18 +4,8 @@ import actors.Worker;
 import main.GamePanel;
 import main.Tile;
 
-/**
- * Represents the move action in the game.
- * This action allows a worker to move to a valid adjacent tile.
- */
 public class MoveAction extends Action {
 
-    /**
-     * Executes the move action logic.
-     * Highlights all valid move tiles around the worker.
-     * @param worker the worker performing the action
-     * @param gamePanel the current game panel
-     */
     @Override
     public void execute(Worker worker, GamePanel gamePanel) {
         super.execute(worker, gamePanel);
@@ -26,7 +16,6 @@ public class MoveAction extends Action {
 
         clearHighlights(board);
 
-        // UI - highlight valid build tiles around the worker
         for (int row = 0; row < gp.playTiles; row++) {
             for (int col = 0; col < gp.playTiles; col++) {
                 Tile target = board[row][col];
@@ -38,13 +27,6 @@ public class MoveAction extends Action {
         }
     }
 
-    /**
-     * Handles a tile click during a move phase.
-     * Validates the action and performs the move if legal.
-     * @param row the row of the clicked tile
-     * @param col the column of the clicked tile
-     * @return true if the move is performed, false otherwise
-     */
     public boolean onTileClick(int row, int col) {
 
         Tile targetTile = getTile(row, col);
@@ -58,14 +40,6 @@ public class MoveAction extends Action {
         return true;
     }
 
-    /**
-     * Moves the worker to the target tile.
-     * Updates the worker's position and clears the old tile.
-     * @param currentTile the tile the worker is moving from
-     * @param targetTile the tile the worker is moving to
-     * @param row the target row
-     * @param col the target column
-     */
     protected void moveWorker(Tile currentTile, Tile targetTile, int row, int col) {
         int currentRow = worker.getRow();
         int currentCol = worker.getCol();

@@ -8,22 +8,42 @@ import util.LeaderBoard;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Handles the logic for detecting and responding to a player's loss in the game.
+ * A player loses if neither of their workers can move or if they run out of time.
+ */
 public class LossCondition {
     private final GamePanel gamePanel;
     private final FontLoader fontLoader;
     private final LeaderBoard leaderBoard;
 
+    /**
+     * Constructs a LossCondition handler for the current game.
+     * @param gamePanel the game panel associated with the game
+     */
     public LossCondition(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
         this.fontLoader = new FontLoader();
         this.leaderBoard = new LeaderBoard();
     }
 
+    /**
+     * Checks if the current player has lost due to no possible moves.
+     * @param currentPlayer the player being checked
+     * @param gamePanel     the current game panel
+     * @return true if the player has no valid moves, false otherwise
+     */
     public boolean checkLossCondition(Player currentPlayer, GamePanel gamePanel) {
         return !canAnyWorkerMove(currentPlayer, gamePanel);
     }
 
-    public boolean canAnyWorkerMove(Player currentPlayer, GamePanel gamePanel) {
+    /**
+     * Checks whether any worker of the current player can make a valid move.
+     * @param currentPlayer the player being checked
+     * @param gamePanel     the current game panel
+     * @return true if at least one worker can move, false otherwise
+     */
+    private boolean canAnyWorkerMove(Player currentPlayer, GamePanel gamePanel) {
         Tile[][] board = gamePanel.getBoard();
 
         for (Worker worker : currentPlayer.getWorkers()) {
@@ -47,16 +67,21 @@ public class LossCondition {
         return false;
     }
 
+    /**
+     * Displays a loss message when the player has no valid moves,
+     * updates the leaderboard, and announces the winner.
+     * @param losingPlayerId the ID of the player who lost
+     */
     public void handleLoss(int losingPlayerId) {
         int winningPlayerId = (losingPlayerId == 1) ? 2 : 1;
         String winnerName = gamePanel.getPlayerName(winningPlayerId);
-        String loserName = gamePanel.getPlayerName(losingPlayerId);
 
         System.out.println("Player " + losingPlayerId + " has no valid moves!");
         System.out.println("Player " + winningPlayerId + " wins!");
 
-        leaderBoard.addScore(winnerName, 1);
+        leaderBoard.addScore(winnerName, 1); // adds winner to leaderboard
 
+        // UI pop up for when the player loses
         ImageIcon originalIcon = new ImageIcon(getClass().getResource("/uiextra/winemoji.png"));
         Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -77,16 +102,20 @@ public class LossCondition {
                 scaledIcon);
     }
 
+    /**
+     * Handles the case where a player loses due to running out of time.
+     * @param losingPlayerId the ID of the player who lost by timeout
+     */
     public void handleTimeoutLoss(int losingPlayerId) {
         int winningPlayerId = (losingPlayerId == 1) ? 2 : 1;
         String winnerName = gamePanel.getPlayerName(winningPlayerId);
-        String loserName = gamePanel.getPlayerName(losingPlayerId);
 
         System.out.println("Player " + losingPlayerId + " ran out of time!");
         System.out.println("Player " + winningPlayerId + " wins!");
 
-        leaderBoard.addScore(winnerName, 1);
+        leaderBoard.addScore(winnerName, 1); // adds winner to leaderboard
 
+        // UI pop up for when the player loses
         ImageIcon originalIcon = new ImageIcon(getClass().getResource("/uiextra/timeremoji.png"));
         Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);

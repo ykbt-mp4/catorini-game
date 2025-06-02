@@ -6,6 +6,10 @@ import actors.Player;
 import actors.Worker;
 import util.TurnTimer;
 
+/**
+ * Manages turn-based gameplay between two players,
+ * handling player switching, action execution, and win/loss conditions.
+ */
 public class TurnManager {
     private final GamePanel gamePanel;
     private final Player player1;
@@ -13,13 +17,20 @@ public class TurnManager {
     private Player currentPlayer;
 
     public Worker selectedWorker = null;
-    public Action currentAction = null;
+    private Action currentAction = null;
     public int currentActionIndex = 0;
 
     private final WinCondition winCondition;
     private final LossCondition lossCondition;
     private TurnTimer turnTimer;
 
+
+    /**
+     * Constructs the TurnManager to manage two players in the game.
+     * @param gamePanel the main game panel
+     * @param player1   the first player
+     * @param player2   the second player
+     */
     public TurnManager(GamePanel gamePanel, Player player1, Player player2) {
         this.gamePanel = gamePanel;
         this.player1 = player1;
@@ -29,17 +40,23 @@ public class TurnManager {
         this.lossCondition = new LossCondition(gamePanel);
     }
 
-    public void switchTurn() {
+    /**
+     * Switches the active player, checks for loss conditions,
+     * restarts the timer, and repaints the board.
+     */
+    private void switchTurn() {
 
         this.currentPlayer = (currentPlayer == player1) ? player2 : player1;
         System.out.println("Player: " + currentPlayer.getPlayerId() + "'s turn");
 
+        // checks if the player can still make moves
         if (lossCondition.checkLossCondition(currentPlayer, gamePanel)) {
             gamePanel.gameOver();
             turnTimer.stop();
             lossCondition.handleLoss(currentPlayer.getPlayerId());
         }
 
+        // restart timer for the current player
         if (turnTimer != null) {
             turnTimer.restart();
         }
@@ -48,10 +65,20 @@ public class TurnManager {
         gamePanel.repaint();
     }
 
+    /**
+     * Sets the turn timer used to limit each player's turn duration.
+     * @param turnTimer the TurnTimer instance
+     */
     public void setTimer(TurnTimer turnTimer) {
         this.turnTimer = turnTimer;
     }
 
+    /**
+     * Handles mouse click input during the game,
+     * selecting workers or executing tile-based actions.
+     * @param mouseX the x-coordinate of the click
+     * @param mouseY the y-coordinate of the click
+     */
     public void handleClick(int mouseX, int mouseY) {
         if (gamePanel.isGameEnded()) {
             System.out.println("Game has ended. No more moves allowed.");
@@ -109,6 +136,10 @@ public class TurnManager {
         }
     }
 
+    /**
+     * Handles worker selection if the clicked tile contains a valid worker.
+     * @param tile the tile that was clicked
+     */
     private void selectWorker(Tile tile) {
         if (tile.isOccupiedByWorker()) {
             Worker worker = tile.getWorker();
@@ -131,6 +162,11 @@ public class TurnManager {
         }
     }
 
+    /**
+     * Skips the current action if it's optional (such as god actions).
+     * Ends the turn if there are no more actions remaining, and the last
+     * action is a god card.
+     */
     public void skipCurrentAction() {
         if (gamePanel.isGameEnded()) {
             System.out.println("Game has ended. No more moves allowed.");
@@ -159,10 +195,19 @@ public class TurnManager {
         gamePanel.repaint();
     }
 
+    /**
+     * Returns the current player whose turn is active.
+     * @return the current player
+     */
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
+
+    /**
+     * Clears all tile highlights on the game board.
+     * @param gamePanel the game panel to clear highlights from
+     */
     private void clearHighlights(GamePanel gamePanel){
         for (int row = 0; row < gamePanel.playTiles; row++) {
             for (int col = 0; col < gamePanel.playTiles; col++) {

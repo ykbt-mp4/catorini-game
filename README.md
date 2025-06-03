@@ -1,6 +1,6 @@
 # FIT3077 Santorini Game Repository
 
-This repository contains the source code and documentation for the Santorini-inspired game developed for FIT3077 Sprints 1 and 2.
+This repository contains the source code and documentation for the Santorini-inspired game developed for FIT3077 Sprints 1, Sprint 2 and Sprint 3.
 
 ---
 
@@ -8,15 +8,17 @@ This repository contains the source code and documentation for the Santorini-ins
 
 The repository is structured as follows:
 
-*   **`prototypes/`**: Contains test (`.jar` files) prototypes produced by all team members.
 *   **`sprint_1/`**: Contains all the documentation from the Sprint 1 iteration.
 
-*   **`sprint_2/`**: Contains all source code (`.java` files) for the Santorini game application developed during Sprint 2 as well as documentation. This directory includes:
-    *   `docs/`: Contains all the documentation from the Sprint 2 iteration, including drafts for UML class diagrams.
-    *   `resources/`: Where all the source code is located 
-    *   `src/`: Contains all source code (`.java` files) for the Santorini game application and the (`.jar` file) of the application (executable application) which can be run without an IDE.
+
+* The previous Sprint 2 Folder has been renamed to **`sprint_3`** to accommodate for the new changes implemented in Sprint 3.
+*   **`sprint_3/`**: Contains all source code (`.java` files), documentation and resources for the Santorini game application developed during Sprint 2 and Sprint 3. This directory includes:
+    *   `docs/`: Contains all the documentation from the Sprint 2 and Sprint 3 iteration, including drafts for UML class diagrams and final UML class Diagram.
+    *   `resources/`: Where all the resources for the UI and MANIFEST file are located.
+    *   `src/`: Contains all source code (`.java` files) for the Santorini game application.
+    *   `SantoriniGame.jar`: Executable file for the entire Santorini application in a `.jar` format.
 
 *   **`README.md`**: Contains information about repository structure and organisation.
 ---
 
-For detailed instructions on how to build and run the game, please refer to the executable instructions located  in `sprint_2/docs/FIT3077_Sprint_2_Santorini_Collective.pdf`.
+For detailed instructions on how to build and run the game, please refer to the executable instructions located  in `sprint_3/docs/FIT3077_Sprint_3_Yokabit_Fesshaye_32591675.pdf`.

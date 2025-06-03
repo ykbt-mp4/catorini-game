@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SantoriniGame:jar">
+    <output-path>$PROJECT_DIR$/sprint_3</output-path>
+    <root id="archive" name="SantoriniGame.jar">
+      <element id="module-output" name="sprint_3" />
+    </root>
+  </artifact>
+</component>

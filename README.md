@@ -2,6 +2,12 @@
 
 This repository contains the source code for the Santorini-inspired game developed for a class project.
 
+You can play the game by downloading the repo and opening the existing SantoriniGame.jar file in application folder
+
+<img src="application/resources/readme_images/image1.png" alt="Homepage" width="400"/>
+<img src="application/resources/readme_images/image2.png" alt="Game view" width="400"/>
+<img src="application/resources/readme_images/image3.png" alt="Win view" width="400"/>
+
 ---
 
 ## Repository Organisation
@@ -47,10 +53,7 @@ Build Executable:
     *   Navigate to the "Build" tab on the top of your IntelliJ window.
     *   Once it has been found, click on the tab and find the "Build Artifacts..." and select it.
     *   A pop-up will appear, click build.
-    *   An executable has been created, it will be located in the out folder by default:
-    *   FIT3077/out/artifacts/FIT3077_jar/FIT3077.jar
-        However, for this project, the jar file is located in:
-    *   FIT3077/sprint_3/SantoriniGame.jar
+    *   An executable has been created, it will be located in the out folder by default
 
 Run Executable
 *   Option 1:
